@@ -1,0 +1,49 @@
+CREATE DATABASE IF NOT EXISTS test;
+USE test;
+
+DROP TABLE IF NOT EXISTS personalities;
+CREATE TABLE IF NOT EXISTS personalities (
+  id tinyint(2) NOT NULL AUTO_INCREMENT,
+  no tinyint(2) NOT NULL,
+  term varchar(100) NOT NULL,
+  most char(1) NOT NULL,
+  least char(1) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS results;
+CREATE TABLE IF NOT EXISTS results(
+	id INT NOT NULL AUTO_INCREMENT,
+	dimension CHAR(1) NOT NULL,
+	intensity INT NOT NULL,
+	value INT NOT NULL,
+	segment INT NOT NULL,
+	graph TINYINT(1) NOT NULL,
+	PRIMARY KEY(id)
+) ENGINE MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS pattern_map;
+CREATE TABLE IF NOT EXISTS pattern_map(
+  d TINYINT(1) NOT NULL,
+  i TINYINT(1) NOT NULL,
+  s TINYINT(1) NOT NULL,
+  c TINYINT(1) NOT NULL,
+  pattern TINYINT(1) NOT NULL
+) ENGINE MyISAM;
+
+DROP TABLE IF EXISTS patterns;
+CREATE TABLE IF NOT EXISTS patterns(
+	id TINYINT NOT NULL,
+	name VARCHAR(30) NOT NULL,
+	emotions VARCHAR(255) NOT NULL,
+	goal VARCHAR(255) NOT NULL,
+	judges_others VARCHAR(255) NOT NULL,
+	influences_others VARCHAR(255) NOT NULL,
+	organization_value VARCHAR(255) NOT NULL,
+	overuses VARCHAR(255) NOT NULL,
+	under_pressure VARCHAR(255) NOT NULL,
+	fear VARCHAR(255) NOT NULL,
+	effectiveness VARCHAR(255) NOT NULL,
+	description TEXT NOT NULL,
+	PRIMARY KEY(id)
+) ENGINE=MyISAM;

@@ -6,8 +6,8 @@ CREATED DATE : 2015-01-11
 *************************************/
 //-- database configuration
 $dbhost='localhost';
-$dbuser='dev';
-$dbpass='password';
+$dbuser='root';
+$dbpass='';
 $dbname='test';
 //-- database connection
 $db=new mysqli($dbhost,$dbuser,$dbpass,$dbname);

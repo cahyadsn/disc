@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS test;
 USE test;
 
-DROP TABLE IF NOT EXISTS personalities;
+DROP TABLE IF EXISTS personalities;
 CREATE TABLE IF NOT EXISTS personalities (
   id tinyint(2) NOT NULL AUTO_INCREMENT,
   no tinyint(2) NOT NULL,

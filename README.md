@@ -14,9 +14,8 @@ DISC Personality Test in PHP language based on DISC Classic. Build on PHP langua
 + MySQL (http://www.mysql.com/), 
 
 ## Donation
-+ [paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6YRM43CZ44UQ) cdsatrian@yahoo.co.id
-+ BCA 1451332193
-+ Mandiri 1570004234408
++ [paypal] : (https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6YRM43CZ44UQ) cdsatrian@yahoo.co.id
++ BCA : 1451332193
 
 ## Contact
 + facebook (https://m.facebook.com/cahya.dsn)
@@ -27,4 +26,5 @@ DISC Personality Test in PHP language based on DISC Classic. Build on PHP langua
 ![alt text](http://cahyadsn.dev.php.or.id/disc/qr_code.jpg "DISC Personality Test")
 ## Contributor
 + Aleksandar Urosevic
++ Ikbal Qodi
 + Lucas Giovanny

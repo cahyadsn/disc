@@ -20,7 +20,7 @@ DISC Personality Test in PHP language based on DISC Classic. Build on PHP langua
 ## Contact
 + facebook (https://m.facebook.com/cahya.dsn)
 + email (cahyadsn@gmail.com)
-+ demo site    : (http://cahyadsn.dev.php.or.id/disc)
++ demo site    : (http://cahyadsn.phpindonesia.id/disc)
 + source code  : (https://github.com/cahyadsn/disc)
 
 ![alt text](http://cahyadsn.dev.php.or.id/disc/qr_code.jpg "DISC Personality Test")

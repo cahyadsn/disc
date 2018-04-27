@@ -3,6 +3,7 @@
 FILENAME     : result.php
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
+UPDATED DATE : 2018-04-27
 *************************************/
 ?>
 <doctype html>
@@ -75,8 +76,8 @@ if(isset($_POST['m']) && isset($_POST['l'])){
     */
     //-- database configuration
 	$dbhost='localhost';
-	$dbuser='dev';
-	$dbpass='password';
+	$dbuser='root';
+	$dbpass='';
 	$dbname='test';
 	//-- database connection
 	$db=new mysqli($dbhost,$dbuser,$dbpass,$dbname);

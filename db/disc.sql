@@ -1,8 +1,8 @@
 -- CREATE DATABASE IF NOT EXISTS test;
 -- USE test;
 
-DROP TABLE IF EXISTS tbl_personalities;
-CREATE TABLE IF NOT EXISTS tbl_personalities (
+DROP TABLE IF EXISTS personalities;
+CREATE TABLE IF NOT EXISTS personalities (
   id tinyint(2) NOT NULL AUTO_INCREMENT,
   no tinyint(2) NOT NULL,
   term varchar(100) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS tbl_personalities (
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO tbl_personalities VALUES 
+INSERT INTO personalities VALUES 
 (1,1,'term1','C','C'),
 (2,1,'term2','D','D'),
 (3,1,'term3','S','S'),
@@ -125,8 +125,8 @@ INSERT INTO tbl_personalities VALUES
 (111,28,'term111','C','C'),
 (112,28,'term112','I','I');
              
-DROP TABLE IF EXISTS tbl_results;
-CREATE TABLE IF NOT EXISTS tbl_results
+DROP TABLE IF EXISTS results;
+CREATE TABLE IF NOT EXISTS results
 (            
 	id INT NOT NULL AUTO_INCREMENT,
 	dimension CHAR(1) NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS tbl_results
 	graph TINYINT(1) NOT NULL,
 	PRIMARY KEY(id)
 ) ENGINE MyISAM DEFAULT CHARSET=utf8;
-INSERT INTO tbl_results VALUES 
+INSERT INTO results VALUES 
 (1,'D',28,27,7,1),
 (2,'D',26,12,7,1),
 (3,'D',25,11,7,1),
@@ -340,8 +340,8 @@ INSERT INTO tbl_results VALUES
 (201,'S',2,-11,1,3),
 (202,'S',1,-26,1,3);
 
-DROP TABLE IF EXISTS tbl_pattern_map;
-CREATE TABLE IF NOT EXISTS tbl_pattern_map
+DROP TABLE IF EXISTS pattern_map;
+CREATE TABLE IF NOT EXISTS pattern_map
 (
   d TINYINT(1) NOT NULL,
   i TINYINT(1) NOT NULL,
@@ -349,7 +349,7 @@ CREATE TABLE IF NOT EXISTS tbl_pattern_map
   c TINYINT(1) NOT NULL,
   pattern TINYINT(1) NOT NULL
 ) ENGINE MyISAM;
-INSERT INTO tbl_pattern_map VALUES 
+INSERT INTO pattern_map VALUES 
 (7,7,7,7,14),
 (7,7,7,6,14),
 (7,7,7,5,14),
@@ -2752,8 +2752,8 @@ INSERT INTO tbl_pattern_map VALUES
 (1,1,1,2,8),
 (1,1,1,1,8);
 
-DROP TABLE IF EXISTS tbl_patterns;
-CREATE TABLE IF NOT EXISTS tbl_patterns
+DROP TABLE IF EXISTS patterns;
+CREATE TABLE IF NOT EXISTS patterns
 (
 	id TINYINT NOT NULL,
 	name VARCHAR(30) NOT NULL,
@@ -2770,7 +2770,7 @@ CREATE TABLE IF NOT EXISTS tbl_patterns
 	PRIMARY KEY(id)
 ) ENGINE=MyISAM;
 
-INSERT INTO tbl_patterns VALUES 
+INSERT INTO patterns VALUES 
 (1,'name1','emotions1','goal1','judges_others1','influences_others1','organization_value1','overuses1','under_pressure1','fear1','effectiveness1','description1'),
 (2,'name2','emotions2','goal2','judges_others2','influences_others2','organization_value2','overuses2','under_pressure2','fear2','effectiveness2','description2'),
 (3,'name3','emotions3','goal3','judges_others3','influences_others3','organization_value3','overuses3','under_pressure3','fear3','effectiveness3','description3'),

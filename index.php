@@ -3,6 +3,7 @@
 FILENAME     : index.php
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
+UPDATED DATE : 2018-04-27
 *************************************/
 //-- database configuration
 $dbhost='localhost';
@@ -40,8 +41,7 @@ $rows 		= count($data)/(4*$cols);
     .first {border-top: solid 0.2em #000; }
     .badge { position:relative;line-height: 3em;border:solid #999 1px;
     		 text-align: center;font-size: 2em;}
-
-	.badge[data-badge]:after {
+    .badge[data-badge]:after {
 	   content:attr(data-badge);
 	   position:absolute;
 	   top:1px;

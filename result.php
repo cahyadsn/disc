@@ -98,6 +98,26 @@ if(isset($_POST['m']) && isset($_POST['l'])){
 		JOIN patterns c ON c.id=a.pattern";
 	$result=$db->query($sql);
 	$data=$result->fetch_object();
+	//-- if empty result found, get default result
+	if(!isset($data->name)){
+	    $sql="
+		SELECT b.*,c.* 
+			FROM
+			pattern_map a
+			JOIN
+			(
+			    SELECT
+					d.d,i.i,s.s,c.c
+				FROM
+					(SELECT segment AS d FROM results WHERE graph=3 AND dimension='D' AND value=15) d,
+					(SELECT segment AS i FROM results WHERE graph=3 AND dimension='I' AND value=14) i,
+					(SELECT segment AS s FROM results WHERE graph=3 AND dimension='S' AND value=15) s,
+					(SELECT segment AS c FROM results WHERE graph=3 AND dimension='C' AND value=14) c
+			) b ON (a.d=b.d AND a.i=b.i AND a.s=b.s AND a.c=b.c)
+			JOIN patterns c ON c.id=a.pattern";
+		$result=$db->query($sql);
+		$data=$result->fetch_object();		
+	}
     ?>
     <div>
     <h1>RESULT</h1>

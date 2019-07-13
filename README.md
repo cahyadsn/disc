@@ -15,12 +15,12 @@ DISC Personality Test in PHP language based on DISC Classic. Build on PHP langua
 
 ## Donation
 + [paypal] : (https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6YRM43CZ44UQ) cdsatrian@yahoo.co.id
-+ BCA : 1451332193
++ BNI : 0821 324 555
 
 ## Contact
 + facebook (https://m.facebook.com/cahya.dsn)
 + email (cahyadsn@gmail.com)
-+ demo site    : (http://cahyadsn.phpindonesia.id/disc)
++ demo site    : (https://psycho.cahyadsn.com/disc) (http://cahyadsn.phpindonesia.id/disc)
 + source code  : (https://github.com/cahyadsn/disc)
 
 ![alt text](http://cahyadsn.dev.php.or.id/disc/qr_code.jpg "DISC Personality Test")

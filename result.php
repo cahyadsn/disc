@@ -3,7 +3,7 @@
 FILENAME     : result.php
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
-UPDATED DATE : 2018-04-27
+UPDATED DATE : 2019-07-14
 *************************************/
 ?>
 <doctype html>
@@ -97,7 +97,7 @@ if(isset($_POST['m']) && isset($_POST['l'])){
 		) b ON (a.d=b.d AND a.i=b.i AND a.s=b.s AND a.c=b.c)
 		JOIN patterns c ON c.id=a.pattern";
 	$result=$db->query($sql);
-	$data=$result->fetch_object();
+	$data=(isset($result)&& !empty($result))?$result->fetch_object():'';
 	//-- if empty result found, get default result
 	if(!isset($data->name)){
 	    $sql="
@@ -138,4 +138,4 @@ if(isset($_POST['m']) && isset($_POST['l'])){
 }
 ?>    
   </body>
-</html>    
+</html>

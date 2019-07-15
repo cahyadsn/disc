@@ -116,7 +116,7 @@ if(isset($_POST['m']) && isset($_POST['l'])){
 			) b ON (a.d=b.d AND a.i=b.i AND a.s=b.s AND a.c=b.c)
 			JOIN patterns c ON c.id=a.pattern";
 		$result=$db->query($sql);
-		$data=$result->fetch_object();		
+		$data=(isset($result)&& !empty($result))?$result->fetch_object():die('Data not found, check your database');	
 	}
     ?>
     <div>

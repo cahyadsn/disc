@@ -1,6 +1,8 @@
 # DISC
 DISC Personality Test in PHP language based on DISC Classic. Build on PHP language and MySQL/MariaDB database server (dummy data included, real data excluded -- please donate and call the author to get real data) 
 
+I can't provide the real data as on demo for this github repo since this data is proprietary, please contact the author via email to more information 
+
 ## Installation
 1. download 'disc_master.zip' file
 2. extract and copy all files to document root folder on your webserver (or other folder that you want)
@@ -19,7 +21,7 @@ DISC Personality Test in PHP language based on DISC Classic. Build on PHP langua
 ## Contact
 + facebook (https://m.facebook.com/cahya.dsn)
 + email (cahyadsn@gmail.com)
-+ demo site    : (https://psycho.cahyadsn.com/disc)
++ demo site    : (https://psycho.cahyadsn.com/disc) [en] (https://psycho.cahyadsn.com/disc/index.es) [es-dev]
 + source code  : (https://github.com/cahyadsn/disc)
 
 ## Contributor

@@ -17,6 +17,7 @@ I can't provide the real data as on demo for this github repo since this data is
 
 ## Donation
 + BNI : 0821 324 555
++ Paypal : (cahyadsn@gmail.com) or (https://paypal.me/cahyadwiana)
 
 ## Contact
 + facebook (https://m.facebook.com/cahya.dsn)

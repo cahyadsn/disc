@@ -15,6 +15,9 @@ I can't provide the real data as on demo for this github repo since this data is
 5. change database configuration on 'index.php' and 'result.php' file (default value is $dbhost='localhost;$dbuser='root';$dbpass='';dbname='test';) 
 6. try accesing to http://localhost (or other -- depend on step 2 above), enjoy!
 
+## Reference
++ **DiSC Classic Paper Profile** -  DiSC® 2800 Series Personal Profile System® (https://www.discprofile.com/products/disc-classic/) 
+
 ## Technology
 + PHP (http://www.php.net/), 
 + MySQL (http://www.mysql.com/), 

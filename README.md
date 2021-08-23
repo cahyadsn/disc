@@ -23,7 +23,7 @@ I can't provide the real data as on demo for this github repo since this data is
 + MySQL (http://www.mysql.com/), 
 
 ## Donation
-+ BNI : 0821 324 555
++ BSI : 821 324 5550
 + Paypal : (cahyadsn@gmail.com) or (https://paypal.me/cahyadwiana)
 
 ## Contact

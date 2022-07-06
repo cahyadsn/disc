@@ -3,7 +3,7 @@
 FILENAME     : index.php
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
-UPDATED DATE : 2018-04-27
+UPDATED DATE : 2022-07-06
 *************************************/
 //-- database configuration
 $dbhost='localhost';
@@ -22,7 +22,7 @@ $show_mark	= 0;	//<-- show 1 or hide 0 the marker
 $cols  		= 4;	//<-- number of columns
 $rows 		= count($data)/(4*$cols);
 ?>
-<doctype html>
+<!doctype html>
 <html>
   <head>
     <title>DISC Personality Test</title>
@@ -35,12 +35,12 @@ $rows 		= count($data)/(4*$cols);
     caption {font-size: 2em;}
     input[type=radio]{border-radius: 0;width:2.2em;height:2.2em;}
     .btn {background-color: #eee;line-height:2em;padding:0.1em 0.6em;
-    	  margin:0.2em;font-size:1.5em;font-weight:bold;
-    	  border-radius: 0.3em;}
+    	   margin:0.2em;font-size:1.5em;font-weight:bold;
+    	   border-radius: 0.3em;}
     .dark {background-color: #eee;}
     .first {border-top: solid 0.2em #000; }
     .badge { position:relative;line-height: 3em;border:solid #999 1px;
-    		 text-align: center;font-size: 2em;}
+  	   text-align: center;font-size: 2em;}
     .badge[data-badge]:after {
 	   content:attr(data-badge);
 	   position:absolute;
@@ -53,7 +53,7 @@ $rows 		= count($data)/(4*$cols);
 	   text-align:center;
 	   line-height:18px;
 	   box-shadow:0 0 1px #333;
-	}
+      }
     </style>
   </head>
   <body>
@@ -112,9 +112,9 @@ $rows 		= count($data)/(4*$cols);
       </tbody>
       <tfoot>
         <tr>
-        	<th colspan='16'>
-        		<input type='submit' value='process' class='btn'/>
-       		</th>
+          <th colspan='16'>
+            <input type='submit' value='process' class='btn'/>
+       	  </th>
        	</tr>
       </tfoot>
     </table>

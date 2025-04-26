@@ -1,5 +1,6 @@
 # DISC
 DISC Personality Test in PHP language based on DISC Classic. Build on PHP language and MySQL/MariaDB database server (dummy data included, real data excluded* )  
+![screenshot](https://github.com/cahyadsn/disc/blob/master/screenshot/home.png?raw=true)
 
 Demo link : 
 - [https://psycho.cahyadsn.com/disc](https://psycho.cahyadsn.com/disc) [ver 0.6 English version]
@@ -20,7 +21,9 @@ Demo link :
 6. try accesing to http://localhost (or other -- depend on step 2 above), enjoy!
 
 ## Reference
-+ [**DiSC Classic Paper Profile** -  DiSC® 2800 Series Personal Profile System®](https://www.discprofile.com/products/disc-classic/) 
++ [**DiSC Classic Paper Profile** -  DiSC® 2800 Series Personal Profile System®](https://www.discprofile.com/products/disc-classic/)
+
+![screenshot](https://github.com/cahyadsn/disc/blob/master/screenshot/result.png?raw=true)  
 
 ## Technology
 + PHP [http://www.php.net/](http://www.php.net/), 

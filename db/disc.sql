@@ -134,7 +134,9 @@ CREATE TABLE IF NOT EXISTS results
 	value INT NOT NULL,
 	segment INT NOT NULL,
 	graph TINYINT(1) NOT NULL,
-	PRIMARY KEY(id)
+	PRIMARY KEY(id),
+	-- Bolt optimization: Add database index on frequently queried fields
+	KEY idx_graph_dim_val (graph, dimension, value)
 ) ENGINE MyISAM DEFAULT CHARSET=utf8;
 INSERT INTO results VALUES 
 (1,'D',28,27,7,1),
@@ -347,7 +349,9 @@ CREATE TABLE IF NOT EXISTS pattern_map
   i TINYINT(1) NOT NULL,
   s TINYINT(1) NOT NULL,
   c TINYINT(1) NOT NULL,
-  pattern TINYINT(1) NOT NULL
+  pattern TINYINT(1) NOT NULL,
+  -- Bolt optimization: Add database index on frequently queried fields for JOINs
+  PRIMARY KEY (d, i, s, c)
 ) ENGINE MyISAM;
 INSERT INTO pattern_map VALUES 
 (7,7,7,7,14),

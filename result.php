@@ -75,10 +75,10 @@ if(isset($_POST['m']) && isset($_POST['l'])){
     <?php
     */
     //-- database configuration
-	$dbhost='localhost';
-	$dbuser='root';
-	$dbpass='';
-	$dbname='test';
+	$dbhost=getenv('DB_HOST') ?: 'localhost';
+	$dbuser=getenv('DB_USER') ?: 'root';
+	$dbpass=getenv('DB_PASS') ?: '';
+	$dbname=getenv('DB_NAME') ?: 'test';
 	//-- database connection
 	$db=new mysqli($dbhost,$dbuser,$dbpass,$dbname);
     $sql="

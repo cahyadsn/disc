@@ -42,7 +42,7 @@ UPDATED DATE : 2019-07-14
   </head>
   <body>
 <?php
-if(isset($_POST['m']) && isset($_POST['l'])){
+if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array($_POST['l'])){
   $most=array_count_values($_POST['m']);
   $least=array_count_values($_POST['l']);
   $result=array();

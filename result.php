@@ -74,13 +74,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     </div>
     <?php
     */
-    //-- database configuration
-	$dbhost='localhost';
-	$dbuser='root';
-	$dbpass='';
-	$dbname='test';
-	//-- database connection
-	$db=new mysqli($dbhost,$dbuser,$dbpass,$dbname);
+    require_once 'db.php';
     $sql="
         SELECT b.*,c.* 
 		FROM

@@ -5,13 +5,7 @@ AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
 UPDATED DATE : 2022-07-06
 *************************************/
-//-- database configuration
-$dbhost=getenv('DB_HOST') ?: 'localhost';
-$dbuser=getenv('DB_USER') ?: 'root';
-$dbpass=getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
-$dbname=getenv('DB_NAME') ?: 'test';
-//-- database connection
-$db=new mysqli($dbhost,$dbuser,$dbpass,$dbname);
+require_once 'db.php';
 //-- query data from database
 $sql='SELECT * FROM personalities ORDER BY no ASC';
 $result=$db->query($sql);

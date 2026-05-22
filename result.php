@@ -75,40 +75,28 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     <?php
     */
     require_once 'db.php';
+    // Bolt optimization: Replaced cross-joined derived tables with direct subqueries to prevent temporary table creation
+    // and Cartesian products. This reduces CPU/memory usage and allows utilizing primary key indexes effectively.
     $sql="
-        SELECT b.*,c.* 
-		FROM
-		pattern_map a
-		JOIN
-		(
-		    SELECT
-				d.d,i.i,s.s,c.c
-			FROM
-				(SELECT segment AS d FROM results WHERE graph=3 AND dimension='D' AND value=".$result['D']['change'].") d,
-				(SELECT segment AS i FROM results WHERE graph=3 AND dimension='I' AND value=".$result['I']['change'].") i,
-				(SELECT segment AS s FROM results WHERE graph=3 AND dimension='S' AND value=".$result['S']['change'].") s,
-				(SELECT segment AS c FROM results WHERE graph=3 AND dimension='C' AND value=".$result['C']['change'].") c
-		) b ON (a.d=b.d AND a.i=b.i AND a.s=b.s AND a.c=b.c)
-		JOIN patterns c ON c.id=a.pattern";
+        SELECT a.*, c.*
+		FROM pattern_map a
+		JOIN patterns c ON c.id=a.pattern
+		WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=".$result['D']['change']." LIMIT 1)
+		  AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=".$result['I']['change']." LIMIT 1)
+		  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=".$result['S']['change']." LIMIT 1)
+		  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=".$result['C']['change']." LIMIT 1)";
 	$result=$db->query($sql);
 	$data=(isset($result)&& !empty($result))?$result->fetch_object():'';
 	//-- if empty result found, get default result
 	if(!isset($data->name)){
 	    $sql="
-		SELECT b.*,c.* 
-			FROM
-			pattern_map a
-			JOIN
-			(
-			    SELECT
-					d.d,i.i,s.s,c.c
-				FROM
-					(SELECT segment AS d FROM results WHERE graph=3 AND dimension='D' AND value=15) d,
-					(SELECT segment AS i FROM results WHERE graph=3 AND dimension='I' AND value=14) i,
-					(SELECT segment AS s FROM results WHERE graph=3 AND dimension='S' AND value=15) s,
-					(SELECT segment AS c FROM results WHERE graph=3 AND dimension='C' AND value=14) c
-			) b ON (a.d=b.d AND a.i=b.i AND a.s=b.s AND a.c=b.c)
-			JOIN patterns c ON c.id=a.pattern";
+		SELECT a.*, c.*
+			FROM pattern_map a
+			JOIN patterns c ON c.id=a.pattern
+			WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=15 LIMIT 1)
+			  AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=14 LIMIT 1)
+			  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=15 LIMIT 1)
+			  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=14 LIMIT 1)";
 		$result=$db->query($sql);
 		$data=(isset($result)&& !empty($result))?$result->fetch_object():die('Data not found, check your database');	
 	}

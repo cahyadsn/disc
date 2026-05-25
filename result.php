@@ -43,8 +43,8 @@ UPDATED DATE : 2019-07-14
   <body>
 <?php
 if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array($_POST['l'])){
-  $most=array_count_values($_POST['m']);
-  $least=array_count_values($_POST['l']);
+  $most=array_count_values(array_filter($_POST['m'], 'is_scalar'));
+  $least=array_count_values(array_filter($_POST['l'], 'is_scalar'));
   $result=array();
   $aspect=array('D','I','S','C','#');
   foreach($aspect as $a){

@@ -81,22 +81,27 @@ $rows 		= count($data)/(4*$cols);
          				.($i+$n*$rows+1)
          				."</th>";
          		}
+		        $item = $data[$cols*($i+$n*$rows)+$j];
+		        $term = htmlspecialchars($item->term, ENT_QUOTES, 'UTF-8');
+		        $most = htmlspecialchars($item->most, ENT_QUOTES, 'UTF-8');
+		        $least = htmlspecialchars($item->least, ENT_QUOTES, 'UTF-8');
+
 		        echo "<td".($j==0?" class='first'":"").">
-		          		{$data[$cols*($i+$n*$rows)+$j]->term}
+					{$term}
 		          	  </td>
 		          	  <td".($j==0?" class='first'":"").">
 		        		<input type='radio' 
 		        		       name='m[".($i+$n*$rows)."]' 
-		        			   value='{$data[$cols*($i+$n*$rows)+$j]->most}' 
+						   value='{$most}'
 		        			   required />" 
-		        	 .($show_mark?$data[$cols*($i+$n*$rows)+$j]->most:'')
+				 .($show_mark ? $most : '')
 		        	 ."</td>
 		          	  <td".($j==0?" class='first'":"").">
 		          		<input type='radio' 
 		          		       name='l[".($i+$n*$rows)."]' 
-		          		       value='{$data[$cols*($i+$n*$rows)+$j]->least}' 
+					       value='{$least}'
 		          		       required />"
-		          	 .($show_mark?$data[$cols*($i+$n*$rows)+$j]->least:'')
+				 .($show_mark ? $least : '')
 		          	 ."</td>";
           	}
           echo "</tr>";

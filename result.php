@@ -52,29 +52,8 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     $result[$a]['least']=isset($least[$a])?$least[$a]:0;
     $result[$a]['change']=($a!='#'?$result[$a]['most']-$result[$a]['least']:0);
   }
-  /*
-	  ?>
-	  <div>
-	    <table>
-		    <caption>TALLY BOX</caption>
-		    <tr>
-		    	<th>Graph I<br/>Most</th>
-		    	<th>Graph II<br />Least</th>
-		    	<th>Graph III<br />Change</th>
-		    </tr>
-		    <?php foreach($aspect as $a){
-		    	echo "<tr>
-		    			<td class='badge' data-badge='{$a}'>{$result[$a]['most']}</td>
-		    			<td class='badge' data-badge='{$a}'>{$result[$a]['least']}</td>
-		    			<td class='badge' data-badge='{$a}'>{$result[$a]['change']}</td>
-		    		  </tr>";
-			}
-			?>
-	    </table>
-    </div>
-    <?php
-    */
-    require_once 'db.php';
+
+  require_once 'db.php';
     // Bolt optimization: Replaced cross-joined derived tables with direct subqueries to prevent temporary table creation
     // and Cartesian products. This reduces CPU/memory usage and allows utilizing primary key indexes effectively.
     $sql="

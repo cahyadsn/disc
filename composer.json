@@ -1,0 +1,15 @@
+{
+    "name": "cahyadsn/disc",
+    "description": "DISC Personality Test in PHP",
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Disc\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

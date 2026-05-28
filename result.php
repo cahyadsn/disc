@@ -82,18 +82,18 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     ?>
     <div>
     <h1>RESULT</h1>
-    <b>Segment : </b><br /><?php echo "{$data->d}-{$data->i}-{$data->s}-{$data->c}";?><br />
-    <b>Pattern : </b><br /><?php echo $data->name;?><br />
-    <b>Emotions : </b><br /><?php echo $data->emotions;?><br />
-    <b>Goal : </b><br /><?php echo $data->goal;?><br />
-    <b>Judges others by : </b><br /><?php echo $data->judges_others;?><br />
-    <b>Influences others by: </b><br /><?php echo $data->influences_others;?><br />
-    <b>Value to the organization: </b><br /><?php echo $data->organization_value;?><br />
-    <b>Overuses : </b><br /><?php echo $data->overuses;?><br />
-    <b>Under pressure : </b><br /><?php echo $data->under_pressure;?><br />
-    <b>Fears : </b><br /><?php echo $data->fear;?><br />
-    <b>Would increase effectiveness through: </b><br /><?php echo $data->effectiveness;?><br />
-    <b>Description : </b><br /><?php echo $data->description;?><br />
+    <b>Segment : </b><br /><?php echo htmlspecialchars("{$data->d}-{$data->i}-{$data->s}-{$data->c}", ENT_QUOTES, 'UTF-8');?><br />
+    <b>Pattern : </b><br /><?php echo htmlspecialchars($data->name, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Emotions : </b><br /><?php echo htmlspecialchars($data->emotions, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Goal : </b><br /><?php echo htmlspecialchars($data->goal, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Judges others by : </b><br /><?php echo htmlspecialchars($data->judges_others, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Influences others by: </b><br /><?php echo htmlspecialchars($data->influences_others, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Value to the organization: </b><br /><?php echo htmlspecialchars($data->organization_value, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Overuses : </b><br /><?php echo htmlspecialchars($data->overuses, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Under pressure : </b><br /><?php echo htmlspecialchars($data->under_pressure, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Fears : </b><br /><?php echo htmlspecialchars($data->fear, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Would increase effectiveness through: </b><br /><?php echo htmlspecialchars($data->effectiveness, ENT_QUOTES, 'UTF-8');?><br />
+    <b>Description : </b><br /><?php echo htmlspecialchars($data->description, ENT_QUOTES, 'UTF-8');?><br />
     </div>
 <?php
 }

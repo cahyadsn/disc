@@ -11,7 +11,6 @@ $sql='SELECT * FROM personalities ORDER BY no ASC';
 $result=$db->query($sql);
 $data=array();
 while($row=$result->fetch_object()) $data[]=$row;
-$terms=json_encode($data);
 $show_mark	= 0;	//<-- show 1 or hide 0 the marker
 $cols  		= 4;	//<-- number of columns
 $rows 		= count($data)/(4*$cols);

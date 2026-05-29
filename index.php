@@ -71,33 +71,35 @@ $rows 		= count($data)/(4*$cols);
       for($i=0;$i<$rows;++$i){
         echo "<tr".($i%2==0?" class='dark'":"").">";
         for($j=0;$j<$cols;++$j){
+            $isFirst = ($j==0?" class='first'":"");
         	for($n=0;$n<4;++$n){
          		if($j>0 && $n==0){
          			echo "<tr".($i%2==0?" class='dark'":"").">";
          		}elseif($j==0){
-         			echo "<th rowspan='$cols'"
-         				.($j==0?" class='first'":"").">"
+				echo "<th rowspan='$cols'{$isFirst}>"
          				.($i+$n*$rows+1)
          				."</th>";
          		}
-		        $item = $data[$cols*($i+$n*$rows)+$j];
+		        $idx = $cols*($i+$n*$rows)+$j;
+		        $item = $data[$idx];
 		        $term = htmlspecialchars($item->term, ENT_QUOTES, 'UTF-8');
 		        $most = htmlspecialchars($item->most, ENT_QUOTES, 'UTF-8');
 		        $least = htmlspecialchars($item->least, ENT_QUOTES, 'UTF-8');
+		        $inr = $i+$n*$rows;
 
-		        echo "<td".($j==0?" class='first'":"").">
+		        echo "<td{$isFirst}>
 					{$term}
 		          	  </td>
-		          	  <td".($j==0?" class='first'":"").">
+				  <td{$isFirst}>
 		        		<input type='radio' 
-		        		       name='m[".($i+$n*$rows)."]' 
+					       name='m[{$inr}]'
 						   value='{$most}'
 		        			   required />" 
 				 .($show_mark ? $most : '')
 		        	 ."</td>
-		          	  <td".($j==0?" class='first'":"").">
+				  <td{$isFirst}>
 		          		<input type='radio' 
-		          		       name='l[".($i+$n*$rows)."]' 
+					       name='l[{$inr}]'
 					       value='{$least}'
 		          		       required />"
 				 .($show_mark ? $least : '')

@@ -6,11 +6,27 @@ CREATED DATE : 2015-01-11
 UPDATED DATE : 2022-07-06
 *************************************/
 require_once 'db.php';
-//-- query data from database
-$sql='SELECT * FROM personalities ORDER BY no ASC';
-$result=$db->query($sql);
-$data=array();
-while($row=$result->fetch_object()) $data[]=$row;
+
+$cache_file = __DIR__ . '/personalities_cache.json';
+$data = null;
+if (file_exists($cache_file)) {
+    $file_content = @file_get_contents($cache_file);
+    if ($file_content !== false) {
+        $data = json_decode($file_content);
+    }
+}
+
+if ($data === null || !is_array($data)) {
+    //-- query data from database
+    $sql='SELECT * FROM personalities ORDER BY no ASC';
+    $result=$db->query($sql);
+    $data=array();
+    while($row=$result->fetch_object()) $data[]=$row;
+
+    // Save to cache for future requests using LOCK_EX for safety during concurrent writes
+    @file_put_contents($cache_file, json_encode($data), LOCK_EX);
+}
+
 $show_mark	= 0;	//<-- show 1 or hide 0 the marker
 $cols  		= 4;	//<-- number of columns
 $rows 		= count($data)/(4*$cols);

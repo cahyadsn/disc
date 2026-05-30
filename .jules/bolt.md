@@ -7,3 +7,6 @@
 2024-05-28 - [JSON File Cache for DB Query]
 **Learning:** For mostly static database queries like static text translations or static enums, file-based caching (JSON with file lock) can offer a ~95% performance improvement by avoiding database network overhead without significantly complicating code. Caching requires careful handling of locking (`LOCK_EX`) and checking validity of the cached payload.
 **Action:** When I encounter database queries retrieving small, infrequently changing datasets on high-traffic endpoints, I will consider file-based JSON caching to eliminate connection overhead.
+## 2024-07-26 - [Database Optimization: Lazy Loading Connection on Cache Hit]
+**Learning:** Caching the result of a database query (e.g., using a local JSON file) is not fully effective if the database connection itself is still established globally before checking the cache. This forces unnecessary network overhead and initialization time for the database connection on every request, even when the data is ultimately served from the cache.
+**Action:** When using file-based caching for database queries, ensure the database connection (`require_once 'db.php'` or `new mysqli(...)`) is lazy-loaded and only established inside the cache-miss condition.

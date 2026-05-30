@@ -7,10 +7,12 @@ UPDATED DATE : 2022-07-06
 *************************************/
 $cache_file = __DIR__ . '/personalities_cache.json';
 $data = null;
-if (file_exists($cache_file)) {
-    $file_content = @file_get_contents($cache_file);
+if (file_exists($cache_file) && is_readable($cache_file)) {
+    $file_content = file_get_contents($cache_file);
     if ($file_content !== false) {
         $data = json_decode($file_content);
+    } else {
+        error_log("Failed to read cache file: $cache_file");
     }
 }
 
@@ -26,7 +28,9 @@ if ($data === null || !is_array($data)) {
     while($row=$result->fetch_object()) $data[]=$row;
 
     // Save to cache for future requests using LOCK_EX for safety during concurrent writes
-    @file_put_contents($cache_file, json_encode($data), LOCK_EX);
+    if (file_put_contents($cache_file, json_encode($data), LOCK_EX) === false) {
+        error_log("Failed to write to cache file: $cache_file");
+    }
 }
 
 $show_mark	= 0;	//<-- show 1 or hide 0 the marker

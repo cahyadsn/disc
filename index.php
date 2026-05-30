@@ -5,7 +5,6 @@ AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
 UPDATED DATE : 2022-07-06
 *************************************/
-require_once 'db.php';
 
 $cache_file = __DIR__ . '/personalities_cache.json';
 $data = null;
@@ -17,6 +16,7 @@ if (file_exists($cache_file)) {
 }
 
 if ($data === null || !is_array($data)) {
+    require_once 'db.php';
     //-- query data from database
     $sql='SELECT * FROM personalities ORDER BY no ASC';
     $result=$db->query($sql);

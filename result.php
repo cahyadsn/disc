@@ -6,7 +6,7 @@ CREATED DATE : 2015-01-11
 UPDATED DATE : 2019-07-14
 *************************************/
 ?>
-<doctype html>
+<!doctype html>
 <html>
   <head>
     <title>DISC Personality Test</title>

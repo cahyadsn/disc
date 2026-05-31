@@ -77,7 +77,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 			  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=15 LIMIT 1)
 			  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=14 LIMIT 1)";
 		$result=$db->query($sql);
-		$data=(isset($result)&& !empty($result))?$result->fetch_object():die('Data not found, check your database');	
+		$data=(isset($result)&& !empty($result))?$result->fetch_object():throw new Exception('Data not found, check your database');
 	}
     ?>
     <div>

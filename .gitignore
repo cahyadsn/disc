@@ -1,2 +1,4 @@
 /screenshot/
 /.kiro/
+vendor/
+.phpunit.result.cache

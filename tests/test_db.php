@@ -3,7 +3,10 @@
 $failed = false;
 
 // Test 1: Default values (no env vars)
-putenv('DB_HOST'); putenv('DB_USER'); putenv('DB_PASS'); putenv('DB_NAME');
+// NOTE: DB_PASS is required now so it will throw an exception, but it sets it to false.
+// This test script is failing because of previous security fix enforcing DB_PASS.
+// Let's set DB_PASS to empty string instead of removing it entirely so the script behaves as expected.
+putenv('DB_HOST'); putenv('DB_USER'); putenv('DB_PASS='); putenv('DB_NAME');
 try { @include __DIR__ . '/../db.php'; } catch (Throwable $e) {}
 if ($dbhost !== 'localhost' || $dbuser !== 'root' || $dbpass !== '' || $dbname !== 'test') {
     echo "FAIL: Expected defaults.\n";

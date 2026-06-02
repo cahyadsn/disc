@@ -64,8 +64,8 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 		  AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=".$result['I']['change']." LIMIT 1)
 		  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=".$result['S']['change']." LIMIT 1)
 		  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=".$result['C']['change']." LIMIT 1)";
-	$result=$db->query($sql);
-	$data=(isset($result)&& !empty($result))?$result->fetch_object():'';
+	$db_result=$db->query($sql);
+	$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():'';
 	//-- if empty result found, get default result
 	if(!isset($data->name)){
 	    $sql="
@@ -76,8 +76,8 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 			  AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=14 LIMIT 1)
 			  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=15 LIMIT 1)
 			  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=14 LIMIT 1)";
-		$result=$db->query($sql);
-		$data=(isset($result)&& !empty($result))?$result->fetch_object():throw new Exception('Data not found, check your database');
+		$db_result=$db->query($sql);
+		$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():throw new Exception('Data not found, check your database');
 	}
     ?>
     <div>

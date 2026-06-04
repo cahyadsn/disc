@@ -60,11 +60,14 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
         SELECT a.*, c.*
 		FROM pattern_map a
 		JOIN patterns c ON c.id=a.pattern
-		WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=".$result['D']['change']." LIMIT 1)
-		  AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=".$result['I']['change']." LIMIT 1)
-		  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=".$result['S']['change']." LIMIT 1)
-		  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=".$result['C']['change']." LIMIT 1)";
-	$db_result=$db->query($sql);
+		WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=? LIMIT 1)
+		  AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=? LIMIT 1)
+		  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=? LIMIT 1)
+		  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=? LIMIT 1)";
+	$stmt = $db->prepare($sql);
+	$stmt->bind_param("iiii", $result['D']['change'], $result['I']['change'], $result['S']['change'], $result['C']['change']);
+	$stmt->execute();
+	$db_result=$stmt->get_result();
 	$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():'';
 	//-- if empty result found, get default result
 	if(!isset($data->name)){

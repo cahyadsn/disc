@@ -25,7 +25,14 @@ if ($data === null || !is_array($data)) {
     $sql='SELECT * FROM personalities ORDER BY no ASC';
     $result=$db->query($sql);
     $data=array();
-    while($row=$result->fetch_object()) $data[]=$row;
+    while($row=$result->fetch_object()) {
+        // Bolt optimization: Pre-escape strings before saving to cache to avoid
+        // redundantly executing htmlspecialchars hundreds of times during every render
+        $row->term = htmlspecialchars($row->term, ENT_QUOTES, 'UTF-8');
+        $row->most = htmlspecialchars($row->most, ENT_QUOTES, 'UTF-8');
+        $row->least = htmlspecialchars($row->least, ENT_QUOTES, 'UTF-8');
+        $data[]=$row;
+    }
 
     // Save to cache for future requests using LOCK_EX for safety during concurrent writes
     if (file_put_contents($cache_file, json_encode($data), LOCK_EX) === false) {
@@ -104,9 +111,10 @@ $rows 		= count($data)/(4*$cols);
          		}
 		        $idx = $cols*($i+$n*$rows)+$j;
 		        $item = $data[$idx];
-		        $term = htmlspecialchars($item->term, ENT_QUOTES, 'UTF-8');
-		        $most = htmlspecialchars($item->most, ENT_QUOTES, 'UTF-8');
-		        $least = htmlspecialchars($item->least, ENT_QUOTES, 'UTF-8');
+		        // Bolt optimization: Data is pre-escaped before caching to avoid 300+ redundant htmlspecialchars calls per render
+		        $term = $item->term;
+		        $most = $item->most;
+		        $least = $item->least;
 		        $inr = $i+$n*$rows;
 
 		        echo "<td{$isFirst}>

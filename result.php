@@ -65,21 +65,22 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 		  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=? LIMIT 1)
 		  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=? LIMIT 1)";
 	$stmt = $db->prepare($sql);
-	$stmt->bind_param("iiii", $result['D']['change'], $result['I']['change'], $result['S']['change'], $result['C']['change']);
+	$val_d = $result['D']['change'];
+	$val_i = $result['I']['change'];
+	$val_s = $result['S']['change'];
+	$val_c = $result['C']['change'];
+	$stmt->bind_param("iiii", $val_d, $val_i, $val_s, $val_c);
 	$stmt->execute();
 	$db_result=$stmt->get_result();
 	$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():'';
 	//-- if empty result found, get default result
 	if(!isset($data->name)){
-	    $sql="
-		SELECT a.*, c.*
-			FROM pattern_map a
-			JOIN patterns c ON c.id=a.pattern
-			WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=15 LIMIT 1)
-			  AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=14 LIMIT 1)
-			  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=15 LIMIT 1)
-			  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=14 LIMIT 1)";
-		$db_result=$db->query($sql);
+		$val_d = 15;
+		$val_i = 14;
+		$val_s = 15;
+		$val_c = 14;
+		$stmt->execute();
+		$db_result=$stmt->get_result();
 		$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():throw new Exception('Data not found, check your database');
 	}
     ?>

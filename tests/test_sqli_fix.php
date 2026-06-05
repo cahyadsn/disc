@@ -12,7 +12,8 @@ if (preg_match('/value="\.\$result\[\'D\'\]\[\'change\'\]\." LIMIT 1\)/', $conte
 }
 
 // Check if bind_param is used
-if (!preg_match('/\$stmt->bind_param\("iiii", \$result\[\'D\'\]\[\'change\'\], \$result\[\'I\'\]\[\'change\'\], \$result\[\'S\'\]\[\'change\'\], \$result\[\'C\'\]\[\'change\'\]\);/', $content)) {
+if (!preg_match('/\$stmt->bind_param\("iiii", \$val_d, \$val_i, \$val_s, \$val_c\);/', $content) &&
+    !preg_match('/\$stmt->bind_param\("iiii", \$result\[\'D\'\]\[\'change\'\], \$result\[\'I\'\]\[\'change\'\], \$result\[\'S\'\]\[\'change\'\], \$result\[\'C\'\]\[\'change\'\]\);/', $content)) {
     echo "FAIL: bind_param is missing or incorrect.\n";
     $failed = true;
 }

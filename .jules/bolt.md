@@ -13,3 +13,6 @@
 2024-05-29 - [PHP View Rendering Performance], 
 **Learning:** [Repeated math calculations, conditional checking, and complex string concatenations inside deep loops during HTML template generation lead to significant performance overhead in PHP. Pre-calculating indices and variables (e.g. class strings based on indices) and directly injecting them via curly braces `{$var}` drastically improves loop rendering times (~24% faster in microbenchmarks).], 
 **Action:** [When rendering large HTML tables or lists in PHP, always hoist index math, CSS class logic, and repetitive access out of inner loops. Use curly brace interpolation for variables instead of inline string concatenation dots.]
+## 2024-05-18 - [Pre-escaping Data Before Caching]
+**Learning:** Calling `htmlspecialchars` inside an HTML rendering loop for hundreds of list items is computationally expensive and redundant if the underlying data doesn't change frequently.
+**Action:** Shift formatting and escaping logic into the data fetching/caching layer whenever possible. By pre-escaping the data before it is saved into `personalities_cache.json`, we avoided over 300 redundant function calls per render, significantly reducing overhead on the main HTML generation pass.

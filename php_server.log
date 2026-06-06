@@ -1,0 +1,13 @@
+[Sat Jun  6 14:46:26 2026] PHP 8.3.6 Development Server (http://localhost:3000) started
+[Sat Jun  6 14:47:04 2026] [::1]:59978 Accepted
+[Sat Jun  6 14:47:04 2026] [::1]:59978 [200]: GET /index.php
+[Sat Jun  6 14:47:04 2026] [::1]:59978 Closing
+[Sat Jun  6 14:47:04 2026] [::1]:59990 Accepted
+[Sat Jun  6 14:47:04 2026] [::1]:59990 [200]: GET /assets/style.css
+[Sat Jun  6 14:47:04 2026] [::1]:59990 Closing
+[Sat Jun  6 14:47:06 2026] [::1]:60002 Accepted
+[Sat Jun  6 14:47:06 2026] [::1]:60002 [200]: GET /result.php
+[Sat Jun  6 14:47:06 2026] [::1]:60002 Closing
+[Sat Jun  6 14:47:06 2026] [::1]:60006 Accepted
+[Sat Jun  6 14:47:06 2026] [::1]:60006 [200]: GET /assets/style.css
+[Sat Jun  6 14:47:06 2026] [::1]:60006 Closing

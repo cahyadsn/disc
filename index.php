@@ -40,7 +40,6 @@ if ($data === null || !is_array($data)) {
     }
 }
 
-$show_mark	= 0;	//<-- show 1 or hide 0 the marker
 $cols  		= 4;	//<-- number of columns
 $rows 		= count($data)/(4*$cols);
 ?>
@@ -96,16 +95,12 @@ $rows 		= count($data)/(4*$cols);
 		        		<input type='radio' 
 					       name='m[{$inr}]'
 						   value='{$most}'
-		        			   required />" 
-				 .($show_mark ? $most : '')
-		        	 ."</td>
+						   required /></td>
 				  <td{$isFirst}>
 		          		<input type='radio' 
 					       name='l[{$inr}]'
 					       value='{$least}'
-		          		       required />"
-				 .($show_mark ? $least : '')
-		          	 ."</td>";
+					       required /></td>";
           	}
           echo "</tr>";
         }

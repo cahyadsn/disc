@@ -48,35 +48,7 @@ $rows 		= count($data)/(4*$cols);
 <html>
   <head>
     <title>DISC Personality Test</title>
-    <style>
-    body,table {font-family: verdana,arial,sans-serif;font-size: 1em;}
-    input {background-color: #eee;line-height:1.5em;}
-    thead {background-color: #666;color: #fff;line-height: 2em; padding:0.2em;}
-    tfoot {background-color: #999;color: #fff;}
-    td {padding:0.2em;}
-    caption {font-size: 2em;}
-    input[type=radio]{border-radius: 0;width:2.2em;height:2.2em;}
-    .btn {background-color: #eee;line-height:2em;padding:0.1em 0.6em;
-    	   margin:0.2em;font-size:1.5em;font-weight:bold;
-    	   border-radius: 0.3em;}
-    .dark {background-color: #eee;}
-    .first {border-top: solid 0.2em #000; }
-    .badge { position:relative;line-height: 3em;border:solid #999 1px;
-  	   text-align: center;font-size: 2em;}
-    .badge[data-badge]:after {
-	   content:attr(data-badge);
-	   position:absolute;
-	   top:1px;
-	   left:1px;
-	   font-size:.7em;
-	   background:#9af;
-	   color:white;
-	   width:18px;height:18px;
-	   text-align:center;
-	   line-height:18px;
-	   box-shadow:0 0 1px #333;
-      }
-    </style>
+    <link rel="stylesheet" href="assets/style.css">
   </head>
   <body>
     <form method='post' action='result.php'>

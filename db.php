@@ -9,4 +9,11 @@ if ($dbpass === false) {
 $dbname = getenv('DB_NAME') ?: 'test';
 
 //-- database connection
-$db = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+try {
+    $db = @new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+    if ($db->connect_error) {
+        throw new Exception('Database connection failed.');
+    }
+} catch (Throwable $e) {
+    throw new Exception('Database connection failed.');
+}

@@ -53,8 +53,12 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 		$val_c = 14;
 		$stmt->execute();
 		$db_result=$stmt->get_result();
-		$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():throw new Exception('Data not found, check your database');
+		$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():null;
 	}
+
+	if (!$data) {
+		echo "    <div>\n      <h1>Error</h1>\n      <p>Data not found, check your database.</p>\n    </div>\n";
+	} else {
     ?>
     <div>
     <h1>RESULT</h1>
@@ -72,6 +76,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     <b>Description : </b><br /><?php echo htmlspecialchars($data->description, ENT_QUOTES, 'UTF-8');?><br />
     </div>
 <?php
+	}
 }
 ?>    
   </body>

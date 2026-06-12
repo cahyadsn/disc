@@ -2,3 +2,4 @@
 /.kiro/
 vendor/
 .phpunit.result.cache
+/html_cache.html

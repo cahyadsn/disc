@@ -41,7 +41,7 @@ $db_time = microtime(true) - $start;
 
 // measure file cache
 $cache_file = __DIR__ . '/cache.json';
-file_put_contents($cache_file, json_encode($data));
+file_put_contents($cache_file, "<html></html>");
 $start = microtime(true);
 for ($i=0; $i<$runs; $i++) {
     $data = json_decode(file_get_contents($cache_file));

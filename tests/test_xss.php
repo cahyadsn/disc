@@ -61,6 +61,8 @@ $db = new MockMySQLi();
 // We need index.php not to require db.php again because require_once only loads once.
 // So if we include it here, index.php won't error out.
 // Let's test this strategy.
+@unlink(__DIR__ . '/../html_cache.html');
+@unlink(__DIR__ . '/../personalities_cache.json');
 ob_start();
 include __DIR__ . '/../index.php';
 $output = ob_get_clean();

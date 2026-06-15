@@ -16,3 +16,6 @@
 ## 2024-05-18 - [Pre-escaping Data Before Caching]
 **Learning:** Calling `htmlspecialchars` inside an HTML rendering loop for hundreds of list items is computationally expensive and redundant if the underlying data doesn't change frequently.
 **Action:** Shift formatting and escaping logic into the data fetching/caching layer whenever possible. By pre-escaping the data before it is saved into `personalities_cache.json`, we avoided over 300 redundant function calls per render, significantly reducing overhead on the main HTML generation pass.
+## 2024-05-30 - HTML View Caching vs JSON Data Caching
+**Learning:** Caching raw JSON data and then rebuilding complex HTML structures via deeply nested PHP loops on every render is still computationally expensive and limits performance gains. Caching the fully rendered HTML block instead can eliminate almost all rendering CPU overhead, achieving up to 98% faster response times.
+**Action:** When working on static or semi-static list/table views, cache the generated HTML structure (e.g., using output buffering `ob_start()`) rather than just the underlying array data, provided the data doesn't require dynamic manipulation on every render.

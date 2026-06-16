@@ -32,23 +32,31 @@ if ($html_content === false) {
     $rows 		= count($data)/(4*$cols);
     ob_start();
       for($i=0;$i<$rows;++$i){
+        $inr_cache = [];
+        $idx_base = [];
+        for($n=0;$n<4;++$n){
+            $inr_cache[$n] = $i+$n*$rows;
+            $idx_base[$n] = $cols*$inr_cache[$n];
+        }
+
         echo "<tr".($i%2==0?" class='dark'":"").">";
         for($j=0;$j<$cols;++$j){
             $isFirst = ($j==0?" class='first'":"");
         	for($n=0;$n<4;++$n){
+                $inr = $inr_cache[$n];
+
          		if($j>0 && $n==0){
          			echo "<tr".($i%2==0?" class='dark'":"").">";
          		}elseif($j==0){
 				echo "<th rowspan='$cols'{$isFirst}>"
-         				.($i+$n*$rows+1)
+					.($inr+1)
          				."</th>";
          		}
-		        $idx = $cols*($i+$n*$rows)+$j;
+		        $idx = $idx_base[$n]+$j;
 		        $item = $data[$idx];
 		        $term = $item->term;
 		        $most = $item->most;
 		        $least = $item->least;
-		        $inr = $i+$n*$rows;
 
 		        echo "<td{$isFirst}>
 					{$term}

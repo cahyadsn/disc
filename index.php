@@ -22,15 +22,20 @@ if ($html_content === false) {
     $sql='SELECT * FROM personalities ORDER BY no ASC';
     $result=$db->query($sql);
     $data=array();
-    while($row=$result->fetch_object()) {
-        $row->term = htmlspecialchars($row->term, ENT_QUOTES, 'UTF-8');
-        $row->most = htmlspecialchars($row->most, ENT_QUOTES, 'UTF-8');
-        $row->least = htmlspecialchars($row->least, ENT_QUOTES, 'UTF-8');
-        $data[]=$row;
+    if ($result) {
+        while($row=$result->fetch_object()) {
+            $row->term = htmlspecialchars($row->term, ENT_QUOTES, 'UTF-8');
+            $row->most = htmlspecialchars($row->most, ENT_QUOTES, 'UTF-8');
+            $row->least = htmlspecialchars($row->least, ENT_QUOTES, 'UTF-8');
+            $data[]=$row;
+        }
     }
 
     $rows 		= count($data)/(4*$cols);
     ob_start();
+      if (!$result) {
+          echo "<tr><td colspan='16' style='text-align:center; color:red;'>Error loading data.</td></tr>";
+      }
       for($i=0;$i<$rows;++$i){
         echo "<tr".($i%2==0?" class='dark'":"").">";
         for($j=0;$j<$cols;++$j){
@@ -68,8 +73,10 @@ if ($html_content === false) {
         }
       }
     $html_content = ob_get_clean();
-    if (file_put_contents($html_cache_file, $html_content, LOCK_EX) === false) {
-        error_log("Failed to write to HTML cache file: $html_cache_file");
+    if ($result) {
+        if (file_put_contents($html_cache_file, $html_content, LOCK_EX) === false) {
+            error_log("Failed to write to HTML cache file: $html_cache_file");
+        }
     }
 }
 ?>

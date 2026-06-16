@@ -10,7 +10,7 @@ $dbname = getenv('DB_NAME') ?: 'test';
 
 //-- database connection
 try {
-    $db = @new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+    $db = @new mysqli('p:' . $dbhost, $dbuser, $dbpass, $dbname);
     if ($db->connect_error) {
         throw new Exception('Database connection failed.');
     }

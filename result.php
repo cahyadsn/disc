@@ -50,7 +50,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 	$stmt->bind_param("iiii", $val_d, $val_i, $val_s, $val_c);
 	$stmt->execute();
 	$db_result=$stmt->get_result();
-	$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():'';
+	$data = $db_result ? $db_result->fetch_object() : '';
 	//-- if empty result found, get default result
 	if(!isset($data->name)){
 		$val_d = DEFAULT_VAL_D;
@@ -59,7 +59,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 		$val_c = DEFAULT_VAL_C;
 		$stmt->execute();
 		$db_result=$stmt->get_result();
-		$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():null;
+		$data = $db_result ? $db_result->fetch_object() : null;
 	}
 
 	if (!$data) {

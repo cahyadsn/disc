@@ -19,3 +19,6 @@
 ## 2024-05-30 - HTML View Caching vs JSON Data Caching
 **Learning:** Caching raw JSON data and then rebuilding complex HTML structures via deeply nested PHP loops on every render is still computationally expensive and limits performance gains. Caching the fully rendered HTML block instead can eliminate almost all rendering CPU overhead, achieving up to 98% faster response times.
 **Action:** When working on static or semi-static list/table views, cache the generated HTML structure (e.g., using output buffering `ob_start()`) rather than just the underlying array data, provided the data doesn't require dynamic manipulation on every render.
+## 2024-07-27 - [Database Optimization: Persistent Connections]
+**Learning:** In PHP/MySQL applications, repeatedly establishing new connections (`new mysqli`) on every request incurs significant TCP handshake and authentication overhead.
+**Action:** Prefix the database hostname with `p:` (e.g., `p:localhost`) to natively enable persistent connection pooling in `mysqli`, reusing connections across requests to reduce latency and resource usage.

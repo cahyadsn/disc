@@ -22,3 +22,6 @@
 ## 2024-07-28 - Database Connection Pooling with Persistent Connections
 **Learning:** In a traditional PHP/MySQL environment without an external connection pooler like PgBouncer or ProxySQL, establishing a new TCP connection to the database on every HTTP request adds significant latency overhead (~40ms per request on slow networks or loaded servers).
 **Action:** Use persistent database connections by prepending `p:` to the database hostname when creating the `mysqli` connection. This leverages PHP's built-in connection pooling, reusing existing established connections across requests and reducing connection time by ~38%.
+2024-06-16 - [Persistent Database Connections]
+**Learning:** Using persistent connections in `mysqli` by simply prepending `p:` to the `$dbhost` can significantly reduce overhead by pooling and reusing database connections, yielding a ~30% improvement in connection times in microbenchmarks.
+**Action:** Default to using persistent connections (`p:`) for `mysqli` to limit the overhead per request in PHP scripts that establish new database connections for every request.

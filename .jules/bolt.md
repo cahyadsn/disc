@@ -1,21 +1,3 @@
-## 2024-05-24 - Database Optimization: Avoiding Cross-Joined Derived Tables
-**Learning:** Using multiple derived tables with a cross-join (Cartesian product) to perform constant-time lookups forces MySQL to create temporary tables, which is highly inefficient for CPU and memory, especially without proper indexing on derived tables.
-**Action:** Replace cross-joined derived tables with uncorrelated direct subqueries in the `WHERE` clause (e.g., `WHERE col = (SELECT val FROM table LIMIT 1)`) to allow the database to use primary key indexes effectively and avoid temporary table creation entirely.
-## 2024-06-25 - [Missing DB Indexes in PHP application]
-**Learning:** In traditional PHP/MySQL applications, SQL scripts used for initial schema definitions (like `db/disc.sql`) often lack necessary indexes for fields frequently queried or used in complex JOINs (like `graph`, `dimension`, `value` in the `results` table, and `d`, `i`, `s`, `c` in `pattern_map`).
-**Action:** When optimizing traditional LAMP stack apps, inspect the SQL schema definition files for missing `PRIMARY KEY` and `KEY` definitions on columns heavily used in `WHERE` and `JOIN` clauses to prevent O(N) full table scans.
-## 2024-07-26 - [Database Optimization: Lazy Loading Connection on Cache Hit]
-**Learning:** Caching the result of a database query (e.g., using a local JSON file) is not fully effective if the database connection itself is still established globally before checking the cache. This forces unnecessary network overhead and initialization time for the database connection on every request, even when the data is ultimately served from the cache.
-**Action:** When using file-based caching for database queries, ensure the database connection (`require_once 'db.php'` or `new mysqli(...)`) is lazy-loaded and only established inside the cache-miss condition.
-2024-05-28 - [JSON File Cache for DB Query]
-**Learning:** For mostly static database queries like static text translations or static enums, file-based caching (JSON with file lock) can offer a ~95% performance improvement by avoiding database network overhead without significantly complicating code. Caching requires careful handling of locking (`LOCK_EX`) and checking validity of the cached payload.
-**Action:** When I encounter database queries retrieving small, infrequently changing datasets on high-traffic endpoints, I will consider file-based JSON caching to eliminate connection overhead.
-2024-05-29 - [PHP View Rendering Performance], 
-**Learning:** [Repeated math calculations, conditional checking, and complex string concatenations inside deep loops during HTML template generation lead to significant performance overhead in PHP. Pre-calculating indices and variables (e.g. class strings based on indices) and directly injecting them via curly braces `{$var}` drastically improves loop rendering times (~24% faster in microbenchmarks).], 
-**Action:** [When rendering large HTML tables or lists in PHP, always hoist index math, CSS class logic, and repetitive access out of inner loops. Use curly brace interpolation for variables instead of inline string concatenation dots.]
-## 2024-05-18 - [Pre-escaping Data Before Caching]
-**Learning:** Calling `htmlspecialchars` inside an HTML rendering loop for hundreds of list items is computationally expensive and redundant if the underlying data doesn't change frequently.
-**Action:** Shift formatting and escaping logic into the data fetching/caching layer whenever possible. By pre-escaping the data before it is saved into `personalities_cache.json`, we avoided over 300 redundant function calls per render, significantly reducing overhead on the main HTML generation pass.
-## 2024-05-30 - HTML View Caching vs JSON Data Caching
-**Learning:** Caching raw JSON data and then rebuilding complex HTML structures via deeply nested PHP loops on every render is still computationally expensive and limits performance gains. Caching the fully rendered HTML block instead can eliminate almost all rendering CPU overhead, achieving up to 98% faster response times.
-**Action:** When working on static or semi-static list/table views, cache the generated HTML structure (e.g., using output buffering `ob_start()`) rather than just the underlying array data, provided the data doesn't require dynamic manipulation on every render.
+2024-06-16 - [Persistent Database Connections]
+**Learning:** Using persistent connections in `mysqli` by simply prepending `p:` to the `$dbhost` can significantly reduce overhead by pooling and reusing database connections, yielding a ~30% improvement in connection times in microbenchmarks.
+**Action:** Default to using persistent connections (`p:`) for `mysqli` to limit the overhead per request in PHP scripts that establish new database connections for every request.

@@ -5,6 +5,12 @@ AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
 UPDATED DATE : 2019-07-14
 *************************************/
+
+const DEFAULT_VAL_D = 15;
+const DEFAULT_VAL_I = 14;
+const DEFAULT_VAL_S = 15;
+const DEFAULT_VAL_C = 14;
+
 ?>
 <!doctype html>
 <html>
@@ -47,10 +53,10 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 	$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():'';
 	//-- if empty result found, get default result
 	if(!isset($data->name)){
-		$val_d = 15;
-		$val_i = 14;
-		$val_s = 15;
-		$val_c = 14;
+		$val_d = DEFAULT_VAL_D;
+		$val_i = DEFAULT_VAL_I;
+		$val_s = DEFAULT_VAL_S;
+		$val_c = DEFAULT_VAL_C;
 		$stmt->execute();
 		$db_result=$stmt->get_result();
 		$data=(isset($db_result)&& !empty($db_result))?$db_result->fetch_object():null;

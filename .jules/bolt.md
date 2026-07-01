@@ -26,3 +26,7 @@
 2024-06-16 - [Persistent Database Connections]
 **Learning:** Using persistent connections in `mysqli` by simply prepending `p:` to the `$dbhost` can significantly reduce overhead by pooling and reusing database connections, yielding a ~30% improvement in connection times in microbenchmarks.
 **Action:** Default to using persistent connections (`p:`) for `mysqli` to limit the overhead per request in PHP scripts that establish new database connections for every request.
+
+2024-05-24 - Duplicate Array Lookups in Result Calculation
+**Learning:** Checking the existence and getting values from associative arrays multiple times for the same keys in a loop incurs unnecessary overhead due to duplicate hash map lookups. Using null coalescing (`??`) operator into local variables avoids redundant lookups. Combining array assignments into a single `[]` statement also avoids re-hashing the parent array multiple times.
+**Action:** Extract associative array lookups to local variables early in tight loops using null coalescing, and perform assignment using single block declarations rather than granular key assignments when possible.

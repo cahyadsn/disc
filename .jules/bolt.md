@@ -26,3 +26,7 @@
 2024-06-16 - [Persistent Database Connections]
 **Learning:** Using persistent connections in `mysqli` by simply prepending `p:` to the `$dbhost` can significantly reduce overhead by pooling and reusing database connections, yielding a ~30% improvement in connection times in microbenchmarks.
 **Action:** Default to using persistent connections (`p:`) for `mysqli` to limit the overhead per request in PHP scripts that establish new database connections for every request.
+
+2026-07-01 - [Optimized HTML String Concatenation in PHP Loops]
+**Learning:** In PHP, optimizing repeated HTML string concatenations and conditional evaluations within deep nested loops by buffering strings into an array (`$html[] = ...`) and using `implode('', $html)` at the end reduces significant CPU overhead compared to multiple direct `echo` calls and inline ternaries.
+**Action:** When rendering large blocks of complex UI inside heavy nested loops, default to appending output to a buffer array and flattening it post-loop rather than chaining continuous output streams. Ensure invariant HTML chunks (like opening tags that only change on specific index boundaries) are pre-calculated outside the tightest innermost loops.

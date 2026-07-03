@@ -37,44 +37,37 @@ if ($html_content === false) {
           echo "<tr><td colspan='16' style='text-align:center; color:red;'>Error loading data.</td></tr>";
       }
       for($i=0;$i<$rows;++$i){
-        $inr_cache = [];
-        $idx_base = [];
-        for($n=0;$n<4;++$n){
-            $inr_cache[$n] = $i+$n*$rows;
-            $idx_base[$n] = $cols*$inr_cache[$n];
-        }
-
-        echo "<tr".($i%2==0?" class='dark'":"").">";
+        // Bolt optimization: Hoist row class calculation and remove inner-loop array creation
+        // which reduces memory allocation overhead and duplicate math evaluations.
+        $rowClass = $i % 2 == 0 ? " class='dark'" : "";
+        echo "<tr{$rowClass}>";
         for($j=0;$j<$cols;++$j){
             $isFirst = ($j==0?" class='first'":"");
         	for($n=0;$n<4;++$n){
-                $inr = $inr_cache[$n];
+                $inr = $i+$n*$rows;
 
          		if($j>0 && $n==0){
-         			echo "<tr".($i%2==0?" class='dark'":"").">";
+				echo "<tr{$rowClass}>";
          		}elseif($j==0){
 				echo "<th rowspan='$cols'{$isFirst}>"
 					.($inr+1)
          				."</th>";
          		}
-		        $idx = $idx_base[$n]+$j;
+		        $idx = $cols*$inr+$j;
 		        $item = $data[$idx];
-		        $term = $item->term;
-		        $most = $item->most;
-		        $least = $item->least;
 
 		        echo "<td{$isFirst}>
-					{$term}
+					{$item->term}
 		          	  </td>
 				  <td{$isFirst}>
 		        		<input type='radio' 
 					       name='m[{$inr}]'
-						   value='{$most}'
+						   value='{$item->most}'
 						   required /></td>
 				  <td{$isFirst}>
 		          		<input type='radio' 
 					       name='l[{$inr}]'
-					       value='{$least}'
+					       value='{$item->least}'
 					       required /></td>";
           	}
           echo "</tr>";

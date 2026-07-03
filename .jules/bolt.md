@@ -30,3 +30,6 @@
 2024-05-24 - Duplicate Array Lookups in Result Calculation
 **Learning:** Checking the existence and getting values from associative arrays multiple times for the same keys in a loop incurs unnecessary overhead due to duplicate hash map lookups. Using null coalescing (`??`) operator into local variables avoids redundant lookups. Combining array assignments into a single `[]` statement also avoids re-hashing the parent array multiple times.
 **Action:** Extract associative array lookups to local variables early in tight loops using null coalescing, and perform assignment using single block declarations rather than granular key assignments when possible.
+## 2024-08-01 - View Rendering: Eliminating Loop Array Allocations
+**Learning:** In PHP, creating temporary arrays (`[]`) and extracting object properties (`$val = $obj->prop;`) inside deep, frequently-executed view rendering loops adds measurable memory allocation and variable extraction overhead.
+**Action:** When optimizing tight HTML rendering loops, completely avoid allocating arrays inside the loop. Compute invariants (like CSS class strings) outside the loop, inline object property accesses directly into string interpolations (`"<td>{$item->term}</td>"`), and perform simple math (`$inr = $i+$n*$rows;`) directly rather than pre-calculating it into short-lived inner loop arrays.

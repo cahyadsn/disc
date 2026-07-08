@@ -27,6 +27,9 @@
 **Learning:** Using persistent connections in `mysqli` by simply prepending `p:` to the `$dbhost` can significantly reduce overhead by pooling and reusing database connections, yielding a ~30% improvement in connection times in microbenchmarks.
 **Action:** Default to using persistent connections (`p:`) for `mysqli` to limit the overhead per request in PHP scripts that establish new database connections for every request.
 
+2026-07-01 - [Optimized HTML String Concatenation in PHP Loops]
+**Learning:** In PHP, optimizing repeated HTML string concatenations and conditional evaluations within deep nested loops by buffering strings into an array (`$html[] = ...`) and using `implode('', $html)` at the end reduces significant CPU overhead compared to multiple direct `echo` calls and inline ternaries.
+**Action:** When rendering large blocks of complex UI inside heavy nested loops, default to appending output to a buffer array and flattening it post-loop rather than chaining continuous output streams. Ensure invariant HTML chunks (like opening tags that only change on specific index boundaries) are pre-calculated outside the tightest innermost loops.
 2024-05-24 - Duplicate Array Lookups in Result Calculation
 **Learning:** Checking the existence and getting values from associative arrays multiple times for the same keys in a loop incurs unnecessary overhead due to duplicate hash map lookups. Using null coalescing (`??`) operator into local variables avoids redundant lookups. Combining array assignments into a single `[]` statement also avoids re-hashing the parent array multiple times.
 **Action:** Extract associative array lookups to local variables early in tight loops using null coalescing, and perform assignment using single block declarations rather than granular key assignments when possible.

@@ -36,6 +36,7 @@ if ($html_content === false) {
       if (!$result) {
           echo "<tr><td colspan='16' style='text-align:center; color:red;'>Error loading data.</td></tr>";
       }
+      $html = [];
       for($i=0;$i<$rows;++$i){
         $inr_cache = [];
         $idx_base = [];
@@ -44,42 +45,38 @@ if ($html_content === false) {
             $idx_base[$n] = $cols*$inr_cache[$n];
         }
 
-        echo "<tr".($i%2==0?" class='dark'":"").">";
+        $tr = $i%2==0 ? "<tr class='dark'>" : "<tr>";
+        $html[] = $tr;
         for($j=0;$j<$cols;++$j){
-            $isFirst = ($j==0?" class='first'":"");
+            $isFirst = $j==0 ? " class='first'" : "";
         	for($n=0;$n<4;++$n){
                 $inr = $inr_cache[$n];
 
          		if($j>0 && $n==0){
-         			echo "<tr".($i%2==0?" class='dark'":"").">";
+				$html[] = $tr;
          		}elseif($j==0){
-				echo "<th rowspan='$cols'{$isFirst}>"
-					.($inr+1)
-         				."</th>";
+				    $html[] = "<th rowspan='$cols'{$isFirst}>".($inr+1)."</th>";
          		}
-		        $idx = $idx_base[$n]+$j;
-		        $item = $data[$idx];
-		        $term = $item->term;
-		        $most = $item->most;
-		        $least = $item->least;
+		        $item = $data[$idx_base[$n]+$j];
 
-		        echo "<td{$isFirst}>
-					{$term}
+		        $html[] = "<td{$isFirst}>
+					{$item->term}
 		          	  </td>
 				  <td{$isFirst}>
 		        		<input type='radio' 
 					       name='m[{$inr}]'
-						   value='{$most}'
+						   value='{$item->most}'
 						   required /></td>
 				  <td{$isFirst}>
 		          		<input type='radio' 
 					       name='l[{$inr}]'
-					       value='{$least}'
+					       value='{$item->least}'
 					       required /></td>";
           	}
-          echo "</tr>";
+          $html[] = "</tr>";
         }
       }
+      echo implode('', $html);
     $html_content = ob_get_clean();
     if ($result) {
         if (file_put_contents($html_cache_file, $html_content, LOCK_EX) === false) {

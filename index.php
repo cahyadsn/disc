@@ -1,4 +1,8 @@
 <?php
+if (!headers_sent()) {
+    header('X-Frame-Options: DENY');
+    header('X-Content-Type-Options: nosniff');
+}
 /************************************
 FILENAME     : index.php
 AUTHOR       : CAHYA DSN
@@ -36,27 +40,30 @@ if ($html_content === false) {
       if (!$result) {
           echo "<tr><td colspan='16' style='text-align:center; color:red;'>Error loading data.</td></tr>";
       }
+      $html = [];
       for($i=0;$i<$rows;++$i){
-        // Bolt optimization: Hoist row class calculation and remove inner-loop array creation
-        // which reduces memory allocation overhead and duplicate math evaluations.
-        $rowClass = $i % 2 == 0 ? " class='dark'" : "";
-        echo "<tr{$rowClass}>";
+        $inr_cache = [];
+        $idx_base = [];
+        for($n=0;$n<4;++$n){
+            $inr_cache[$n] = $i+$n*$rows;
+            $idx_base[$n] = $cols*$inr_cache[$n];
+        }
+
+        $tr = $i%2==0 ? "<tr class='dark'>" : "<tr>";
+        $html[] = $tr;
         for($j=0;$j<$cols;++$j){
-            $isFirst = ($j==0?" class='first'":"");
+            $isFirst = $j==0 ? " class='first'" : "";
         	for($n=0;$n<4;++$n){
                 $inr = $i+$n*$rows;
 
          		if($j>0 && $n==0){
-				echo "<tr{$rowClass}>";
+				$html[] = $tr;
          		}elseif($j==0){
-				echo "<th rowspan='$cols'{$isFirst}>"
-					.($inr+1)
-         				."</th>";
+				    $html[] = "<th rowspan='$cols'{$isFirst}>".($inr+1)."</th>";
          		}
-		        $idx = $cols*$inr+$j;
-		        $item = $data[$idx];
+		        $item = $data[$idx_base[$n]+$j];
 
-		        echo "<td{$isFirst}>
+		        $html[] = "<td{$isFirst}>
 					{$item->term}
 		          	  </td>
 				  <td{$isFirst}>
@@ -70,9 +77,10 @@ if ($html_content === false) {
 					       value='{$item->least}'
 					       required /></td>";
           	}
-          echo "</tr>";
+          $html[] = "</tr>";
         }
       }
+      echo implode('', $html);
     $html_content = ob_get_clean();
     if ($result) {
         if (file_put_contents($html_cache_file, $html_content, LOCK_EX) === false) {

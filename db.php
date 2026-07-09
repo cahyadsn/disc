@@ -4,7 +4,8 @@ $dbhost = getenv('DB_HOST') ?: 'localhost';
 $dbuser = getenv('DB_USER') ?: 'root';
 $dbpass = getenv('DB_PASS');
 if ($dbpass === false) {
-    throw new Exception('DB_PASS environment variable is required.');
+    error_log('DB_PASS environment variable is required.');
+    exit('Database configuration error.');
 }
 $dbname = getenv('DB_NAME') ?: 'test';
 

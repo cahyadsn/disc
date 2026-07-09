@@ -54,7 +54,7 @@ if ($html_content === false) {
         for($j=0;$j<$cols;++$j){
             $isFirst = $j==0 ? " class='first'" : "";
         	for($n=0;$n<4;++$n){
-                $inr = $inr_cache[$n];
+                $inr = $i+$n*$rows;
 
          		if($j>0 && $n==0){
 				$html[] = $tr;

@@ -36,3 +36,6 @@
 ## 2024-08-01 - View Rendering: Eliminating Loop Array Allocations
 **Learning:** In PHP, creating temporary arrays (`[]`) and extracting object properties (`$val = $obj->prop;`) inside deep, frequently-executed view rendering loops adds measurable memory allocation and variable extraction overhead.
 **Action:** When optimizing tight HTML rendering loops, completely avoid allocating arrays inside the loop. Compute invariants (like CSS class strings) outside the loop, inline object property accesses directly into string interpolations (`"<td>{$item->term}</td>"`), and perform simple math (`$inr = $i+$n*$rows;`) directly rather than pre-calculating it into short-lived inner loop arrays.
+## 2024-08-01 - Avoid Chaining Array Iteration Functions
+**Learning:** In PHP, chaining array iteration functions like `array_count_values(array_filter(...))` causes redundant array traversals and creates intermediate arrays, adding performance overhead.
+**Action:** When filtering and processing arrays, use a single `foreach` loop to filter and process elements simultaneously (e.g. counting values) instead of chaining multiple array functions. This avoids intermediate array allocations and reduces CPU overhead.

@@ -8,32 +8,27 @@ try {
 }
 
 class MockResult {
-    public $call_count = 0;
     public function fetch_object() {
-        $this->call_count++;
-        if ($this->call_count == 1) {
-            return null; // First call returns null (no result)
-        } else {
-            return (object)[
-                'name' => 'Mock Pattern',
-                'd' => 15, 'i' => 14, 's' => 15, 'c' => 14,
-                'emotions' => 'calm',
-                'goal' => 'peace',
-                'judges_others' => 'fairly',
-                'influences_others' => 'kindly',
-                'organization_value' => 'stable',
-                'overuses' => 'nothing',
-                'under_pressure' => 'cool',
-                'fear' => 'none',
-                'effectiveness' => 'great',
-                'description' => 'A mock description'
-            ];
-        }
+        return (object)[
+            'name' => 'Mock Pattern',
+            'd' => 15, 'i' => 14, 's' => 15, 'c' => 14,
+            'emotions' => 'calm',
+            'goal' => 'peace',
+            'judges_others' => 'fairly',
+            'influences_others' => 'kindly',
+            'organization_value' => 'stable',
+            'overuses' => 'nothing',
+            'under_pressure' => 'cool',
+            'fear' => 'none',
+            'effectiveness' => 'great',
+            'description' => 'A mock description'
+        ];
     }
 }
 
 class MockStmt {
     public $execute_count = 0;
+    public $get_result_count = 0;
     public $bound_params = [];
     public $d, $i, $s, $c;
     public function bind_param($types, &$d, &$i, &$s, &$c) {
@@ -48,11 +43,12 @@ class MockStmt {
         $this->bound_params[] = [$this->d, $this->i, $this->s, $this->c];
     }
     public function get_result() {
-        static $result = null;
-        if ($result === null) {
-            $result = new MockResult();
+        $this->get_result_count++;
+        if ($this->get_result_count == 1) {
+            return false; // First call returns false (query failure)
+        } else {
+            return new MockResult();
         }
-        return $result;
     }
 }
 
@@ -69,17 +65,38 @@ $db = new MockDb();
 
 $_POST['m'] = ['D'];
 $_POST['l'] = ['I'];
+
+$error_caught = false;
+set_error_handler(function($errno, $errstr, $errfile, $errline) use (&$error_caught) {
+    echo "ERROR/WARNING CAUGHT: $errstr in $errfile on line $errline\n";
+    $error_caught = true;
+});
+
 ob_start();
-include __DIR__ . '/../result.php';
+try {
+    include __DIR__ . '/../result.php';
+} catch (Throwable $e) {
+    echo "THROWABLE CAUGHT: " . $e->getMessage() . "\n";
+    $error_caught = true;
+}
 $output = ob_get_clean();
 
+restore_error_handler();
+
 $failed = false;
+
+if ($error_caught) {
+    echo "FAIL: A warning or error was generated.\n";
+    $failed = true;
+} else {
+    echo "PASS: No warnings or errors were generated.\n";
+}
 
 if ($db->stmt->execute_count === 2) {
     echo "PASS: execute() called twice.\n";
     $second_execute_params = $db->stmt->bound_params[1];
     if ($second_execute_params === [15, 14, 15, 14]) {
-        echo "PASS: Default fallback values (15, 14, 15, 14) were used correctly.\n";
+        echo "PASS: Default fallback values (15, 14, 15, 14) were used correctly after get_result() false.\n";
     } else {
         echo "FAIL: Default fallback values incorrect. Got: " . json_encode($second_execute_params) . "\n";
         $failed = true;

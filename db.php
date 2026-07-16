@@ -13,7 +13,7 @@ $dbname = getenv('DB_NAME') ?: 'test';
 try {
     // Bolt optimization: Prefix the hostname with 'p:' to enable persistent connection pooling
     // in mysqli, reducing TCP handshake and authentication overhead per request.
-    $db = @new mysqli((strpos($dbhost, 'p:') === 0 ? $dbhost : 'p:' . $dbhost), $dbuser, $dbpass, $dbname);
+    $db = new mysqli((strpos($dbhost, 'p:') === 0 ? $dbhost : 'p:' . $dbhost), $dbuser, $dbpass, $dbname);
     if ($db->connect_error) {
         throw new Exception('Database connection failed.');
     }

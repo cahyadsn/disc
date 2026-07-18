@@ -42,26 +42,20 @@ if ($html_content === false) {
       }
       $html = [];
       for($i=0;$i<$rows;++$i){
-        $inr_cache = [];
-        $idx_base = [];
-        for($n=0;$n<4;++$n){
-            $inr_cache[$n] = $i+$n*$rows;
-            $idx_base[$n] = $cols*$inr_cache[$n];
-        }
-
+        // Bolt optimization: Eliminated inner-loop array allocations ($inr_cache, $idx_base) by calculating invariants directly, reducing memory overhead and loop initialization time.
         $tr = $i%2==0 ? "<tr class='dark'>" : "<tr>";
         $html[] = $tr;
         for($j=0;$j<$cols;++$j){
             $isFirst = $j==0 ? " class='first'" : "";
         	for($n=0;$n<4;++$n){
-                $inr = $inr_cache[$n];
+                $inr = $i + $n * $rows;
 
          		if($j>0 && $n==0){
 				$html[] = $tr;
          		}elseif($j==0){
 				    $html[] = "<th rowspan='$cols'{$isFirst}>".($inr+1)."</th>";
          		}
-		        $item = $data[$idx_base[$n]+$j];
+		        $item = $data[$cols * $inr + $j];
 
 		        $html[] = "<td{$isFirst}>
 					{$item->term}

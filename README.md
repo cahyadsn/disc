@@ -50,3 +50,20 @@ Demo link :
 + Aleksandar Urosevic
 + Ikbal Qodi
 + Lucas Giovanny
+
+## Changelog
+### Recent Updates (2026-07-18 23:06:34)
+- **Performance & Optimizations (Bolt)**:
+  - Optimized array allocations and iterations in the rendering and view rendering loops.
+  - Streamlined array traversals and refactored loops in `result.php`.
+  - Removed redundant mathematical calculations inside nested loops.
+- **Security Enhancements**:
+  - Prevented potential database password leaks in database exceptions.
+  - Added essential HTTP security headers to `index.php` and `result.php`.
+- **Code Quality & Health**:
+  - Cleaned up database connection error suppression in `db.php`.
+  - Fixed type mismatches and object fallback logic in `result.php`.
+- **Testing**:
+  - Added new test suites covering query failures, unreadable cache file fallback, and HTML cache write failures.
+  - Updated test documentation.
+

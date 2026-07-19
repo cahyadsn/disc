@@ -18,5 +18,5 @@ try {
         throw new Exception('Database connection failed.');
     }
 } catch (Throwable $e) {
-    throw new Exception('Database connection failed.');
+    throw new Exception('Database connection failed.', 0, $e);
 }

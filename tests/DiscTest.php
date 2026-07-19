@@ -13,10 +13,10 @@ class DiscTest extends TestCase
         $leastCounts = array_count_values(array_filter($least, 'is_scalar'));
         
         $result = [];
-        foreach (['D', 'I', 'S', 'C', '#'] as $a) {
+        foreach (['D', 'I', 'S', 'C'] as $a) {
             $result[$a]['most'] = $mostCounts[$a] ?? 0;
             $result[$a]['least'] = $leastCounts[$a] ?? 0;
-            $result[$a]['change'] = ($a !== '#') ? $result[$a]['most'] - $result[$a]['least'] : 0;
+            $result[$a]['change'] = $result[$a]['most'] - $result[$a]['least'];
         }
         return $result;
     }
@@ -67,18 +67,6 @@ class DiscTest extends TestCase
         
         $this->assertStringNotContainsString('<script>', $escaped);
         $this->assertStringContainsString('&lt;script&gt;', $escaped);
-    }
-
-    public function testHashDimensionChangeAlwaysZero(): void
-    {
-        $most = ['#', '#', '#'];
-        $least = ['#'];
-        
-        $result = $this->calculateScores($most, $least);
-        
-        $this->assertEquals(3, $result['#']['most']);
-        $this->assertEquals(1, $result['#']['least']);
-        $this->assertEquals(0, $result['#']['change']); // Always 0 for '#'
     }
 
     public function testNegativeChangeScore(): void

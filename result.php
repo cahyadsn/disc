@@ -32,7 +32,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
   $least = [];
   foreach ($_POST['l'] as $v) if (is_scalar($v)) $least[$v] = ($least[$v] ?? 0) + 1;
   $result=array();
-  $aspect=array('D','I','S','C','#');
+  $aspect=array('D','I','S','C');
   // Bolt optimization: Extract array values to variables and use null coalescing operator to avoid duplicate hash lookups and optimize array assignment
   foreach($aspect as $a){
     $m = $most[$a] ?? 0;
@@ -40,7 +40,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     $result[$a] = [
         'most' => $m,
         'least' => $l,
-        'change' => ($a !== '#' ? $m - $l : 0)
+        'change' => $m - $l
     ];
   }
 

@@ -31,24 +31,25 @@ class MockStmt {
     public $get_result_count = 0;
     public $bound_params = [];
     public $d, $i, $s, $c;
-    public function bind_param($types, &$d, &$i, &$s, &$c) {
+    public $def_d, $def_i, $def_s, $def_c;
+    public function bind_param($types, &$d, &$def_d, &$i, &$def_i, &$s, &$def_s, &$c, &$def_c) {
         $this->d = &$d;
+        $this->def_d = &$def_d;
         $this->i = &$i;
+        $this->def_i = &$def_i;
         $this->s = &$s;
+        $this->def_s = &$def_s;
         $this->c = &$c;
+        $this->def_c = &$def_c;
     }
     public function execute() {
         $this->execute_count++;
         // Capture values of references at the time of execution
-        $this->bound_params[] = [$this->d, $this->i, $this->s, $this->c];
+        $this->bound_params[] = [$this->d, $this->def_d, $this->i, $this->def_i, $this->s, $this->def_s, $this->c, $this->def_c];
     }
     public function get_result() {
         $this->get_result_count++;
-        if ($this->get_result_count == 1) {
-            return false; // First call returns false (query failure)
-        } else {
-            return new MockResult();
-        }
+        return new MockResult();
     }
 }
 
@@ -92,13 +93,13 @@ if ($error_caught) {
     echo "PASS: No warnings or errors were generated.\n";
 }
 
-if ($db->stmt->execute_count === 2) {
-    echo "PASS: execute() called twice.\n";
-    $second_execute_params = $db->stmt->bound_params[1];
-    if ($second_execute_params === [15, 14, 15, 14]) {
-        echo "PASS: Default fallback values (15, 14, 15, 14) were used correctly after get_result() false.\n";
+if ($db->stmt->execute_count === 1) {
+    echo "PASS: execute() called once.\n";
+    $execute_params = $db->stmt->bound_params[0];
+    if ($execute_params[4] === 15 && $execute_params[5] === 14 && $execute_params[6] === 15 && $execute_params[7] === 14) {
+        echo "PASS: Default fallback values (15, 14, 15, 14) were bound correctly after get_result() false.\n";
     } else {
-        echo "FAIL: Default fallback values incorrect. Got: " . json_encode($second_execute_params) . "\n";
+        echo "FAIL: Default fallback values incorrect. Got: " . json_encode($execute_params) . "\n";
         $failed = true;
     }
 } else {

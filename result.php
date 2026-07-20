@@ -7,7 +7,7 @@ if (!headers_sent()) {
 FILENAME     : result.php
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
-UPDATED DATE : 2019-07-14
+UPDATED DATE : 2026-07-20 08:04:50
 *************************************/
 
 const DEFAULT_VAL_D = 15;

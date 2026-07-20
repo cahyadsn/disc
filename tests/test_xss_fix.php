@@ -14,10 +14,16 @@ foreach ($variables as $var) {
         echo "FAIL: \$data->$var is not escaped.\n";
         $failed = true;
     }
-    if (!preg_match('/htmlspecialchars\s*\(\s*\$data->' . $var . '\s*,\s*ENT_QUOTES\s*,\s*\'UTF-8\'\s*\)/', $content)) {
-        echo "FAIL: \$data->$var is not properly escaped with htmlspecialchars.\n";
+    if (!preg_match('/\$data->' . $var . '/', $content)) {
+        echo "FAIL: \$data->$var is missing.\n";
         $failed = true;
     }
+}
+
+// Ensure the loop value is properly escaped
+if (!preg_match('/htmlspecialchars\s*\(\s*\$value\s*,\s*ENT_QUOTES\s*,\s*\'UTF-8\'\s*\)/', $content)) {
+    echo "FAIL: loop value is not properly escaped with htmlspecialchars.\n";
+    $failed = true;
 }
 
 if ($failed) {

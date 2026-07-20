@@ -85,17 +85,24 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     <div>
     <h1>RESULT</h1>
     <b>Segment : </b><br /><?php echo htmlspecialchars("{$data->d}-{$data->i}-{$data->s}-{$data->c}", ENT_QUOTES, 'UTF-8');?><br />
-    <b>Pattern : </b><br /><?php echo htmlspecialchars($data->name, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Emotions : </b><br /><?php echo htmlspecialchars($data->emotions, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Goal : </b><br /><?php echo htmlspecialchars($data->goal, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Judges others by : </b><br /><?php echo htmlspecialchars($data->judges_others, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Influences others by: </b><br /><?php echo htmlspecialchars($data->influences_others, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Value to the organization: </b><br /><?php echo htmlspecialchars($data->organization_value, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Overuses : </b><br /><?php echo htmlspecialchars($data->overuses, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Under pressure : </b><br /><?php echo htmlspecialchars($data->under_pressure, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Fears : </b><br /><?php echo htmlspecialchars($data->fear, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Would increase effectiveness through: </b><br /><?php echo htmlspecialchars($data->effectiveness, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Description : </b><br /><?php echo htmlspecialchars($data->description, ENT_QUOTES, 'UTF-8');?><br />
+<?php
+    $properties = [
+        'Pattern : ' => $data->name,
+        'Emotions : ' => $data->emotions,
+        'Goal : ' => $data->goal,
+        'Judges others by : ' => $data->judges_others,
+        'Influences others by: ' => $data->influences_others,
+        'Value to the organization: ' => $data->organization_value,
+        'Overuses : ' => $data->overuses,
+        'Under pressure : ' => $data->under_pressure,
+        'Fears : ' => $data->fear,
+        'Would increase effectiveness through: ' => $data->effectiveness,
+        'Description : ' => $data->description
+    ];
+    foreach ($properties as $label => $value) {
+        echo "    <b>" . htmlspecialchars($label, ENT_NOQUOTES, 'UTF-8') . "</b><br />" . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . "<br />\n";
+    }
+?>
     </div>
 <?php
 	}

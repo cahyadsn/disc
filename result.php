@@ -32,7 +32,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
   $least = [];
   foreach ($_POST['l'] as $v) if (is_scalar($v)) $least[$v] = ($least[$v] ?? 0) + 1;
   $result=array();
-  $aspect=array('D','I','S','C','#');
+  $aspect=array('D','I','S','C');
   // Bolt optimization: Extract array values to variables and use null coalescing operator to avoid duplicate hash lookups and optimize array assignment
   foreach($aspect as $a){
     $m = $most[$a] ?? 0;
@@ -40,7 +40,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     $result[$a] = [
         'most' => $m,
         'least' => $l,
-        'change' => ($a !== '#' ? $m - $l : 0)
+        'change' => $m - $l
     ];
   }
 
@@ -72,18 +72,27 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
         ORDER BY priority ASC
         LIMIT 1";
 	$stmt = $db->prepare($sql);
-	$val_d = $result['D']['change'];
-	$val_i = $result['I']['change'];
-	$val_s = $result['S']['change'];
-	$val_c = $result['C']['change'];
-	$def_d = DEFAULT_VAL_D;
-	$def_i = DEFAULT_VAL_I;
-	$def_s = DEFAULT_VAL_S;
-	$def_c = DEFAULT_VAL_C;
-	$stmt->bind_param("iiiiiiii", $val_d, $val_i, $val_s, $val_c, $def_d, $def_i, $def_s, $def_c);
-	$stmt->execute();
-	$db_result=$stmt->get_result();
-	$data = $db_result ? $db_result->fetch_object() : null;
+	$data = null;
+	if ($stmt) {
+		$val_d = $result['D']['change'];
+		$val_i = $result['I']['change'];
+		$val_s = $result['S']['change'];
+		$val_c = $result['C']['change'];
+		$stmt->bind_param("iiii", $val_d, $val_i, $val_s, $val_c);
+		$stmt->execute();
+		$db_result=$stmt->get_result();
+		$data = $db_result ? $db_result->fetch_object() : null;
+		//-- if empty result found, get default result
+		if(!isset($data->name)){
+			$val_d = DEFAULT_VAL_D;
+			$val_i = DEFAULT_VAL_I;
+			$val_s = DEFAULT_VAL_S;
+			$val_c = DEFAULT_VAL_C;
+			$stmt->execute();
+			$db_result=$stmt->get_result();
+			$data = $db_result ? $db_result->fetch_object() : null;
+		}
+	}
 
 	if (!$data) {
 		echo "    <div>\n      <h1>Error</h1>\n      <p>Data not found, check your database.</p>\n    </div>\n";
@@ -92,17 +101,24 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     <div>
     <h1>RESULT</h1>
     <b>Segment : </b><br /><?php echo htmlspecialchars("{$data->d}-{$data->i}-{$data->s}-{$data->c}", ENT_QUOTES, 'UTF-8');?><br />
-    <b>Pattern : </b><br /><?php echo htmlspecialchars($data->name, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Emotions : </b><br /><?php echo htmlspecialchars($data->emotions, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Goal : </b><br /><?php echo htmlspecialchars($data->goal, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Judges others by : </b><br /><?php echo htmlspecialchars($data->judges_others, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Influences others by: </b><br /><?php echo htmlspecialchars($data->influences_others, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Value to the organization: </b><br /><?php echo htmlspecialchars($data->organization_value, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Overuses : </b><br /><?php echo htmlspecialchars($data->overuses, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Under pressure : </b><br /><?php echo htmlspecialchars($data->under_pressure, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Fears : </b><br /><?php echo htmlspecialchars($data->fear, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Would increase effectiveness through: </b><br /><?php echo htmlspecialchars($data->effectiveness, ENT_QUOTES, 'UTF-8');?><br />
-    <b>Description : </b><br /><?php echo htmlspecialchars($data->description, ENT_QUOTES, 'UTF-8');?><br />
+<?php
+    $properties = [
+        'Pattern : ' => $data->name,
+        'Emotions : ' => $data->emotions,
+        'Goal : ' => $data->goal,
+        'Judges others by : ' => $data->judges_others,
+        'Influences others by: ' => $data->influences_others,
+        'Value to the organization: ' => $data->organization_value,
+        'Overuses : ' => $data->overuses,
+        'Under pressure : ' => $data->under_pressure,
+        'Fears : ' => $data->fear,
+        'Would increase effectiveness through: ' => $data->effectiveness,
+        'Description : ' => $data->description
+    ];
+    foreach ($properties as $label => $value) {
+        echo "    <b>" . htmlspecialchars($label, ENT_NOQUOTES, 'UTF-8') . "</b><br />" . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . "<br />\n";
+    }
+?>
     </div>
 <?php
 	}

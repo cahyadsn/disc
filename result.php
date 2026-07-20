@@ -48,13 +48,29 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     // Bolt optimization: Replaced cross-joined derived tables with direct subqueries to prevent temporary table creation
     // and Cartesian products. This reduces CPU/memory usage and allows utilizing primary key indexes effectively.
     $sql="
-        SELECT a.*, c.*
-		FROM pattern_map a
-		JOIN patterns c ON c.id=a.pattern
-		WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=? LIMIT 1)
-		  AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=? LIMIT 1)
-		  AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=? LIMIT 1)
-		  AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=? LIMIT 1)";
+        SELECT * FROM (
+            SELECT a.*, c.*, 1 as priority
+            FROM pattern_map a
+            JOIN patterns c ON c.id=a.pattern
+            WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=? LIMIT 1)
+              AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=? LIMIT 1)
+              AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=? LIMIT 1)
+              AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=? LIMIT 1)
+            LIMIT 1
+        ) AS user_result
+        UNION ALL
+        SELECT * FROM (
+            SELECT a.*, c.*, 2 as priority
+            FROM pattern_map a
+            JOIN patterns c ON c.id=a.pattern
+            WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=? LIMIT 1)
+              AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=? LIMIT 1)
+              AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=? LIMIT 1)
+              AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=? LIMIT 1)
+            LIMIT 1
+        ) AS default_result
+        ORDER BY priority ASC
+        LIMIT 1";
 	$stmt = $db->prepare($sql);
 	$data = null;
 	if ($stmt) {

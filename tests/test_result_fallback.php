@@ -8,27 +8,21 @@ try {
 }
 
 class MockResult {
-    public $call_count = 0;
     public function fetch_object() {
-        $this->call_count++;
-        if ($this->call_count == 1) {
-            return null; // First call returns null (no result)
-        } else {
-            return (object)[
-                'name' => 'Mock Pattern',
-                'd' => 15, 'i' => 14, 's' => 15, 'c' => 14,
-                'emotions' => 'calm',
-                'goal' => 'peace',
-                'judges_others' => 'fairly',
-                'influences_others' => 'kindly',
-                'organization_value' => 'stable',
-                'overuses' => 'nothing',
-                'under_pressure' => 'cool',
-                'fear' => 'none',
-                'effectiveness' => 'great',
-                'description' => 'A mock description'
-            ];
-        }
+        return (object)[
+            'name' => 'Mock Pattern',
+            'd' => 15, 'i' => 14, 's' => 15, 'c' => 14,
+            'emotions' => 'calm',
+            'goal' => 'peace',
+            'judges_others' => 'fairly',
+            'influences_others' => 'kindly',
+            'organization_value' => 'stable',
+            'overuses' => 'nothing',
+            'under_pressure' => 'cool',
+            'fear' => 'none',
+            'effectiveness' => 'great',
+            'description' => 'A mock description'
+        ];
     }
 }
 
@@ -36,16 +30,21 @@ class MockStmt {
     public $execute_count = 0;
     public $bound_params = [];
     public $d, $i, $s, $c;
-    public function bind_param($types, &$d, &$i, &$s, &$c) {
+    public $def_d, $def_i, $def_s, $def_c;
+    public function bind_param($types, &$d, &$def_d, &$i, &$def_i, &$s, &$def_s, &$c, &$def_c) {
         $this->d = &$d;
+        $this->def_d = &$def_d;
         $this->i = &$i;
+        $this->def_i = &$def_i;
         $this->s = &$s;
+        $this->def_s = &$def_s;
         $this->c = &$c;
+        $this->def_c = &$def_c;
     }
     public function execute() {
         $this->execute_count++;
         // Capture values of references at the time of execution
-        $this->bound_params[] = [$this->d, $this->i, $this->s, $this->c];
+        $this->bound_params[] = [$this->d, $this->def_d, $this->i, $this->def_i, $this->s, $this->def_s, $this->c, $this->def_c];
     }
     public function get_result() {
         static $result = null;
@@ -75,13 +74,14 @@ $output = ob_get_clean();
 
 $failed = false;
 
-if ($db->stmt->execute_count === 2) {
-    echo "PASS: execute() called twice.\n";
-    $second_execute_params = $db->stmt->bound_params[1];
-    if ($second_execute_params === [15, 14, 15, 14]) {
-        echo "PASS: Default fallback values (15, 14, 15, 14) were used correctly.\n";
+if ($db->stmt->execute_count === 1) {
+    echo "PASS: execute() called once.\n";
+    $execute_params = $db->stmt->bound_params[0];
+    // Check if the default fallback values were bound to parameters 4, 5, 6, 7 (index 4 to 7)
+    if ($execute_params[4] === 15 && $execute_params[5] === 14 && $execute_params[6] === 15 && $execute_params[7] === 14) {
+        echo "PASS: Default fallback values (15, 14, 15, 14) were bound correctly.\n";
     } else {
-        echo "FAIL: Default fallback values incorrect. Got: " . json_encode($second_execute_params) . "\n";
+        echo "FAIL: Default fallback values incorrect. Got: " . json_encode($execute_params) . "\n";
         $failed = true;
     }
 } else {

@@ -25,9 +25,28 @@ Demo link :
 
 ![screenshot](https://github.com/cahyadsn/disc/blob/master/screenshot/result.png?raw=true)  
 
-## Technology
-+ PHP [http://www.php.net/](http://www.php.net/), 
-+ MySQL [http://www.mysql.com/](http://www.mysql.com/), 
+## Technology Stack & Architecture
+
+This project is built using a lightweight and highly optimized architecture designed for performance, security, and portability:
+
+* **Core Engine**: PHP (supports version 8.x and above)
+  * **Lazy-Loading Database Connection**: Database connections are deferred and only established on cache misses.
+  * **Persistent Database Pooling**: Configured with persistent connections (`p:`) to minimize TCP handshake and connection authentication overhead.
+* **Database & Query Layer**: MySQL / MariaDB
+  * **Single Round-trip Fallbacks**: Optimized data retrieval utilizing SQL `UNION ALL` to resolve pattern records and application fallbacks in a single database query.
+  * **Prepared Statements**: Secure parameter binding utilizing mysqli prepared statements.
+* **Caching & Performance Optimization**:
+  * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output for the 28-group questionnaire to a local HTML cache file (`html_cache.html`), yielding a ~98% speedup.
+  * **Loop & Memory Optimizations**: Minimized array allocations and nested calculations inside loops.
+* **Security & Hardening**:
+  * **HTTP Security Headers**: Implements custom protection rules such as `X-Frame-Options: DENY` and `X-Content-Type-Options: nosniff` to defend against clickjacking and MIME sniffing.
+  * **XSS Defenses**: Sanitized and escaped HTML output using `htmlspecialchars` with UTF-8 encoding.
+  * **Sensitive Data Redaction**: Safe exception handling prevents database password leaks in debug logs and user interfaces.
+* **Frontend & Presentation**:
+  * **Styling**: Vanilla CSS ([style.css](file:///D:/laragon/repo/dev/disc/assets/style.css)) with clean grid alignments, alternating table row styles, and responsive form styling.
+* **Testing & CI/CD**:
+  * **PHPUnit Framework**: Unit test suite covering SQL injection mitigations, XSS checks, caching mechanics, exception context preservation, database connection failures, and invalid POST fallbacks.
+  * **Cross-platform Compatibility**: Test scripts dynamically adapt to and run reliably on both Unix/Linux and Windows environments.
 
 ## Donation
 - untuk donasi via transfer

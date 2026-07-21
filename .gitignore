@@ -3,6 +3,6 @@
 vendor/
 .github
 .phpunit.result.cache
-.composer.lock
+composer.lock
 /html_cache.html
 GEMINI.md

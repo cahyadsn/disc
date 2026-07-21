@@ -1,6 +1,7 @@
 /screenshot/
 /.kiro/
 vendor/
+.github
 .phpunit.result.cache
 .composer.lock
 /html_cache.html

@@ -2,4 +2,6 @@
 /.kiro/
 vendor/
 .phpunit.result.cache
+.composer.lock
 /html_cache.html
+GEMINI.md

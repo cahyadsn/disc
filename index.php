@@ -43,34 +43,101 @@ if ($html_content === false) {
       $html = [];
       for($i=0;$i<$rows;++$i){
         // Bolt optimization: Eliminated inner-loop array allocations ($inr_cache, $idx_base) by calculating invariants directly, reducing memory overhead and loop initialization time.
+        // Bolt optimization: Unrolled inner loop to eliminate redundant calculations and complex conditionals
         $tr = $i%2==0 ? "<tr class='dark'>" : "<tr>";
         $html[] = $tr;
+
+        $inr0 = $i;
+        $inr1 = $i + $rows;
+        $inr2 = $i + 2*$rows;
+        $inr3 = $i + 3*$rows;
+
+        $idx0 = $cols * $inr0;
+        $idx1 = $cols * $inr1;
+        $idx2 = $cols * $inr2;
+        $idx3 = $cols * $inr3;
+
         for($j=0;$j<$cols;++$j){
             $isFirst = $j==0 ? " class='first'" : "";
-        	for($n=0;$n<4;++$n){
-                $inr = $i + $n * $rows;
 
-         		if($j>0 && $n==0){
-				$html[] = $tr;
-         		}elseif($j==0){
-				    $html[] = "<th rowspan='$cols'{$isFirst}>".($inr+1)."</th>";
-         		}
-		        $item = $data[$cols * $inr + $j];
+            // n = 0
+            if ($j > 0) {
+                $html[] = $tr;
+            } else {
+                $html[] = "<th rowspan='$cols'{$isFirst}>".($inr0+1)."</th>";
+            }
+            $item = $data[$idx0 + $j];
+            $html[] = "<td{$isFirst}>
+					{$item->term}
+				  </td>
+				  <td{$isFirst}>
+					<input type='radio'
+					       name='m[{$inr0}]'
+						   value='{$item->most}'
+						   required /></td>
+				  <td{$isFirst}>
+					<input type='radio'
+					       name='l[{$inr0}]'
+					       value='{$item->least}'
+					       required /></td>";
 
-		        $html[] = "<td{$isFirst}>
+            // n = 1
+            if ($j == 0) {
+                $html[] = "<th rowspan='$cols'{$isFirst}>".($inr1+1)."</th>";
+            }
+            $item = $data[$idx1 + $j];
+            $html[] = "<td{$isFirst}>
+					{$item->term}
+				  </td>
+				  <td{$isFirst}>
+					<input type='radio'
+					       name='m[{$inr1}]'
+						   value='{$item->most}'
+						   required /></td>
+				  <td{$isFirst}>
+					<input type='radio'
+					       name='l[{$inr1}]'
+					       value='{$item->least}'
+					       required /></td>";
+
+            // n = 2
+            if ($j == 0) {
+                $html[] = "<th rowspan='$cols'{$isFirst}>".($inr2+1)."</th>";
+            }
+            $item = $data[$idx2 + $j];
+            $html[] = "<td{$isFirst}>
 					{$item->term}
 		          	  </td>
 				  <td{$isFirst}>
 		        		<input type='radio' 
-					       name='m[{$inr}]'
+					       name='m[{$inr2}]'
 						   value='{$item->most}'
 						   required /></td>
 				  <td{$isFirst}>
 		          		<input type='radio' 
-					       name='l[{$inr}]'
+					       name='l[{$inr2}]'
 					       value='{$item->least}'
 					       required /></td>";
-          	}
+
+            // n = 3
+            if ($j == 0) {
+                $html[] = "<th rowspan='$cols'{$isFirst}>".($inr3+1)."</th>";
+            }
+            $item = $data[$idx3 + $j];
+            $html[] = "<td{$isFirst}>
+					{$item->term}
+				  </td>
+				  <td{$isFirst}>
+					<input type='radio'
+					       name='m[{$inr3}]'
+						   value='{$item->most}'
+						   required /></td>
+				  <td{$isFirst}>
+					<input type='radio'
+					       name='l[{$inr3}]'
+					       value='{$item->least}'
+					       required /></td>";
+
           $html[] = "</tr>";
         }
       }

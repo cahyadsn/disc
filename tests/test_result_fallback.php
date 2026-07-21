@@ -8,14 +8,7 @@ try {
 }
 
 class MockResult {
-    private $is_fallback = false;
-    public function __construct($is_fallback = false) {
-        $this->is_fallback = $is_fallback;
-    }
     public function fetch_object() {
-        if (!$this->is_fallback) {
-            return null; // Return null to trigger the fallback logic
-        }
         return (object)[
             'name' => 'Mock Pattern',
             'd' => 15, 'i' => 14, 's' => 15, 'c' => 14,
@@ -37,20 +30,27 @@ class MockStmt {
     public $execute_count = 0;
     public $bound_params = [];
     public $val_d, $val_i, $val_s, $val_c;
-    public function bind_param($types, &$d, &$i, &$s, &$c) {
+    public $def_d, $def_i, $def_s, $def_c;
+    public function bind_param($types, &$d, &$i, &$s, &$c, &$dd, &$di, &$ds, &$dc) {
         $this->val_d = &$d;
         $this->val_i = &$i;
         $this->val_s = &$s;
         $this->val_c = &$c;
+        $this->def_d = &$dd;
+        $this->def_i = &$di;
+        $this->def_s = &$ds;
+        $this->def_c = &$dc;
     }
     public function execute() {
         $this->execute_count++;
         // Capture values of references at the time of execution
-        $this->bound_params[] = [$this->val_d, $this->val_i, $this->val_s, $this->val_c];
+        $this->bound_params[] = [
+            $this->val_d, $this->val_i, $this->val_s, $this->val_c,
+            $this->def_d, $this->def_i, $this->def_s, $this->def_c
+        ];
     }
     public function get_result() {
-        // Return null first time to trigger fallback, return mock result second time
-        return new MockResult($this->execute_count > 1);
+        return new MockResult();
     }
 }
 
@@ -73,13 +73,13 @@ $output = ob_get_clean();
 
 $failed = false;
 
-if ($db->stmt->execute_count === 2) {
-    echo "PASS: execute() called twice (initial + fallback).\n";
-    $fallback_params = $db->stmt->bound_params[1];
-    if ($fallback_params[0] === 15 && $fallback_params[1] === 14 && $fallback_params[2] === 15 && $fallback_params[3] === 14) {
+if ($db->stmt->execute_count === 1) {
+    echo "PASS: execute() called once.\n";
+    $params = $db->stmt->bound_params[0];
+    if ($params[4] === 15 && $params[5] === 14 && $params[6] === 15 && $params[7] === 14) {
         echo "PASS: Default fallback values (15, 14, 15, 14) were bound correctly.\n";
     } else {
-        echo "FAIL: Default fallback values incorrect. Got: " . json_encode($fallback_params) . "\n";
+        echo "FAIL: Default fallback values incorrect. Got: " . json_encode($params) . "\n";
         $failed = true;
     }
 } else {

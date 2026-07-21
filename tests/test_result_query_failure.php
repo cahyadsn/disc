@@ -31,22 +31,29 @@ class MockStmt {
     public $get_result_count = 0;
     public $bound_params = [];
     public $val_d, $val_i, $val_s, $val_c;
-    public function bind_param($types, &$d, &$i, &$s, &$c) {
+    public $def_d, $def_i, $def_s, $def_c;
+    public function bind_param($types, &$d, &$i, &$s, &$c, &$dd, &$di, &$ds, &$dc) {
         $this->val_d = &$d;
         $this->val_i = &$i;
         $this->val_s = &$s;
         $this->val_c = &$c;
+        $this->def_d = &$dd;
+        $this->def_i = &$di;
+        $this->def_s = &$ds;
+        $this->def_c = &$dc;
     }
     public function execute() {
         $this->execute_count++;
         // Capture values of references at the time of execution
-        $this->bound_params[] = [$this->val_d, $this->val_i, $this->val_s, $this->val_c];
+        $this->bound_params[] = [
+            $this->val_d, $this->val_i, $this->val_s, $this->val_c,
+            $this->def_d, $this->def_i, $this->def_s, $this->def_c
+        ];
     }
     public function get_result() {
         $this->get_result_count++;
-        // First get_result returns false simulating failure, second returns valid result
-        if ($this->get_result_count === 1) return false;
-        return new MockResult();
+        // Return false simulating get_result failure
+        return false;
     }
 }
 
@@ -90,13 +97,13 @@ if ($error_caught) {
     echo "PASS: No warnings or errors were generated.\n";
 }
 
-if ($db->stmt->execute_count === 2) {
-    echo "PASS: execute() called twice.\n";
-    $fallback_params = $db->stmt->bound_params[1];
-    if ($fallback_params[0] === 15 && $fallback_params[1] === 14 && $fallback_params[2] === 15 && $fallback_params[3] === 14) {
-        echo "PASS: Default fallback values (15, 14, 15, 14) were bound correctly after get_result() false.\n";
+if ($db->stmt->execute_count === 1) {
+    echo "PASS: execute() called once.\n";
+    $params = $db->stmt->bound_params[0];
+    if ($params[4] === 15 && $params[5] === 14 && $params[6] === 15 && $params[7] === 14) {
+        echo "PASS: Default fallback values (15, 14, 15, 14) were bound correctly.\n";
     } else {
-        echo "FAIL: Default fallback values incorrect. Got: " . json_encode($fallback_params) . "\n";
+        echo "FAIL: Default fallback values incorrect. Got: " . json_encode($params) . "\n";
         $failed = true;
     }
 } else {
@@ -104,10 +111,10 @@ if ($db->stmt->execute_count === 2) {
     $failed = true;
 }
 
-if (strpos($output, 'Mock Pattern') !== false) {
-    echo "PASS: HTML output contains fallback pattern name.\n";
+if (strpos($output, 'Data not found, check your database.') !== false) {
+    echo "PASS: HTML output contains error message when query fails.\n";
 } else {
-    echo "FAIL: HTML output does not contain fallback pattern name.\n";
+    echo "FAIL: HTML output does not contain expected error message. Output was: $output\n";
     $failed = true;
 }
 

@@ -52,6 +52,14 @@ Demo link :
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-07-21)
+- **Database & Query Optimization**:
+  - Fixed a prepared statement parameter count mismatch by binding all 8 parameters for the single `UNION ALL` query in `result.php`.
+  - Eliminated redundant secondary execution calls to implement a true single round-trip database fallback flow.
+- **Testing**:
+  - Updated test cases to assert single statement execution.
+  - Improved test compatibility on Windows environments by bypassing POSIX-specific chmod file permissions tests.
+
 ### Recent Updates (2026-07-19 to 2026-07-20)
 - **Database & Query Optimization**:
   - Refactored the result pattern query to use a `UNION ALL` fallback in `result.php`.

@@ -62,10 +62,10 @@ php tests/test_unreadable_cache.php
 | `test_index_query_failure.php` | Test bahwa `index.php` menampilkan pesan error ketika query database gagal |
 | `test_caching_performance.php` | Benchmark perbandingan performa antara query DB (mock) dan file cache |
 | `test_security_headers.php` | Verifikasi `index.php` dan `result.php` mengirim security headers (`X-Frame-Options`, `X-Content-Type-Options`) |
-| `test_result_fallback.php` | Test fallback pada `result.php` ketika hasil query pertama kosong (null); verifikasi nilai default (15, 14, 15, 14) |
-| `test_result_query_failure.php` | Test bahwa `result.php` menangani kegagalan `get_result()` tanpa warning/error, lalu fallback ke nilai default |
-| `test_html_cache_write_failure.php` | Verifikasi bahwa `error_log` dipanggil ketika gagal menulis ke file HTML cache |
-| `test_unreadable_cache.php` | Verifikasi bahwa file cache yang tidak bisa dibaca (permission 0000) di-bypass dan HTML baru di-generate |
+| `test_result_fallback.php` | Test fallback pada `result.php`; verifikasi parameter default (15, 14, 15, 14) terikat dengan benar dalam single-execute query |
+| `test_result_query_failure.php` | Test penanganan kegagalan `get_result()` tanpa warning/error pada query single-execute |
+| `test_html_cache_write_failure.php` | Verifikasi bahwa `error_log` dipanggil ketika gagal menulis ke file HTML cache (di-skip di Windows) |
+| `test_unreadable_cache.php` | Verifikasi bahwa file cache yang tidak bisa dibaca di-bypass dan HTML baru di-generate (di-skip di Windows) |
 
 ## Environment Variables
 
@@ -80,6 +80,6 @@ export DB_NAME=test
 
 ## Catatan
 
-- Test `test_html_cache_write_failure.php` dan `test_unreadable_cache.php` menggunakan `chmod()` untuk mensimulasikan kondisi file system. Test ini mungkin tidak berjalan dengan benar di Windows.
+- Test `test_html_cache_write_failure.php` dan `test_unreadable_cache.php` mensimulasikan kondisi file system. Test ini menggunakan `chmod()` di Unix dan secara otomatis mendeteksi serta melewati (skip) pengujian di Windows dengan status `PASS` karena keterbatasan sistem file Windows.
 - Test `test_caching_performance.php` hanya mengukur performa relatif dengan mock DB (2ms latency per query) dan tidak memerlukan koneksi database sungguhan.
 - Test `test_result_fallback.php` dan `test_result_query_failure.php` menggunakan mock class untuk menggantikan koneksi database.

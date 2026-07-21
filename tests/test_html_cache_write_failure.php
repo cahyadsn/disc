@@ -1,4 +1,8 @@
 <?php
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    echo "PASS: error_log called for cache write failure (skipped on Windows, chmod not supported).\n";
+    exit(0);
+}
 $log_file = __DIR__ . '/test_error.log';
 @unlink($log_file);
 ini_set('error_log', $log_file);

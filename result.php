@@ -7,7 +7,7 @@ if (!headers_sent()) {
 FILENAME     : result.php
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
-UPDATED DATE : 2026-07-20 08:04:50
+UPDATED DATE : 2026-07-21 08:05:00
 *************************************/
 
 const DEFAULT_VAL_D = 15;
@@ -78,20 +78,14 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 		$val_i = $result['I']['change'];
 		$val_s = $result['S']['change'];
 		$val_c = $result['C']['change'];
-		$stmt->bind_param("iiii", $val_d, $val_i, $val_s, $val_c);
+		$def_d = DEFAULT_VAL_D;
+		$def_i = DEFAULT_VAL_I;
+		$def_s = DEFAULT_VAL_S;
+		$def_c = DEFAULT_VAL_C;
+		$stmt->bind_param("iiiiiiii", $val_d, $val_i, $val_s, $val_c, $def_d, $def_i, $def_s, $def_c);
 		$stmt->execute();
 		$db_result=$stmt->get_result();
 		$data = $db_result ? $db_result->fetch_object() : null;
-		//-- if empty result found, get default result
-		if(!isset($data->name)){
-			$val_d = DEFAULT_VAL_D;
-			$val_i = DEFAULT_VAL_I;
-			$val_s = DEFAULT_VAL_S;
-			$val_c = DEFAULT_VAL_C;
-			$stmt->execute();
-			$db_result=$stmt->get_result();
-			$data = $db_result ? $db_result->fetch_object() : null;
-		}
 	}
 
 	if (!$data) {

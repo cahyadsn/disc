@@ -43,7 +43,10 @@ This project is built using a lightweight and highly optimized architecture desi
   * **XSS Defenses**: Sanitized and escaped HTML output using `htmlspecialchars` with UTF-8 encoding.
   * **Sensitive Data Redaction**: Safe exception handling prevents database password leaks in debug logs and user interfaces.
 * **Frontend & Presentation**:
-  * **Styling**: Vanilla CSS ([style.css](file:///D:/laragon/repo/dev/disc/assets/style.css)) with clean grid alignments, alternating table row styles, and responsive form styling.
+  * **Glassmorphic UI Design**: Refactored to a sleek, modern visual aesthetic featuring background blurs (`backdrop-filter`), translucent panels, glowing border/shadow effects, and gradient backdrops.
+  * **Typography**: Clean visual styling built on the `Plus Jakarta Sans` Google Font.
+  * **Tactile Custom Controls**: Standard radio inputs are styled into custom selection buttons that glow emerald-green for "Most" choices and rose-red for "Least" choices.
+  * **Responsive Dashboard Grid**: Layout cards and lists adapt fluidly to screen dimensions, providing a highly premium experience on both desktop and mobile.
 * **Testing & CI/CD**:
   * **PHPUnit Framework**: Unit test suite covering SQL injection mitigations, XSS checks, caching mechanics, exception context preservation, database connection failures, and invalid POST fallbacks.
   * **Cross-platform Compatibility**: Test scripts dynamically adapt to and run reliably on both Unix/Linux and Windows environments.
@@ -71,6 +74,13 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-07-24)
+- **UI Refactoring & Styling**:
+  - Restructured layout templates with modern Glassmorphic panel designs, fluid containers, and dynamic radial background glows.
+  - Implemented tactile custom-styled radio buttons that dynamically glow green (Most) and rose (Least) when checked.
+  - Re-skinned results into a responsive grid dashboard matching premium modern design frameworks.
+  - Automatically cleared file caches to seamlessly render the modernized structure.
+
 ### Recent Updates (2026-07-21)
 - **Database & Query Optimization**:
   - Fixed a prepared statement parameter count mismatch by binding all 8 parameters for the single `UNION ALL` query in `result.php`.

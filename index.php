@@ -90,33 +90,39 @@ if ($html_content === false) {
     <link rel="stylesheet" href="assets/style.css">
   </head>
   <body>
-    <form method='post' action='result.php'>
-    <div>
-	Choose one <b>MOST</b> and one <b>LEAST</b> in each of the 28 groups of words.
+    <div class="app-container">
+      <div class="header-section">
+        <h1>DISC Personality Test</h1>
+        <p>Choose one <b>MOST</b> and one <b>LEAST</b> in each of the 28 groups of words.</p>
+      </div>
+      
+      <div class="card-glass">
+        <form method='post' action='result.php'>
+          <table>
+            <caption>DISC Personality Test</caption>
+            <thead>
+              <tr>
+              <?php for($i=0;$i<$cols;++$i):?>
+                <th>No</th>
+                <th>term</th>
+                <th>Most</th>
+                <th>Least</th>
+              <?php endfor;?>
+              </tr>
+            </thead>
+            <tbody>
+            <?php echo $html_content; ?>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th colspan='16'>
+                  <input type='submit' value='process' class='btn'/>
+                </th>
+              </tr>
+            </tfoot>
+          </table>
+        </form>
+      </div>
     </div>
-    <table>
-      <caption>DISC Personality Test</caption>
-      <thead>
-        <tr>
-        <?php for($i=0;$i<$cols;++$i):?>
-          <th>No</th>
-          <th>term</th>
-          <th>Most</th>
-          <th>Least</th>
-        <?php endfor;?>
-        </tr>
-      </thead>
-      <tbody>
-      <?php echo $html_content; ?>
-      </tbody>
-      <tfoot>
-        <tr>
-          <th colspan='16'>
-            <input type='submit' value='process' class='btn'/>
-       	  </th>
-       	</tr>
-      </tfoot>
-    </table>
-    </form>
   </body>
 </html>

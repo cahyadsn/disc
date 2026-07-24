@@ -89,30 +89,47 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 	}
 
 	if (!$data) {
-		echo "    <div>\n      <h1>Error</h1>\n      <p>Data not found, check your database.</p>\n    </div>\n";
+		echo "    <div class='app-container'><div class='card-glass error-container'>\n      <div class='error-title'>Error</div>\n      <p>Data not found, check your database.</p>\n    </div></div>\n";
 	} else {
     ?>
-    <div>
-    <h1>RESULT</h1>
-    <b>Segment : </b><br /><?php echo htmlspecialchars("{$data->d}-{$data->i}-{$data->s}-{$data->c}", ENT_QUOTES, 'UTF-8');?><br />
-<?php
-    $properties = [
-        'Pattern : ' => $data->name,
-        'Emotions : ' => $data->emotions,
-        'Goal : ' => $data->goal,
-        'Judges others by : ' => $data->judges_others,
-        'Influences others by: ' => $data->influences_others,
-        'Value to the organization: ' => $data->organization_value,
-        'Overuses : ' => $data->overuses,
-        'Under pressure : ' => $data->under_pressure,
-        'Fears : ' => $data->fear,
-        'Would increase effectiveness through: ' => $data->effectiveness,
-        'Description : ' => $data->description
-    ];
-    foreach ($properties as $label => $value) {
-        echo "    <b>" . htmlspecialchars($label, ENT_NOQUOTES, 'UTF-8') . "</b><br />" . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . "<br />\n";
-    }
-?>
+    <div class="app-container">
+      <div class="card-glass">
+        <div class="result-header">
+          <div class="header-section" style="margin-bottom: 20px;">
+            <h1>Your DISC Profile Result</h1>
+          </div>
+          <div class="result-segment-badge">
+            Segment: <?php echo htmlspecialchars("{$data->d}-{$data->i}-{$data->s}-{$data->c}", ENT_QUOTES, 'UTF-8');?>
+          </div>
+        </div>
+
+        <div class="result-grid">
+        <?php
+            $properties = [
+                'Pattern' => $data->name,
+                'Emotions' => $data->emotions,
+                'Goal' => $data->goal,
+                'Judges others by' => $data->judges_others,
+                'Influences others by' => $data->influences_others,
+                'Value to the organization' => $data->organization_value,
+                'Overuses' => $data->overuses,
+                'Under pressure' => $data->under_pressure,
+                'Fears' => $data->fear,
+                'Would increase effectiveness through' => $data->effectiveness,
+                'Description' => $data->description
+            ];
+            foreach ($properties as $label => $value) {
+                echo "          <div class='result-card'>\n";
+                echo "            <h3>" . htmlspecialchars($label, ENT_NOQUOTES, 'UTF-8') . "</h3>\n";
+                echo "            <p>" . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . "</p>\n";
+                echo "          </div>\n";
+            }
+        ?>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+          <a href="index.php" class="btn" style="text-decoration: none;">Take Test Again</a>
+        </div>
+      </div>
     </div>
 <?php
 	}

@@ -17,8 +17,8 @@ Demo link :
 2. extract and copy all files to document root folder on your webserver (or other folder that you want)
 3. create new database named 'test'
 4. import 'db/disc.sql' to the 'test' database
-5. change database configuration on 'index.php' and 'result.php' file (default value is $dbhost='localhost;$dbuser='root';$dbpass='';dbname='test';) 
-6. try accesing to http://localhost (or other -- depend on step 2 above), enjoy!
+5. Copy `.env.example` to `.env` and customize your database credentials (`DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`). The application will automatically load these credentials using a native PHP loader.
+6. Try accessing http://localhost (or the target folder configured in step 2). Enjoy!
 
 ## Reference
 + [**DiSC Classic Paper Profile** -  DiSC® 2800 Series Personal Profile System®](https://www.discprofile.com/products/disc-classic/)
@@ -30,6 +30,7 @@ Demo link :
 This project is built using a lightweight and highly optimized architecture designed for performance, security, and portability:
 
 * **Core Engine**: PHP (supports version 8.x and above)
+  * **Native Environment Variables Loader**: Automatically loads credentials from a `.env` file via `autoload_env.php` using pure native PHP.
   * **Lazy-Loading Database Connection**: Database connections are deferred and only established on cache misses.
   * **Persistent Database Pooling**: Configured with persistent connections (`p:`) to minimize TCP handshake and connection authentication overhead.
 * **Database & Query Layer**: MySQL / MariaDB
@@ -74,6 +75,12 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-07-25)
+- **Configuration & Security**:
+  - Implemented a native PHP `.env` loader (`autoload_env.php`) to keep credential configurations clean and isolated.
+  - Created `.env.example` template.
+  - Updated `.gitignore` to prevent database configuration credentials from being checked into source control.
+
 ### Recent Updates (2026-07-24)
 - **UI Refactoring & Styling**:
   - Restructured layout templates with modern Glassmorphic panel designs, fluid containers, and dynamic radial background glows.

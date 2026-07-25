@@ -44,7 +44,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     ];
   }
 
-  require_once 'db.php';
+  require_once 'conf/config.php';
     // Bolt optimization: Replaced cross-joined derived tables with direct subqueries to prevent temporary table creation
     // and Cartesian products. This reduces CPU/memory usage and allows utilizing primary key indexes effectively.
     $sql="

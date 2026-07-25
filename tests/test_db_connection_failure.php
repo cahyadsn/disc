@@ -11,7 +11,7 @@ putenv('DB_NAME=test');
 $exceptionThrown = false;
 try {
     // Suppress warning using @ to avoid noise, but catch the exception
-    @include __DIR__ . '/../db.php';
+    @include __DIR__ . '/../conf/config.php';
 
     // In some older PHP versions or configs, mysqli constructor might not throw but set connect_error
     if (isset($db) && $db->connect_error) {
@@ -32,3 +32,5 @@ if (!$exceptionThrown) {
 
 echo "All tests passed.\n";
 exit(0);
+
+

@@ -1,9 +1,9 @@
 <?php
 mysqli_report(MYSQLI_REPORT_OFF);
-echo "Running security fix tests for db.php...\n";
+echo "Running security fix tests for config.php...\n";
 
 // Test 1: DB_PASS is missing
-$dbCode = file_get_contents(__DIR__ . '/../db.php');
+$dbCode = file_get_contents(__DIR__ . '/../conf/config.php');
 if (strpos($dbCode, "exit('Database configuration error.');") !== false && strpos($dbCode, "error_log('DB_PASS environment variable is required.');") !== false) {
     echo "PASS: Safe exit and error_log found for DB_PASS check.\n";
 } else {
@@ -15,7 +15,7 @@ if (strpos($dbCode, "exit('Database configuration error.');") !== false && strpo
 putenv('DB_PASS=securepassword');
 
 try {
-    @include __DIR__ . '/../db.php';
+    @include __DIR__ . '/../conf/config.php';
     echo "PASS: Script continues when DB_PASS is provided.\n";
 } catch (Exception $e) {
     echo "PASS: Exception/error after DB_PASS check.\n";
@@ -25,3 +25,4 @@ try {
 
 echo "All tests passed.\n";
 exit(0);
+

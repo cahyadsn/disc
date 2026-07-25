@@ -60,5 +60,5 @@ foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $trace) {
 }
 
 if (!$isTestEnv) {
-    loadEnv(__DIR__ . '/.env');
+    loadEnv(dirname(__DIR__) . '/.env');
 }

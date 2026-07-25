@@ -46,19 +46,19 @@ class MockMySQLi {
 // Override connection settings
 putenv('DB_HOST=127.0.0.1');
 
-// Instead of rewriting db.php, we can simply override the $db variable AFTER require_once 'db.php'.
-// However, 'db.php' will attempt to connect, which will fail if MySQL is not running.
+// Instead of rewriting config.php, we can simply override the $db variable AFTER require_once 'config.php'.
+// However, 'config.php' will attempt to connect, which will fail if MySQL is not running.
 // So we use @include and catch error, then override $db.
 // Wait, an exception will halt execution. We need a custom error handler or try-catch.
 try {
-    @include __DIR__ . '/../db.php';
+    @include __DIR__ . '/../conf/config.php';
 } catch (Throwable $e) {}
 
 // Now define $db globally
 global $db;
 $db = new MockMySQLi();
 
-// We need index.php not to require db.php again because require_once only loads once.
+// We need index.php not to require config.php again because require_once only loads once.
 // So if we include it here, index.php won't error out.
 // Let's test this strategy.
 @unlink(__DIR__ . '/../html_cache.html');
@@ -108,3 +108,5 @@ if (!$success) {
 }
 
 exit(0);
+
+

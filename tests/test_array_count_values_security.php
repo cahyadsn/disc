@@ -12,7 +12,7 @@ set_error_handler(function($errno, $errstr) {
     }
 });
 
-// Since result.php requires db.php, let's catch the fatal error or just test array_count_values manually.
+// Since result.php requires config.php, let's catch the fatal error or just test array_count_values manually.
 // Because the database connection fails and stops script execution before our SUCCESS echo.
 // Let's test the specific function call that was patched.
 $m = array_filter($_POST['m'], 'is_scalar');
@@ -22,3 +22,4 @@ $most = array_count_values($m);
 $least = array_count_values($l);
 
 echo "SUCCESS: No array_count_values warning triggered when filtering with is_scalar.\n";
+

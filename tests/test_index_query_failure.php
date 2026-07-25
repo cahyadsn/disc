@@ -7,7 +7,7 @@ class MockMySQLi {
 }
 
 try {
-    @include __DIR__ . '/../db.php';
+    @include __DIR__ . '/../conf/config.php';
 } catch (Throwable $e) {}
 
 global $db;
@@ -26,3 +26,5 @@ if (strpos($output, "Error loading data.") !== false) {
     echo "FAIL: Did not gracefully handle query failure.\n";
     exit(1);
 }
+
+

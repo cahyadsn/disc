@@ -14,7 +14,7 @@ class MockMySQLiEmpty {
 }
 
 try {
-    @include __DIR__ . '/../db.php';
+    @include __DIR__ . '/../conf/config.php';
 } catch (Throwable $e) {}
 
 global $db;
@@ -35,3 +35,5 @@ if (strpos($output, "Error loading data.") === false && (strpos($output, "<tbody
     echo "FAIL: Did not gracefully handle empty result set.\n";
     exit(1);
 }
+
+

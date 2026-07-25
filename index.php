@@ -20,7 +20,7 @@ if (file_exists($html_cache_file) && is_readable($html_cache_file)) {
 
 if ($html_content === false) {
     // Lazy load the database connection only on cache miss
-    require_once 'db.php';
+    require_once 'conf/config.php';
 
     //-- query data from database
     $sql='SELECT * FROM personalities ORDER BY no ASC';

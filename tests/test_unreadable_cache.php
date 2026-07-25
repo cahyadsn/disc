@@ -54,10 +54,11 @@ try {
         }
     };
 
-    // Create a temporary mock db.php in a temp directory
+    // Create a temporary mock config.php in a temp directory
     $tmp_dir = sys_get_temp_dir() . '/mock_db_' . uniqid();
     mkdir($tmp_dir);
-    file_put_contents($tmp_dir . '/db.php', '<?php // Mock DB file. ?>');
+    mkdir($tmp_dir . '/conf');
+    file_put_contents($tmp_dir . '/conf/config.php', '<?php // Mock DB file. ?>');
 
     // Prepend the temp directory to the include path
     set_include_path($tmp_dir . PATH_SEPARATOR . get_include_path());
@@ -81,9 +82,16 @@ try {
     set_include_path(get_include_path());
 
     // Clean up temp dir
-    if ($tmp_dir !== null && file_exists($tmp_dir . '/db.php')) {
-        unlink($tmp_dir . '/db.php');
-        rmdir($tmp_dir);
+    if ($tmp_dir !== null) {
+        if (file_exists($tmp_dir . '/conf/config.php')) {
+            unlink($tmp_dir . '/conf/config.php');
+        }
+        if (file_exists($tmp_dir . '/conf')) {
+            rmdir($tmp_dir . '/conf');
+        }
+        if (file_exists($tmp_dir)) {
+            rmdir($tmp_dir);
+        }
     }
 }
 
@@ -100,3 +108,4 @@ if (strpos($output, "<form method='post' action='result.php'>") === false) {
 }
 
 echo "PASS: Unreadable cache file properly bypassed.\n";
+

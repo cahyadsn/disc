@@ -25,8 +25,8 @@ composer test
 Test standalone dapat dijalankan langsung dengan PHP:
 
 ```bash
-php tests/test_db.php
-php tests/test_db_pass.php
+php tests/test_config.php
+php tests/test_config_pass.php
 php tests/test_missing_post.php
 php tests/test_xss.php
 php tests/test_xss_fix.php
@@ -49,8 +49,8 @@ php tests/test_unreadable_cache.php
 | File | Deskripsi |
 |------|-----------|
 | `DiscTest.php` | PHPUnit test untuk kalkulasi skor DISC dan XSS escaping |
-| `test_db.php` | Test konfigurasi database via environment variables |
-| `test_db_pass.php` | Test validasi `DB_PASS` wajib diset |
+| `test_config.php` | Test konfigurasi database via environment variables |
+| `test_config_pass.php` | Test validasi `DB_PASS` wajib diset |
 | `test_missing_post.php` | Test handling POST data yang tidak lengkap |
 | `test_xss.php` | Test simulasi serangan XSS pada input |
 | `test_xss_fix.php` | Verifikasi semua output di-escape dengan `htmlspecialchars()` |
@@ -61,7 +61,7 @@ php tests/test_unreadable_cache.php
 | `test_lazy_db.php` | Test bahwa koneksi database tidak dilakukan saat cache HTML tersedia |
 | `test_index_query_failure.php` | Test bahwa `index.php` menampilkan pesan error ketika query database gagal |
 | `test_caching_performance.php` | Benchmark perbandingan performa antara query DB (mock) dan file cache |
-| `test_security_headers.php` | Verifikasi `index.php` dan `result.php` mengirim security headers (`X-Frame-Options`, `X-Content-Type-Options`) |
+| `test_security_headers.php` | Verifikasi `index.php` and `result.php` mengirim security headers (`X-Frame-Options`, `X-Content-Type-Options`) |
 | `test_result_fallback.php` | Test fallback pada `result.php`; verifikasi parameter default (15, 14, 15, 14) terikat dengan benar dalam single-execute query |
 | `test_result_query_failure.php` | Test penanganan kegagalan `get_result()` tanpa warning/error pada query single-execute |
 | `test_html_cache_write_failure.php` | Verifikasi bahwa `error_log` dipanggil ketika gagal menulis ke file HTML cache (di-skip di Windows) |
@@ -80,6 +80,7 @@ export DB_NAME=test
 
 ## Catatan
 
-- Test `test_html_cache_write_failure.php` dan `test_unreadable_cache.php` mensimulasikan kondisi file system. Test ini menggunakan `chmod()` di Unix dan secara otomatis mendeteksi serta melewati (skip) pengujian di Windows dengan status `PASS` karena keterbatasan sistem file Windows.
-- Test `test_caching_performance.php` hanya mengukur performa relatif dengan mock DB (2ms latency per query) dan tidak memerlukan koneksi database sungguhan.
-- Test `test_result_fallback.php` dan `test_result_query_failure.php` menggunakan mock class untuk menggantikan koneksi database.
+- Test `test_html_cache_write_failure.php` and `test_unreadable_cache.php` mensimulasikan kondisi file system. Test ini menggunakan `chmod()` di Unix dan secara otomatis mendeteksi serta melewati (skip) pengujian di Windows dengan status `PASS` karena keterbatasan sistem file Windows.
+- Test `test_caching_performance.php` hanya mengukur performa relatif dengan mock DB (2ms latency per query) and tidak memerlukan koneksi database sungguhan.
+- Test `test_result_fallback.php` and `test_result_query_failure.php` menggunakan mock class untuk menggantikan koneksi database.
+

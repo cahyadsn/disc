@@ -24,7 +24,7 @@ class MockMySQLi {
 putenv('DB_HOST=127.0.0.1');
 
 try {
-    @include __DIR__ . '/../db.php';
+    @include __DIR__ . '/../conf/config.php';
 } catch (Throwable $e) {}
 
 global $db;
@@ -49,3 +49,5 @@ try {
     echo "FAIL: Uncaught exception thrown! " . $e->getMessage() . "\n";
     exit(1);
 }
+
+

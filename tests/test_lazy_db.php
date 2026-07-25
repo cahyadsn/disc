@@ -9,12 +9,12 @@ for ($i = 0; $i < 112; $i++) {
 }
 file_put_contents($cache_file, "<tbody><tr><td>Mock HTML</td></tr></tbody>");
 
-// DB_PASS is missing, which normally throws an exception in db.php.
+// DB_PASS is missing, which normally throws an exception in config.php.
 putenv('DB_PASS');
 
 $exceptionThrown = false;
 try {
-    // If it requires db.php, an exception will be thrown.
+    // If it requires config.php, an exception will be thrown.
     ob_start();
     include __DIR__ . '/../index.php';
     ob_end_clean();
@@ -37,9 +37,10 @@ if (file_exists($cache_file)) {
 }
 
 if ($exceptionThrown) {
-    echo "FAIL: db.php was required even though cache was valid.\n";
+    echo "FAIL: config.php was required even though cache was valid.\n";
     exit(1);
 }
 
-echo "PASS: db.php was not required when cache was hit.\n";
+echo "PASS: config.php was not required when cache was hit.\n";
 exit(0);
+

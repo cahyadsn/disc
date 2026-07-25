@@ -7,7 +7,7 @@ $log_file = __DIR__ . '/test_error.log';
 @unlink($log_file);
 ini_set('error_log', $log_file);
 
-putenv('DB_PASS='); // Ensure DB_PASS is set to avoid exceptions from db.php
+putenv('DB_PASS='); // Ensure DB_PASS is set to avoid exceptions from config.php
 
 // Mock DB connection
 class MockMySQLiResult {
@@ -20,7 +20,7 @@ class MockMySQLi {
         return new MockMySQLiResult();
     }
 }
-try { @include __DIR__ . '/../db.php'; } catch (Throwable $e) {}
+try { @include __DIR__ . '/../conf/config.php'; } catch (Throwable $e) {}
 global $db;
 $db = new MockMySQLi();
 
@@ -46,3 +46,5 @@ if ($log_contents && strpos($log_contents, "Failed to write to HTML cache file")
     echo "FAIL: error_log was not called.\n";
     exit(1);
 }
+
+

@@ -1,7 +1,7 @@
 <?php
 try {
-    putenv('DB_PASS='); // Ensure no Exception from db.php missing pass
-    require_once __DIR__ . '/../db.php';
+    putenv('DB_PASS='); // Ensure no Exception from config.php missing pass
+    require_once __DIR__ . '/../conf/config.php';
 } catch (Throwable $e) {
     // Suppress connection errors
 }
@@ -32,3 +32,5 @@ if (strpos($output, 'Data not found, check your database.') !== false) {
     echo "FAIL: Unexpected output:\n$output\n";
     exit(1);
 }
+
+

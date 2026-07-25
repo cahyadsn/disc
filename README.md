@@ -30,7 +30,7 @@ Demo link :
 This project is built using a lightweight and highly optimized architecture designed for performance, security, and portability:
 
 * **Core Engine**: PHP (supports version 8.x and above)
-  * **Native Environment Variables Loader**: Automatically loads credentials from a `.env` file via `autoload_env.php` using pure native PHP.
+  * **Native Environment Variables Loader**: Automatically loads credentials from a `.env` file via `conf/autoload_env.php` using pure native PHP.
   * **Lazy-Loading Database Connection**: Database connections are deferred and only established on cache misses.
   * **Persistent Database Pooling**: Configured with persistent connections (`p:`) to minimize TCP handshake and connection authentication overhead.
 * **Database & Query Layer**: MySQL / MariaDB
@@ -77,9 +77,10 @@ This project is built using a lightweight and highly optimized architecture desi
 ## Changelog
 ### Recent Updates (2026-07-25)
 - **Configuration & Security**:
-  - Implemented a native PHP `.env` loader (`autoload_env.php`) to keep credential configurations clean and isolated.
+  - Implemented a native PHP `.env` loader (`conf/autoload_env.php`) to keep credential configurations clean and isolated.
   - Created `.env.example` template.
   - Updated `.gitignore` to prevent database configuration credentials from being checked into source control.
+  - Relocated configuration and variable loading files to the `/conf` directory (`conf/config.php` and `conf/autoload_env.php`).
 
 ### Recent Updates (2026-07-24)
 - **UI Refactoring & Styling**:
@@ -104,7 +105,7 @@ This project is built using a lightweight and highly optimized architecture desi
   - Removed unnecessary '#' aspect processing in `result.php`.
   - Guarded against statement `prepare()` failure in `result.php`.
 - **Security & Error Handling**:
-  - Fixed discarded exception context in `db.php`.
+  - Fixed discarded exception context in `config.php`.
 - **Header Information**:
   - Updated `UPDATED DATE` header in `index.php` and `result.php` to `2026-07-20 08:04:50` using the `yyyy-mm-dd hh:ii:ss` format.
 ### Recent Updates (2026-07-18 23:06:34)
@@ -116,7 +117,7 @@ This project is built using a lightweight and highly optimized architecture desi
   - Prevented potential database password leaks in database exceptions.
   - Added essential HTTP security headers to `index.php` and `result.php`.
 - **Code Quality & Health**:
-  - Cleaned up database connection error suppression in `db.php`.
+  - Cleaned up database connection error suppression in `config.php`.
   - Fixed type mismatches and object fallback logic in `result.php`.
 - **Testing**:
   - Added new test suites covering query failures, unreadable cache file fallback, and HTML cache write failures.

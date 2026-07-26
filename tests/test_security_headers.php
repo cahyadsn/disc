@@ -11,6 +11,10 @@ foreach ($files as $file) {
         echo "Missing X-Content-Type-Options in $file\n";
         $passed = false;
     }
+    if (strpos($content, "header(\"Content-Security-Policy: default-src 'self';\");") === false) {
+        echo "Missing Content-Security-Policy in $file\n";
+        $passed = false;
+    }
 }
 if ($passed) {
     echo "Security headers test passed.\n";

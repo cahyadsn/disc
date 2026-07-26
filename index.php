@@ -9,7 +9,7 @@ AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
 UPDATED DATE : 2026-07-20 08:04:50
 *************************************/
-$html_cache_file = __DIR__ . '/html_cache.html';
+$html_cache_file = sys_get_temp_dir() . '/html_cache.html';
 $html_content = false;
 $cols  		= 4;	//<-- number of columns
 

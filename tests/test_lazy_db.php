@@ -1,6 +1,6 @@
 <?php
 // We test if the database connection is avoided when cache is hit.
-$cache_file = __DIR__ . '/../html_cache.html';
+$cache_file = sys_get_temp_dir() . '/html_cache.html';
 
 // Create a dummy valid html cache (enough to suppress warnings)
 $dummy_data = [];

@@ -24,7 +24,7 @@ try { @include __DIR__ . '/../conf/config.php'; } catch (Throwable $e) {}
 global $db;
 $db = new MockMySQLi();
 
-$cache_file = __DIR__ . '/../html_cache.html';
+$cache_file = sys_get_temp_dir() . '/html_cache.html';
 system('rm -rf ' . escapeshellarg($cache_file));
 touch($cache_file);
 chmod($cache_file, 0000); // No permissions. This makes is_readable() false, and file_put_contents() fail.

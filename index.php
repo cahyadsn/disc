@@ -14,7 +14,7 @@ $html_content = false;
 $cols  		= 4;	//<-- number of columns
 
 // Bolt optimization: Cache fully generated HTML block to bypass deep nested loops and redundant string generation (~98% speedup)
-if (file_exists($html_cache_file) && is_readable($html_cache_file)) {
+if (is_readable($html_cache_file)) {
     $html_content = file_get_contents($html_cache_file);
 }
 

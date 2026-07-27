@@ -2,7 +2,7 @@
 // Fix working directory
 chdir(__DIR__ . '/../');
 
-$cache_file = __DIR__ . '/../html_cache.html';
+$cache_file = sys_get_temp_dir() . '/html_cache.html';
 
 class FailingFileWrapper {
     public $context;

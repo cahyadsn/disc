@@ -20,7 +20,7 @@ try {
 global $db;
 $db = new MockMySQLiEmpty();
 
-@unlink(__DIR__ . '/../html_cache.html');
+@unlink(sys_get_temp_dir() . '/html_cache.html');
 
 ob_start();
 include __DIR__ . '/../index.php';

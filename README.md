@@ -20,6 +20,31 @@ Demo link :
 5. Copy `.env.example` to `.env` and customize your database credentials (`DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`). The application will automatically load these credentials using a native PHP loader.
 6. Try accessing http://localhost (or the target folder configured in step 2). Enjoy!
 
+## Project Structure
+
+The project directory has been reorganized to keep configuration and test layers clean:
+
+* **`/conf`**: Directory holding central configuration and autoload helper:
+  * `config.php`: Central database configuration setup with lazy-loading connection pooling.
+  * `autoload_env.php`: A native, zero-dependency environment variables loader that parses and applies configuration variables from `.env`.
+* **`/db`**: Contains database schema and seed data files (`disc.sql`).
+* **`/tests`**: Contains the PHPUnit and standalone test suites covering security, SQL injection mitigations, cache handlers, and platform-specific tests.
+* **`/assets`**: Frontend styles, fonts, and assets.
+
+## Running Tests
+
+To verify code changes, security fixes, and database behaviors, run the test suite:
+
+1. Install development dependencies:
+   ```bash
+   composer install
+   ```
+2. Execute the test suite:
+   ```bash
+   composer test
+   ```
+   *Note: Standalone test scripts can also be run individually (e.g., `php tests/test_config.php`). For a full list of tests, see the [tests/README.md](file:///D:/laragon/repo/dev/disc/tests/README.md) file.*
+
 ## Reference
 + [**DiSC Classic Paper Profile** -  DiSC® 2800 Series Personal Profile System®](https://www.discprofile.com/products/disc-classic/)
 
@@ -37,12 +62,13 @@ This project is built using a lightweight and highly optimized architecture desi
   * **Single Round-trip Fallbacks**: Optimized data retrieval utilizing SQL `UNION ALL` to resolve pattern records and application fallbacks in a single database query.
   * **Prepared Statements**: Secure parameter binding utilizing mysqli prepared statements.
 * **Caching & Performance Optimization**:
-  * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output for the 28-group questionnaire to a local HTML cache file (`html_cache.html`), yielding a ~98% speedup.
+  * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output to an HTML cache file (`html_cache.html`) in the system temporary directory (to prevent direct HTTP access), yielding a ~98% speedup.
+  * **Filesystem Call Reductions**: Uses `is_readable()` to perform cache-hit checks in one step, bypassing redundant `file_exists()` checks.
   * **Loop & Memory Optimizations**: Minimized array allocations and nested calculations inside loops.
 * **Security & Hardening**:
-  * **HTTP Security Headers**: Implements custom protection rules such as `X-Frame-Options: DENY` and `X-Content-Type-Options: nosniff` to defend against clickjacking and MIME sniffing.
+  * **HTTP Security Headers**: Implements custom protection rules such as `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and a restrictive `Content-Security-Policy: default-src 'self';` to defend against clickjacking, MIME sniffing, and cross-site scripting (XSS).
   * **XSS Defenses**: Sanitized and escaped HTML output using `htmlspecialchars` with UTF-8 encoding.
-  * **Sensitive Data Redaction**: Safe exception handling prevents database password leaks in debug logs and user interfaces.
+  * **Sensitive Data Redaction**: Safe exception handling prevents database password and credential leaks in debug logs and user interfaces by stripping underlying exception context during connection failures.
 * **Frontend & Presentation**:
   * **Glassmorphic UI Design**: Refactored to a sleek, modern visual aesthetic featuring background blurs (`backdrop-filter`), translucent panels, glowing border/shadow effects, and gradient backdrops.
   * **Typography**: Clean visual styling built on the `Plus Jakarta Sans` Google Font.
@@ -75,6 +101,13 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-07-26)
+- **Security & Caching**:
+  - Moved `html_cache.html` out of the web root into the system temporary directory (`sys_get_temp_dir()`) to prevent direct public HTTP access.
+  - Implemented `Content-Security-Policy: default-src 'self';` header on both `index.php` and `result.php`.
+  - Redacted the database connection exception context (stripped internal PHP exception chains) to prevent accidental database credential leaks in debug logs.
+  - Removed redundant `file_exists()` checks before checking `is_readable()` when resolving HTML cache hits.
+
 ### Recent Updates (2026-07-25)
 - **Configuration & Security**:
   - Implemented a native PHP `.env` loader (`conf/autoload_env.php`) to keep credential configurations clean and isolated.

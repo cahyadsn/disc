@@ -8,7 +8,7 @@ if (!headers_sent()) {
 FILENAME     : index.php
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
-UPDATED DATE : 2026-07-20 08:04:50
+UPDATED DATE : 2026-07-28 09:42:01
 *************************************/
 $html_cache_file = sys_get_temp_dir() . '/html_cache.html';
 $html_content = false;
@@ -59,108 +59,124 @@ if ($html_content === false) {
         $idx3 = $cols * $inr3;
 
         for($j=0;$j<$cols;++$j){
-            $isFirst = $j==0 ? " class='first'" : "";
             $i0 = $data[$idx0 + $j];
             $i1 = $data[$idx1 + $j];
             $i2 = $data[$idx2 + $j];
             $i3 = $data[$idx3 + $j];
 
+            $c0 = (($inr0 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
+            $c1 = (($inr1 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
+            $c2 = (($inr2 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
+            $c3 = (($inr3 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
+
             if ($j == 0) {
-                $html[] = "<th rowspan='$cols'{$isFirst}>".($inr0+1)."</th><td{$isFirst}>
+                $class0 = "class='{$c0} first'";
+                $class1 = "class='{$c1} first'";
+                $class2 = "class='{$c2} first'";
+                $class3 = "class='{$c3} first'";
+            } else {
+                $class0 = "class='{$c0}'";
+                $class1 = "class='{$c1}'";
+                $class2 = "class='{$c2}'";
+                $class3 = "class='{$c3}'";
+            }
+
+            if ($j == 0) {
+                $html[] = "<th rowspan='$cols' {$class0}>".($inr0+1)."</th><td {$class0}>
 					{$i0->term}
 				  </td>
-				  <td{$isFirst}>
+				  <td {$class0}>
 					<input type='radio'
 					       name='m[{$inr0}]'
 						   value='{$i0->most}'
 						   required /></td>
-				  <td{$isFirst}>
+				  <td {$class0}>
 					<input type='radio'
 					       name='l[{$inr0}]'
 					       value='{$i0->least}'
-					       required /></td><th rowspan='$cols'{$isFirst}>".($inr1+1)."</th><td{$isFirst}>
+					       required /></td><th rowspan='$cols' {$class1}>".($inr1+1)."</th><td {$class1}>
 					{$i1->term}
 				  </td>
-				  <td{$isFirst}>
+				  <td {$class1}>
 					<input type='radio'
 					       name='m[{$inr1}]'
 						   value='{$i1->most}'
 						   required /></td>
-				  <td{$isFirst}>
+				  <td {$class1}>
 					<input type='radio'
 					       name='l[{$inr1}]'
 					       value='{$i1->least}'
-					       required /></td><th rowspan='$cols'{$isFirst}>".($inr2+1)."</th><td{$isFirst}>
+					       required /></td><th rowspan='$cols' {$class2}>".($inr2+1)."</th><td {$class2}>
 					{$i2->term}
 				  </td>
-				  <td{$isFirst}>
+				  <td {$class2}>
 					<input type='radio'
 					       name='m[{$inr2}]'
 						   value='{$i2->most}'
 						   required /></td>
-				  <td{$isFirst}>
+				  <td {$class2}>
 					<input type='radio'
 					       name='l[{$inr2}]'
 					       value='{$i2->least}'
-					       required /></td><th rowspan='$cols'{$isFirst}>".($inr3+1)."</th><td{$isFirst}>
+					       required /></td><th rowspan='$cols' {$class3}>".($inr3+1)."</th><td {$class3}>
 					{$i3->term}
 				  </td>
-				  <td{$isFirst}>
+				  <td {$class3}>
 					<input type='radio'
 					       name='m[{$inr3}]'
 						   value='{$i3->most}'
 						   required /></td>
-				  <td{$isFirst}>
+				  <td {$class3}>
 					<input type='radio'
 					       name='l[{$inr3}]'
 					       value='{$i3->least}'
 					       required /></td></tr>";
             } else {
-                $html[] = "{$tr}<td{$isFirst}>
+                $html[] = "{$tr}<td {$class0}>
 					{$i0->term}
 				  </td>
-				  <td{$isFirst}>
+				  <td {$class0}>
 					<input type='radio'
 					       name='m[{$inr0}]'
 						   value='{$i0->most}'
 						   required /></td>
-				  <td{$isFirst}>
+				  <td {$class0}>
 					<input type='radio'
 					       name='l[{$inr0}]'
 					       value='{$i0->least}'
-					       required /></td><td{$isFirst}>
+					       required /></td><td {$class1}>
 					{$i1->term}
 				  </td>
-				  <td{$isFirst}>
+				  <td {$class1}>
 					<input type='radio'
 					       name='m[{$inr1}]'
 						   value='{$i1->most}'
 						   required /></td>
-				  <td{$isFirst}>
+				  <td {$class1}>
 					<input type='radio'
 					       name='l[{$inr1}]'
 					       value='{$i1->least}'
-					       required /></td><td{$isFirst}>
+					       required /></td><td {$class2}>
 					{$i2->term}
 		          	  </td>
-				  <td{$isFirst}>
+				  <td {$class2}>
 		        		<input type='radio' 
 					       name='m[{$inr2}]'
 						   value='{$i2->most}'
 						   required /></td>
-				  <td{$isFirst}>
+				  <td {$class2}>
 		          		<input type='radio' 
 					       name='l[{$inr2}]'
 					       value='{$i2->least}'
-					       required /></td><td{$isFirst}>
+					       required /></td><td {$class3}>
 					{$i3->term}
 				  </td>
-				  <td{$isFirst}>
+				  <td {$class3}>
 					<input type='radio'
 					       name='m[{$inr3}]'
 						   value='{$i3->most}'
 						   required /></td>
-				  <td{$isFirst}>
+				  <td {$class3}>
 					<input type='radio'
 					       name='l[{$inr3}]'
 					       value='{$i3->least}'

@@ -101,6 +101,10 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-07-28)
+- **UI & Presentation**:
+  - Implemented distinct background tone colors (`q-odd` and `q-even`) for odd/even numbered question groups (groups of 4 terms) to improve readability and visual separation.
+
 ### Recent Updates (2026-07-26)
 - **Security & Caching**:
   - Moved `html_cache.html` out of the web root into the system temporary directory (`sys_get_temp_dir()`) to prevent direct public HTTP access.

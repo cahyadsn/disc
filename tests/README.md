@@ -40,6 +40,7 @@ php tests/test_caching_performance.php
 php tests/test_security_headers.php
 php tests/test_result_fallback.php
 php tests/test_result_query_failure.php
+php tests/test_result_execute_failure.php
 php tests/test_html_cache_write_failure.php
 php tests/test_unreadable_cache.php
 ```
@@ -64,6 +65,7 @@ php tests/test_unreadable_cache.php
 | `test_security_headers.php` | Verifikasi `index.php` and `result.php` mengirim security headers (`X-Frame-Options`, `X-Content-Type-Options`) |
 | `test_result_fallback.php` | Test fallback pada `result.php`; verifikasi parameter default (15, 14, 15, 14) terikat dengan benar dalam single-execute query |
 | `test_result_query_failure.php` | Test penanganan kegagalan `get_result()` tanpa warning/error pada query single-execute |
+| `test_result_execute_failure.php` | Test penanganan kegagalan `execute()` pada single-execute query |
 | `test_html_cache_write_failure.php` | Verifikasi bahwa `error_log` dipanggil ketika gagal menulis ke file HTML cache (di-skip di Windows) |
 | `test_unreadable_cache.php` | Verifikasi bahwa file cache yang tidak bisa dibaca di-bypass dan HTML baru di-generate (di-skip di Windows) |
 

@@ -42,6 +42,7 @@ php tests/test_result_fallback.php
 php tests/test_result_query_failure.php
 php tests/test_html_cache_write_failure.php
 php tests/test_unreadable_cache.php
+php tests/test_invalid_dimensions.php
 ```
 
 ## Daftar Test
@@ -66,6 +67,7 @@ php tests/test_unreadable_cache.php
 | `test_result_query_failure.php` | Test penanganan kegagalan `get_result()` tanpa warning/error pada query single-execute |
 | `test_html_cache_write_failure.php` | Verifikasi bahwa `error_log` dipanggil ketika gagal menulis ke file HTML cache (di-skip di Windows) |
 | `test_unreadable_cache.php` | Verifikasi bahwa file cache yang tidak bisa dibaca di-bypass dan HTML baru di-generate (di-skip di Windows) |
+| `test_invalid_dimensions.php` | Test penanganan nilai dimensi kepribadian yang tidak valid (invalid dimensions) pada data POST di `result.php` |
 
 ## Environment Variables
 

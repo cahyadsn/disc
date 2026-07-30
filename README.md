@@ -101,9 +101,17 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-07-30)
+- **Testing & Quality Assurance**:
+  - Refactored directory change (`chdir`) inline comments in the unreadable cache test suite to explicitly describe execution context configuration, satisfying static analysis and preventing false positives from TODO scanners.
+
 ### Recent Updates (2026-07-28)
 - **UI & Presentation**:
   - Implemented distinct background tone colors (`q-odd` and `q-even`) for odd/even numbered question groups (groups of 4 terms) to improve readability and visual separation.
+- **Testing & Security Coverage**:
+  - Added robust test coverage for invalid personality dimension values in POST inputs to verify database integration safety.
+  - Added security test suite verifying XSS escaping rules on `result.php` template rendering.
+  - Added test coverage targeting database execution failures to verify transaction resilience and graceful fallbacks.
 
 ### Recent Updates (2026-07-26)
 - **Security & Caching**:

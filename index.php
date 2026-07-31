@@ -84,27 +84,38 @@ if ($html_content === false) {
         $idx2 = $cols * $inr2;
         $idx3 = $cols * $inr3;
 
+        // Bolt optimization: Hoisted loop invariants out of the inner loop to save concatenation overhead
+        $c0 = (($inr0 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
+        $c1 = (($inr1 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
+        $c2 = (($inr2 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
+        $c3 = (($inr3 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
+
+        $class0_first = "class='{$c0} first'";
+        $class1_first = "class='{$c1} first'";
+        $class2_first = "class='{$c2} first'";
+        $class3_first = "class='{$c3} first'";
+
+        $class0_rest = "class='{$c0}'";
+        $class1_rest = "class='{$c1}'";
+        $class2_rest = "class='{$c2}'";
+        $class3_rest = "class='{$c3}'";
+
         for($j=0;$j<$cols;++$j){
             $i0 = $data[$idx0 + $j];
             $i1 = $data[$idx1 + $j];
             $i2 = $data[$idx2 + $j];
             $i3 = $data[$idx3 + $j];
 
-            $c0 = (($inr0 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
-            $c1 = (($inr1 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
-            $c2 = (($inr2 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
-            $c3 = (($inr3 + 1) % 2 == 0) ? 'q-even' : 'q-odd';
-
             if ($j == 0) {
-                $class0 = "class='{$c0} first'";
-                $class1 = "class='{$c1} first'";
-                $class2 = "class='{$c2} first'";
-                $class3 = "class='{$c3} first'";
+                $class0 = $class0_first;
+                $class1 = $class1_first;
+                $class2 = $class2_first;
+                $class3 = $class3_first;
             } else {
-                $class0 = "class='{$c0}'";
-                $class1 = "class='{$c1}'";
-                $class2 = "class='{$c2}'";
-                $class3 = "class='{$c3}'";
+                $class0 = $class0_rest;
+                $class1 = $class1_rest;
+                $class2 = $class2_rest;
+                $class3 = $class3_rest;
             }
 
             if ($j == 0) {

@@ -101,7 +101,13 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-07-31)
+- **Performance & Optimizations**:
+  - Hoisted loop invariants out of the inner rendering loop in `index.php` to prevent redundant computations and CSS class string interpolations on every iteration.
+
 ### Recent Updates (2026-07-30)
+- **Code Standardization**:
+  - Standardized file headers with comprehensive MIT License blocks, authorship metadata, and description fields across core scripts (`conf/autoload_env.php`, `conf/config.php`, `index.php`, and `result.php`).
 - **Testing & Quality Assurance**:
   - Refactored directory change (`chdir`) inline comments in the unreadable cache test suite to explicitly describe execution context configuration, satisfying static analysis and preventing false positives from TODO scanners.
 

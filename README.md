@@ -27,6 +27,7 @@ The project directory has been reorganized to keep configuration and test layers
 * **`/conf`**: Directory holding central configuration and autoload helper:
   * `config.php`: Central database configuration setup with lazy-loading connection pooling.
   * `autoload_env.php`: A native, zero-dependency environment variables loader that parses and applies configuration variables from `.env`.
+  * `headers.php`: Central security headers configuration ensuring custom protection rules are applied uniformly across PHP page endpoints.
 * **`/db`**: Contains database schema and seed data files (`disc.sql`).
 * **`/tests`**: Contains the PHPUnit and standalone test suites covering security, SQL injection mitigations, cache handlers, and platform-specific tests.
 * **`/assets`**: Frontend styles, fonts, and assets.
@@ -101,6 +102,13 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-02)
+- **Security & Refactoring**:
+  - Extracted duplicated security headers from `index.php` and `result.php` into a central configuration file `conf/headers.php`, and updated tests to verify its presence.
+- **Code Quality & Health**:
+  - Fixed an unreachable condition in the database password (`DB_PASS`) check in `conf/config.php` when the password is set to an empty string.
+  - Refactored the `$result` array structure in `result.php` to avoid unused nested keys (`most`, `least`, `change`), simplifying it to store only the calculated scalar difference.
+
 ### Recent Updates (2026-07-31)
 - **Performance & Optimizations**:
   - Hoisted loop invariants out of the inner rendering loop in `index.php` to prevent redundant computations and CSS class string interpolations on every iteration.

@@ -31,11 +31,7 @@ SOFTWARE.
 copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
 ================================================================================
 */
-if (!headers_sent()) {
-    header('X-Frame-Options: DENY');
-    header('X-Content-Type-Options: nosniff');
-    header("Content-Security-Policy: default-src 'self';");
-}
+require_once __DIR__ . '/conf/headers.php';
 $html_cache_file = sys_get_temp_dir() . '/html_cache.html';
 $html_content = false;
 $cols  		= 4;	//<-- number of columns

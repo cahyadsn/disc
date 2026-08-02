@@ -1,25 +1,29 @@
 <?php
-$files = ['index.php', 'result.php'];
 $passed = true;
+$header_content = file_get_contents(__DIR__ . '/../conf/headers.php');
+if (strpos($header_content, "header('X-Frame-Options: DENY');") === false) {
+    echo "Missing X-Frame-Options in conf/headers.php\n";
+    $passed = false;
+}
+if (strpos($header_content, "header('X-Content-Type-Options: nosniff');") === false) {
+    echo "Missing X-Content-Type-Options in conf/headers.php\n";
+    $passed = false;
+}
+if (strpos($header_content, "header(\"Content-Security-Policy: default-src 'self';\");") === false) {
+    echo "Missing Content-Security-Policy in conf/headers.php\n";
+    $passed = false;
+}
+
+$files = ['index.php', 'result.php'];
 foreach ($files as $file) {
     $content = file_get_contents(__DIR__ . '/../' . $file);
-    if (strpos($content, "header('X-Frame-Options: DENY');") === false) {
-        echo "Missing X-Frame-Options in $file\n";
-        $passed = false;
-    }
-    if (strpos($content, "header('X-Content-Type-Options: nosniff');") === false) {
-        echo "Missing X-Content-Type-Options in $file\n";
-        $passed = false;
-    }
-    if (strpos($content, "header(\"Content-Security-Policy: default-src 'self';\");") === false) {
-        echo "Missing Content-Security-Policy in $file\n";
+    if (strpos($content, "require_once __DIR__ . '/conf/headers.php';") === false) {
+        echo "Missing require_once headers.php in $file\n";
         $passed = false;
     }
 }
 if ($passed) {
     echo "Security headers test passed.\n";
-    // We shouldn't use exit(0) inside test files if we evaluate via ad-hoc loop
 } else {
     echo "Security headers test failed.\n";
-    // exit(1);
 }

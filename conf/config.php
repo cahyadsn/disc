@@ -35,7 +35,7 @@ require_once __DIR__ . '/autoload_env.php';
 //-- database configuration
 $dbhost = getenv('DB_HOST') ?: 'localhost';
 $dbuser = getenv('DB_USER') ?: 'root';
-$dbpass = getenv('DB_PASS') ?: '';
+$dbpass = getenv('DB_PASS');
 if ($dbpass === false) {
     error_log('DB_PASS environment variable is required.');
     exit('Database configuration error.');

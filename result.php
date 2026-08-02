@@ -62,11 +62,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
   foreach($aspect as $a){
     $m = $most[$a] ?? 0;
     $l = $least[$a] ?? 0;
-    $result[$a] = [
-        'most' => $m,
-        'least' => $l,
-        'change' => $m - $l
-    ];
+    $result[$a] = $m - $l;
   }
 
   require_once 'conf/config.php';
@@ -99,10 +95,10 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
 	$stmt = $db->prepare($sql);
 	$data = null;
 	if ($stmt) {
-		$val_d = $result['D']['change'];
-		$val_i = $result['I']['change'];
-		$val_s = $result['S']['change'];
-		$val_c = $result['C']['change'];
+		$val_d = $result['D'];
+		$val_i = $result['I'];
+		$val_s = $result['S'];
+		$val_c = $result['C'];
 		$def_d = DEFAULT_VAL_D;
 		$def_i = DEFAULT_VAL_I;
 		$def_s = DEFAULT_VAL_S;

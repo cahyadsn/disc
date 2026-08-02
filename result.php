@@ -31,11 +31,7 @@ SOFTWARE.
 copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
 ================================================================================
 */
-if (!headers_sent()) {
-    header('X-Frame-Options: DENY');
-    header('X-Content-Type-Options: nosniff');
-    header("Content-Security-Policy: default-src 'self';");
-}
+require_once __DIR__ . '/conf/headers.php';
 const DEFAULT_VAL_D = 15;
 const DEFAULT_VAL_I = 14;
 const DEFAULT_VAL_S = 15;

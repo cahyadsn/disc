@@ -61,7 +61,11 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     $result[$a] = $m - $l;
   }
 
-  require_once 'conf/config.php';
+  try {
+      require_once 'conf/config.php';
+  } catch (Exception $e) {
+      error_log($e->getMessage());
+  }
     // Bolt optimization: Replaced cross-joined derived tables with direct subqueries to prevent temporary table creation
     // and Cartesian products. This reduces CPU/memory usage and allows utilizing primary key indexes effectively.
     $sql="
@@ -88,7 +92,7 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
         ) AS default_result
         ORDER BY priority ASC
         LIMIT 1";
-	$stmt = $db->prepare($sql);
+	$stmt = isset($db) ? $db->prepare($sql) : false;
 	$data = null;
 	if ($stmt) {
 		$val_d = $result['D'];

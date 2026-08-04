@@ -21,7 +21,7 @@ class MockMySQLi {
     }
 }
 
-putenv('DB_HOST=127.0.0.1');
+putenv('DB_HOST=127.0.0.1'); putenv('DB_PASS=dummy');
 
 try {
     @include __DIR__ . '/../conf/config.php';

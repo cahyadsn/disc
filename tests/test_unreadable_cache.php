@@ -28,7 +28,7 @@ file_put_contents($cache_file, 'CACHE_HIT');
 // Make it unreadable
 chmod($cache_file, 0000);
 
-putenv('DB_PASS='); // Ensure no config error
+putenv('DB_PASS=dummy'); // Ensure no config error
 
 // Mock the db connection before including index.php
 $tmp_dir = null;

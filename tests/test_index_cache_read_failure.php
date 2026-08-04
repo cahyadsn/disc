@@ -72,7 +72,7 @@ class FailingFileWrapper {
     public function dir_rewinddir() { rewinddir($this->dh); }
 }
 
-putenv('DB_PASS='); // Ensure no config error
+putenv('DB_PASS=dummy'); // Ensure no config error
 
 $tmp_dir = null;
 try {

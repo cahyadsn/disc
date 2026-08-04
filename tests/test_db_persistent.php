@@ -1,5 +1,5 @@
 <?php
-putenv('DB_PASS=');
+putenv('DB_PASS=dummy');
 
 $start = microtime(true);
 for ($i = 0; $i < 100; $i++) {

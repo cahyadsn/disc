@@ -44,7 +44,7 @@ class MockMySQLi {
 }
 
 // Override connection settings
-putenv('DB_HOST=127.0.0.1');
+putenv('DB_HOST=127.0.0.1'); putenv('DB_PASS=dummy');
 
 // Instead of rewriting config.php, we can simply override the $db variable AFTER require_once 'config.php'.
 // However, 'config.php' will attempt to connect, which will fail if MySQL is not running.

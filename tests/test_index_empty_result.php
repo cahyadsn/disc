@@ -1,5 +1,5 @@
 <?php
-putenv('DB_PASS='); // Avoid Exception
+putenv('DB_PASS=dummy'); // Avoid Exception
 
 class MockMySQLiResultEmpty {
     public function fetch_object() {

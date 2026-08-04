@@ -5,7 +5,7 @@ echo "Running DB connection failure test...\n";
 // Set invalid host to simulate connection error
 putenv('DB_HOST=invalid_host_12345');
 putenv('DB_USER=test');
-putenv('DB_PASS=test');
+putenv('DB_PASS=dummy');
 putenv('DB_NAME=test');
 
 $exceptionThrown = false;

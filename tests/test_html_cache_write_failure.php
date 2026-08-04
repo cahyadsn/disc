@@ -7,7 +7,7 @@ $log_file = __DIR__ . '/test_error.log';
 @unlink($log_file);
 ini_set('error_log', $log_file);
 
-putenv('DB_PASS='); // Ensure DB_PASS is set to avoid exceptions from config.php
+putenv('DB_PASS=dummy'); // Ensure DB_PASS is set to avoid exceptions from config.php
 
 // Mock DB connection
 class MockMySQLiResult {

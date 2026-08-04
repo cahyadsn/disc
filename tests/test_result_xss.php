@@ -1,6 +1,6 @@
 <?php
 try {
-    putenv('DB_PASS='); // Ensure no Exception from config.php missing pass
+    putenv('DB_PASS=dummy'); // Ensure no Exception from config.php missing pass
     require_once __DIR__ . '/../conf/config.php';
 } catch (Throwable $e) {
     // Suppress connection errors

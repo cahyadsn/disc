@@ -102,6 +102,15 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-05)
+- **Configuration & Quality**:
+  - Corrected `DB_PASS` validation logic in `conf/config.php` to safely check `$_ENV['DB_PASS']` and prevent PHP warnings when the database password is empty or unset.
+
+### Recent Updates (2026-08-04)
+- **Security & Error Handling**:
+  - Wrapped database configuration inclusion in a try-catch block within `index.php` and `result.php` to prevent uncaught database initialization exception exposure.
+  - Added checks to verify if `$db` is defined before executing queries or preparing statements.
+
 ### Recent Updates (2026-08-02)
 - **Security & Refactoring**:
   - Extracted duplicated security headers from `index.php` and `result.php` into a central configuration file `conf/headers.php`, and updated tests to verify its presence.

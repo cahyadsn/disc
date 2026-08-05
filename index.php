@@ -43,11 +43,15 @@ if (is_readable($html_cache_file)) {
 
 if ($html_content === false) {
     // Lazy load the database connection only on cache miss
-    require_once 'conf/config.php';
+    try {
+        require_once 'conf/config.php';
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+    }
 
     //-- query data from database
     $sql='SELECT * FROM personalities ORDER BY no ASC';
-    $result=$db->query($sql);
+    $result = isset($db) ? $db->query($sql) : false;
     $data=array();
     if ($result) {
         while($row=$result->fetch_object()) {

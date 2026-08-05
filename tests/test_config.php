@@ -6,9 +6,9 @@ $failed = false;
 // NOTE: DB_PASS is required now so it will throw an exception if completely missing.
 // We set DB_PASS to an empty string to bypass the strict security exception
 // so that we can verify the fallback default values for the other variables.
-putenv('DB_HOST'); putenv('DB_USER'); putenv('DB_PASS='); putenv('DB_NAME');
+putenv('DB_HOST'); putenv('DB_USER'); putenv('DB_PASS=dummy'); putenv('DB_NAME');
 try { @include __DIR__ . '/../conf/config.php'; } catch (Throwable $e) {}
-if ($dbhost !== 'localhost' || $dbuser !== 'root' || $dbpass !== '' || $dbname !== 'test') {
+if ($dbhost !== 'localhost' || $dbuser !== 'root' || $dbpass !== 'dummy' || $dbname !== 'test') {
     echo "FAIL: Expected defaults.\n";
     $failed = true;
 }

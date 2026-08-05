@@ -6,6 +6,7 @@ class MockMySQLi {
     }
 }
 
+putenv('DB_PASS=dummy');
 try {
     @include __DIR__ . '/../conf/config.php';
 } catch (Throwable $e) {}

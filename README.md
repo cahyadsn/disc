@@ -102,6 +102,16 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-07)
+- **Testing & Quality**:
+  - Added test coverage for `loadEnv` edge cases in `conf/autoload_env.php` via `tests/test_autoload_env.php`.
+
+### Recent Updates (2026-08-06)
+- **Database & Query Optimization**:
+  - Refactored the SQL query in `result.php` to use a Common Table Expression (CTE) to reduce subquery overhead and optimize performance.
+- **Testing & Quality**:
+  - Introduced `tests/test_autoload_env.php` to comprehensively test the environment variable loader `loadEnv()`, checking comments, spaces, quotes, empty values, missing/unreadable files, and env var overwriting prevention.
+
 ### Recent Updates (2026-08-05)
 - **Configuration & Quality**:
   - Corrected `DB_PASS` validation logic in `conf/config.php` to safely check `$_ENV['DB_PASS']` and prevent PHP warnings when the database password is empty or unset.

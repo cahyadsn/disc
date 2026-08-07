@@ -45,6 +45,7 @@ php tests/test_html_cache_write_failure.php
 php tests/test_unreadable_cache.php
 php tests/test_invalid_dimensions.php
 php tests/test_result_xss.php
+php tests/test_autoload_env.php
 ```
 
 ## Daftar Test
@@ -72,6 +73,8 @@ php tests/test_result_xss.php
 | `test_unreadable_cache.php` | Verifikasi bahwa file cache yang tidak bisa dibaca di-bypass dan HTML baru di-generate (di-skip di Windows) |
 | `test_invalid_dimensions.php` | Test penanganan nilai dimensi kepribadian yang tidak valid (invalid dimensions) pada data POST di `result.php` |
 | `test_result_xss.php` | Test edge case untuk simulasi serangan XSS pada output hasil database |
+| `test_autoload_env.php` | Test unit untuk loadEnv behavior, parsing .env, penanganan file tidak terbaca/hilang, dan proteksi overwrite |
+
 
 ## Environment Variables
 

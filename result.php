@@ -66,31 +66,27 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
   } catch (Exception $e) {
       error_log($e->getMessage());
   }
-    // Bolt optimization: Replaced cross-joined derived tables with direct subqueries to prevent temporary table creation
-    // and Cartesian products. This reduces CPU/memory usage and allows utilizing primary key indexes effectively.
+    // Bolt optimization: Factored out redundant subqueries by using a Common Table Expression (CTE)
+    // to map input values to segments once per priority level, avoiding repeated execution.
     $sql="
-        SELECT * FROM (
-            SELECT a.*, c.*, 1 as priority
-            FROM pattern_map a
-            JOIN patterns c ON c.id=a.pattern
-            WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=? LIMIT 1)
-              AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=? LIMIT 1)
-              AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=? LIMIT 1)
-              AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=? LIMIT 1)
-            LIMIT 1
-        ) AS user_result
-        UNION ALL
-        SELECT * FROM (
-            SELECT a.*, c.*, 2 as priority
-            FROM pattern_map a
-            JOIN patterns c ON c.id=a.pattern
-            WHERE a.d = (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=? LIMIT 1)
-              AND a.i = (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=? LIMIT 1)
-              AND a.s = (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=? LIMIT 1)
-              AND a.c = (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=? LIMIT 1)
-            LIMIT 1
-        ) AS default_result
-        ORDER BY priority ASC
+        WITH input_params (priority, v_d, v_i, v_s, v_c) AS (
+            SELECT 1, ?, ?, ?, ?
+            UNION ALL
+            SELECT 2, ?, ?, ?, ?
+        ),
+        mapped_segments AS (
+            SELECT priority,
+                (SELECT segment FROM results WHERE graph=3 AND dimension='D' AND value=v_d LIMIT 1) as d,
+                (SELECT segment FROM results WHERE graph=3 AND dimension='I' AND value=v_i LIMIT 1) as i,
+                (SELECT segment FROM results WHERE graph=3 AND dimension='S' AND value=v_s LIMIT 1) as s,
+                (SELECT segment FROM results WHERE graph=3 AND dimension='C' AND value=v_c LIMIT 1) as c
+            FROM input_params
+        )
+        SELECT a.*, c.*, m.priority
+        FROM mapped_segments m
+        JOIN pattern_map a ON a.d = m.d AND a.i = m.i AND a.s = m.s AND a.c = m.c
+        JOIN patterns c ON c.id=a.pattern
+        ORDER BY m.priority ASC
         LIMIT 1";
 	$stmt = isset($db) ? $db->prepare($sql) : false;
 	$data = null;

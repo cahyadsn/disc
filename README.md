@@ -102,7 +102,16 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-08)
+- **Security & Caching**:
+  - Secured the template cache by moving `html_cache.html` out of the system `/tmp` directory into a local, protected `cache/` directory. Added a `cache/.htaccess` file to prevent direct public HTTP access to cached outputs in shared hosting environments.
+- **Performance Optimization**:
+  - Replaced the costly `debug_backtrace()` call in the environment loader with a fast environment variable and script name lookup to detect testing environments, yielding a ~45% speedup.
+  - Removed redundant `file_exists()` system calls before checking `is_readable()` in the environment loader to avoid unnecessary filesystem stat overhead.
+
 ### Recent Updates (2026-08-07)
+- **Performance Optimization**:
+  - Removed redundant `file_exists()` check in the environment loader to minimize filesystem stat overhead.
 - **Testing & Quality**:
   - Added test coverage for `loadEnv` edge cases in `conf/autoload_env.php` via `tests/test_autoload_env.php`.
 

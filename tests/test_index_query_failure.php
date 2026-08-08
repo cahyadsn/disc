@@ -14,7 +14,7 @@ try {
 global $db;
 $db = new MockMySQLi();
 
-@unlink(sys_get_temp_dir() . '/html_cache.html');
+@unlink(__DIR__ . '/../cache/html_cache.html');
 
 ob_start();
 include __DIR__ . '/../index.php';

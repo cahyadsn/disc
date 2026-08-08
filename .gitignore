@@ -6,4 +6,5 @@ vendor/
 composer.lock
 /html_cache.html
 GEMINI.md
-.env
+.env
+cache/

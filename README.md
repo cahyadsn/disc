@@ -63,7 +63,7 @@ This project is built using a lightweight and highly optimized architecture desi
   * **Single Round-trip Fallbacks**: Optimized data retrieval utilizing SQL `UNION ALL` to resolve pattern records and application fallbacks in a single database query.
   * **Prepared Statements**: Secure parameter binding utilizing mysqli prepared statements.
 * **Caching & Performance Optimization**:
-  * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output to an HTML cache file (`html_cache.html`) in the system temporary directory (to prevent direct HTTP access), yielding a ~98% speedup.
+  * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output to an HTML cache file (`html_cache.html`) in the local `cache/` directory (protected via `.htaccess` to prevent direct HTTP access), yielding a ~98% speedup.
   * **Filesystem Call Reductions**: Uses `is_readable()` to perform cache-hit checks in one step, bypassing redundant `file_exists()` checks.
   * **Loop & Memory Optimizations**: Minimized array allocations and nested calculations inside loops.
 * **Security & Hardening**:
@@ -148,7 +148,7 @@ This project is built using a lightweight and highly optimized architecture desi
 
 ### Recent Updates (2026-07-26)
 - **Security & Caching**:
-  - Moved `html_cache.html` out of the web root into the system temporary directory (`sys_get_temp_dir()`) to prevent direct public HTTP access.
+  - Moved `html_cache.html` out of the web root into the local `cache/` directory (protected via `.htaccess`) to prevent direct public HTTP access.
   - Implemented `Content-Security-Policy: default-src 'self';` header on both `index.php` and `result.php`.
   - Redacted the database connection exception context (stripped internal PHP exception chains) to prevent accidental database credential leaks in debug logs.
   - Removed redundant `file_exists()` checks before checking `is_readable()` when resolving HTML cache hits.

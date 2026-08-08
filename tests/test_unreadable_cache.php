@@ -7,7 +7,7 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 // Ensure the working directory is correct
 chdir(__DIR__ . '/../');
 
-$cache_file = sys_get_temp_dir() . '/html_cache.html';
+$cache_file = __DIR__ . '/../cache/html_cache.html';
 
 // Clean up any existing cache file
 if (file_exists($cache_file)) {

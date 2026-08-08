@@ -35,7 +35,8 @@ copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
  * Load environment variables from .env file
  */
 function loadEnv(string $filePath): void {
-    // Bolt optimization: is_readable() implicitly checks for file existence. Removing the redundant file_exists() check eliminates unnecessary stat system call overhead.
+    // Bolt optimization: is_readable() implicitly checks if the file exists.
+    // Removing file_exists() bypasses a redundant OS stat system call.
     if (!is_readable($filePath)) {
         return;
     }

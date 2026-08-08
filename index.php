@@ -32,7 +32,11 @@ copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
 ================================================================================
 */
 require_once __DIR__ . '/conf/headers.php';
-$html_cache_file = sys_get_temp_dir() . '/html_cache.html';
+$cache_dir = __DIR__ . '/cache';
+if (!is_dir($cache_dir)) {
+    mkdir($cache_dir, 0755, true);
+}
+$html_cache_file = $cache_dir . '/html_cache.html';
 $html_content = false;
 $cols  		= 4;	//<-- number of columns
 

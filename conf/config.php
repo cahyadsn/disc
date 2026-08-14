@@ -6,7 +6,7 @@ FILENAME     : config.php
 DESC		 : database configuration for disc apps
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
-UPDATED DATE : 2026-08-02 13:03:17
+UPDATED DATE : 2026-08-14 11:20:00
 ================================================================================
 MIT License
 
@@ -50,6 +50,6 @@ try {
     if ($db->connect_error) {
         throw new Exception('Database connection failed.');
     }
-} catch (Throwable $e) {
+} catch (Exception $e) {
     throw new Exception('Database connection failed.');
 }

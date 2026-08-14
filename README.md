@@ -102,6 +102,15 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-14)
+- **PHP 5.6 Compatibility & Exception Handling**:
+  - Removed PHP 7 type hints (parameter and return type declarations) from the environment variable loader in `conf/autoload_env.php` to prevent parse errors on PHP 5.6.
+  - Replaced `Throwable` catch blocks with standard `Exception` in `conf/config.php` and `tests/test_result_fallback.php` to restore robust exception catching on PHP 5.6.
+- **Database & Query Optimization**:
+  - Rewrote the CTE (Common Table Expression) query in `result.php` using a derived table `UNION ALL` statement, ensuring backwards compatibility for MySQL 5.5+ and MariaDB while preserving single database round-trip performance.
+- **Performance & Timezone Mitigation**:
+  - Added default timezone initialization to `conf/autoload_env.php` to suppress PHP's CLI timezone warning and reduce logging overhead.
+
 ### Recent Updates (2026-08-08)
 - **Security & Caching**:
   - Secured the template cache by moving `html_cache.html` out of the system `/tmp` directory into a local, protected `cache/` directory. Added a `cache/.htaccess` file to prevent direct public HTTP access to cached outputs in shared hosting environments.

@@ -6,7 +6,7 @@ FILENAME     : autoload_env.php
 DESC		 : grab configuration data form .env file
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2026-07-25
-UPDATED DATE : 2026-08-02 13:03:17
+UPDATED DATE : 2026-08-14 11:20:00
 ================================================================================
 MIT License
 
@@ -31,10 +31,14 @@ SOFTWARE.
 copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
 ================================================================================
 */
+if (!ini_get('date.timezone')) {
+    date_default_timezone_set('UTC');
+}
+
 /**
  * Load environment variables from .env file
  */
-function loadEnv(string $filePath): void {
+function loadEnv($filePath) {
     // Bolt optimization: is_readable() implicitly checks if the file exists.
     // Removing file_exists() bypasses a redundant OS stat system call.
     if (!is_readable($filePath)) {

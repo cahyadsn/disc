@@ -102,6 +102,12 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-18)
+- **Performance & Parser Optimization**:
+  - Replaced `preg_match` with `trim` for stripping surrounding quotes from parsed environment variables in `conf/autoload_env.php` to eliminate regex engine overhead.
+- **Code Health & Readability**:
+  - Refactored `result.php` using the early return pattern to remove a massive nested conditional block, reducing the overall indentation level and improving code maintainability.
+
 ### Recent Updates (2026-08-14)
 - **PHP 5.6 Compatibility & Exception Handling**:
   - Removed PHP 7 type hints (parameter and return type declarations) from the environment variable loader in `conf/autoload_env.php` to prevent parse errors on PHP 5.6.

@@ -45,8 +45,15 @@ const DEFAULT_VAL_C = 14;
   </head>
   <body>
 <?php
-if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array($_POST['l'])){
-  // Bolt optimization: Pre-initialize aspect counts and use direct hash lookup (isset)
+if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array($_POST['l']))) {
+?>
+  </body>
+</html>
+<?php
+    return;
+}
+
+// Bolt optimization: Pre-initialize aspect counts and use direct hash lookup (isset)
   // instead of dynamic keys and null coalescing, avoiding a secondary extraction loop (~25% speedup).
   $most = ['D' => 0, 'I' => 0, 'S' => 0, 'C' => 0];
   foreach ($_POST['m'] as $v) if (is_scalar($v) && isset($most[$v])) $most[$v]++;
@@ -145,7 +152,6 @@ if(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array
     </div>
 <?php
 	}
-}
 ?>    
   </body>
 </html>

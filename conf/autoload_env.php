@@ -68,9 +68,8 @@ function loadEnv($filePath) {
         $value = trim($parts[1]);
 
         // Remove quotes around values
-        if (preg_match('/^([\'"])(.*)\1$/', $value, $matches)) {
-            $value = $matches[2];
-        }
+        // Bolt optimization: replaced preg_match with trim for removing quotes to avoid regex engine overhead.
+        $value = trim($value, "\"'");
 
         // Only set if not already set by system/server environment
         if (getenv($key) === false) {

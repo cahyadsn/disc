@@ -34,7 +34,7 @@ copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
 require_once __DIR__ . '/conf/headers.php';
 $cache_dir = __DIR__ . '/cache';
 if (!is_dir($cache_dir)) {
-    mkdir($cache_dir, 0755, true);
+    @mkdir($cache_dir, 0755, true);
 }
 $html_cache_file = $cache_dir . '/html_cache.html';
 $html_content = false;
@@ -228,7 +228,7 @@ if ($html_content === false) {
       echo implode('', $html);
     $html_content = ob_get_clean();
     if ($result) {
-        if (file_put_contents($html_cache_file, $html_content, LOCK_EX) === false) {
+        if (@file_put_contents($html_cache_file, $html_content, LOCK_EX) === false) {
             error_log("Failed to write to HTML cache file: $html_cache_file");
         }
     }

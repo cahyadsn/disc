@@ -102,6 +102,12 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-21)
+- **Security & Hardening**:
+  - Removed the default `'root'` fallback for `DB_USER` in `conf/config.php` to prevent assuming administrative privileges.
+- **Error & Warning Mitigation**:
+  - Suppressed potential PHP warnings on `mkdir` and `file_put_contents` cache operations in `index.php` to avoid path exposure vulnerabilities.
+
 ### Recent Updates (2026-08-18)
 - **Performance & Parser Optimization**:
   - Replaced `preg_match` with `trim` for stripping surrounding quotes from parsed environment variables in `conf/autoload_env.php` to eliminate regex engine overhead.

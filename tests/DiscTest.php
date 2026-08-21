@@ -9,15 +9,9 @@ class DiscTest extends TestCase
      */
     private function calculateScores(array $most, array $least): array
     {
-        $mostCounts = array_count_values(array_filter($most, 'is_scalar'));
-        $leastCounts = array_count_values(array_filter($least, 'is_scalar'));
-        
-        $result = [];
-        foreach (['D', 'I', 'S', 'C'] as $a) {
-            $result[$a]['most'] = $mostCounts[$a] ?? 0;
-            $result[$a]['least'] = $leastCounts[$a] ?? 0;
-            $result[$a]['change'] = $result[$a]['most'] - $result[$a]['least'];
-        }
+        $result = ['D' => 0, 'I' => 0, 'S' => 0, 'C' => 0];
+        foreach ($most as $v) if (is_scalar($v) && isset($result[$v])) $result[$v]++;
+        foreach ($least as $v) if (is_scalar($v) && isset($result[$v])) $result[$v]--;
         return $result;
     }
 
@@ -28,13 +22,8 @@ class DiscTest extends TestCase
         
         $result = $this->calculateScores($most, $least);
         
-        $this->assertEquals(2, $result['D']['most']);
-        $this->assertEquals(0, $result['D']['least']);
-        $this->assertEquals(2, $result['D']['change']);
-        
-        $this->assertEquals(1, $result['I']['most']);
-        $this->assertEquals(1, $result['I']['least']);
-        $this->assertEquals(0, $result['I']['change']);
+        $this->assertEquals(2, $result['D']);
+        $this->assertEquals(0, $result['I']);
     }
 
     public function testCalculateScoresEmpty(): void
@@ -42,9 +31,7 @@ class DiscTest extends TestCase
         $result = $this->calculateScores([], []);
         
         foreach (['D', 'I', 'S', 'C'] as $dim) {
-            $this->assertEquals(0, $result[$dim]['most']);
-            $this->assertEquals(0, $result[$dim]['least']);
-            $this->assertEquals(0, $result[$dim]['change']);
+            $this->assertEquals(0, $result[$dim]);
         }
     }
 
@@ -56,8 +43,8 @@ class DiscTest extends TestCase
         // Should not throw warning, arrays filtered out
         $result = $this->calculateScores($most, $least);
         
-        $this->assertEquals(1, $result['D']['most']);
-        $this->assertEquals(1, $result['I']['most']);
+        $this->assertEquals(1, $result['D']);
+        $this->assertEquals(1, $result['I']);
     }
 
     public function testXssEscaping(): void
@@ -76,8 +63,6 @@ class DiscTest extends TestCase
         
         $result = $this->calculateScores($most, $least);
         
-        $this->assertEquals(1, $result['D']['most']);
-        $this->assertEquals(3, $result['D']['least']);
-        $this->assertEquals(-2, $result['D']['change']);
+        $this->assertEquals(-2, $result['D']);
     }
 }

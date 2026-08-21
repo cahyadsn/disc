@@ -34,7 +34,7 @@ copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
 require_once __DIR__ . '/autoload_env.php';
 //-- database configuration
 $dbhost = getenv('DB_HOST') ?: 'localhost';
-$dbuser = getenv('DB_USER') ?: 'root';
+$dbuser = getenv('DB_USER') ?: '';
 $dbpass = getenv('DB_PASS');
 if ($dbpass === false || $dbpass === '') {
     error_log('DB_PASS environment variable is required.');

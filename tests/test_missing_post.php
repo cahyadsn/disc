@@ -1,9 +1,9 @@
 <?php
 $cases = [
-    'Completely empty POST' => [],
-    'Missing l' => ['m' => ['1' => 'D']],
-    'Missing m' => ['l' => ['1' => 'D']],
-    'm and l are not arrays' => ['m' => 'D', 'l' => 'C']
+    'Valid CSRF token but missing m/l' => ['csrf_token' => 'mock_token'],
+    'Missing l' => ['csrf_token' => 'mock_token', 'm' => ['1' => 'D']],
+    'Missing m' => ['csrf_token' => 'mock_token', 'l' => ['1' => 'D']],
+    'm and l are not arrays' => ['csrf_token' => 'mock_token', 'm' => 'D', 'l' => 'C']
 ];
 
 $passed = true;
@@ -13,7 +13,7 @@ $result_php_export = var_export($result_php, true);
 foreach ($cases as $name => $post_data) {
     // Isolate execution by running it in a separate PHP process
     $post_export = var_export($post_data, true);
-    $script = "<?php \$_POST = $post_export; require $result_php_export; ";
+    $script = "<?php session_start(); \$_SESSION['csrf_token'] = 'mock_token'; \$_POST = $post_export; require $result_php_export; ";
 
     $tmp_file = tempnam(sys_get_temp_dir(), 'test_');
     file_put_contents($tmp_file, $script);

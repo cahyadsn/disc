@@ -45,6 +45,12 @@ const DEFAULT_VAL_C = 14;
   </head>
   <body>
 <?php
+if (!isset($_POST['csrf_token']) || !is_string($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    http_response_code(403);
+    echo "Invalid CSRF token.";
+    return;
+}
+
 if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_array($_POST['l']))) {
 ?>
   </body>

@@ -66,7 +66,7 @@ global $db;
 $db = new MockDb();
 
 // Invalid dimensions that should be ignored
-$_POST['m'] = ['X', 'Y', 'Z', 'UNKNOWN'];
+session_start(); $_SESSION['csrf_token'] = 'mock_token'; $_POST['csrf_token'] = 'mock_token'; $_POST['m'] = ['X', 'Y', 'Z', 'UNKNOWN'];
 $_POST['l'] = ['FOO', 'BAR', 'BAZ'];
 ob_start();
 include __DIR__ . '/../result.php';

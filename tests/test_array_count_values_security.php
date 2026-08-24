@@ -1,6 +1,6 @@
 <?php
 // Mock $_POST data with an array payload
-$_POST['m'] = ['D', 'I', ['array']];
+session_start(); $_SESSION['csrf_token'] = 'mock_token'; $_POST['csrf_token'] = 'mock_token'; $_POST['m'] = ['D', 'I', ['array']];
 $_POST['l'] = ['S', 'C', ['array']];
 
 // We want to test that array_count_values doesn't throw a warning.

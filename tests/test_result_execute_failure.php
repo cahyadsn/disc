@@ -59,7 +59,7 @@ class MockDb {
 global $db;
 $db = new MockDb();
 
-$_POST['m'] = ['D'];
+session_start(); $_SESSION['csrf_token'] = 'mock_token'; $_POST['csrf_token'] = 'mock_token'; $_POST['m'] = ['D'];
 $_POST['l'] = ['I'];
 
 $error_caught = false;

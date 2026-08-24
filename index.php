@@ -249,6 +249,7 @@ if ($html_content === false) {
       
       <div class="card-glass">
         <form method='post' action='result.php'>
+          <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
           <table>
             <caption>DISC Personality Test</caption>
             <thead>

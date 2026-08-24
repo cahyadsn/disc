@@ -1,5 +1,5 @@
 <?php
-echo "Running Exception Leak test...\n";
+
 
 class MockResult {
     public function fetch_object() {
@@ -30,7 +30,7 @@ try {
 global $db;
 $db = new MockMySQLi();
 
-$_POST['m'] = ['D'];
+session_start(); $_SESSION['csrf_token'] = 'mock_token'; $_POST['csrf_token'] = 'mock_token'; $_POST['m'] = ['D'];
 $_POST['l'] = ['I'];
 
 ob_start();

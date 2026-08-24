@@ -55,7 +55,7 @@ To verify code changes, security fixes, and database behaviors, run the test sui
 
 This project is built using a lightweight and highly optimized architecture designed for performance, security, and portability:
 
-* **Core Engine**: PHP (supports version 8.x and above)
+* **Core Engine**: PHP (supports version 5.6 and above)
   * **Native Environment Variables Loader**: Automatically loads credentials from a `.env` file via `conf/autoload_env.php` using pure native PHP.
   * **Lazy-Loading Database Connection**: Database connections are deferred and only established on cache misses.
   * **Persistent Database Pooling**: Configured with persistent connections (`p:`) to minimize TCP handshake and connection authentication overhead.
@@ -65,8 +65,10 @@ This project is built using a lightweight and highly optimized architecture desi
 * **Caching & Performance Optimization**:
   * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output to an HTML cache file (`html_cache.html`) in the local `cache/` directory (protected via `.htaccess` to prevent direct HTTP access), yielding a ~98% speedup.
   * **Filesystem Call Reductions**: Uses `is_readable()` to perform cache-hit checks in one step, bypassing redundant `file_exists()` checks.
+  * **Single-Pass Value Aggregation**: Direct mutation of the result array in `result.php` avoids intermediate array allocations and the difference aggregation loop, yielding a ~45% speedup.
   * **Loop & Memory Optimizations**: Minimized array allocations and nested calculations inside loops.
 * **Security & Hardening**:
+  * **CSRF Protection**: Form submissions on `index.php` are protected against Cross-Site Request Forgery (CSRF) via session-backed, cryptographically secure random tokens validated with `hash_equals()` in `result.php`.
   * **HTTP Security Headers**: Implements custom protection rules such as `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and a restrictive `Content-Security-Policy: default-src 'self';` to defend against clickjacking, MIME sniffing, and cross-site scripting (XSS).
   * **XSS Defenses**: Sanitized and escaped HTML output using `htmlspecialchars` with UTF-8 encoding.
   * **Sensitive Data Redaction**: Safe exception handling prevents database password and credential leaks in debug logs and user interfaces by stripping underlying exception context during connection failures.
@@ -102,7 +104,18 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-24)
+- **Security & Hardening**:
+  - Implemented session-based CSRF protection on form submissions (`index.php` and `result.php`).
+- **Testing & Quality Assurance**:
+  - Added a new CSRF validation test suite (`tests/test_csrf.php`).
+  - Updated existing tests to initialize and include valid CSRF tokens.
+  - Added `tests/test_index_error_log.php` to verify database connection failure logging via `error_log()`.
+
 ### Recent Updates (2026-08-21)
+- **Performance Optimization**:
+  - Refactored `result.php` array initialization and value aggregation into a single-pass mutation of the result array. This eliminates intermediate allocations for most/least arrays and the difference calculation loop, yielding a ~45% speedup.
+  - Updated PHPUnit test assertions in `tests/DiscTest.php` to align with the simplified result structure.
 - **Security & Hardening**:
   - Removed the default `'root'` fallback for `DB_USER` in `conf/config.php` to prevent assuming administrative privileges.
 - **Error & Warning Mitigation**:

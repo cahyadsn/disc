@@ -37,6 +37,7 @@ php tests/test_sqli_fix.php
 php tests/test_lazy_db.php
 php tests/test_index_query_failure.php
 php tests/test_index_error_log.php
+php tests/test_csrf.php
 php tests/test_caching_performance.php
 php tests/test_security_headers.php
 php tests/test_result_fallback.php
@@ -66,6 +67,7 @@ php tests/test_autoload_env.php
 | `test_lazy_db.php` | Test bahwa koneksi database tidak dilakukan saat cache HTML tersedia |
 | `test_index_query_failure.php` | Test bahwa `index.php` menampilkan pesan error ketika query database gagal |
 | `test_index_error_log.php` | Verifikasi bahwa error koneksi database di `index.php` di-log menggunakan `error_log()` |
+| `test_csrf.php` | Verifikasi proteksi CSRF pada form submission dengan memvalidasi token |
 | `test_caching_performance.php` | Benchmark perbandingan performa antara query DB (mock) dan file cache |
 | `test_security_headers.php` | Verifikasi `index.php` and `result.php` mengirim security headers (`X-Frame-Options`, `X-Content-Type-Options`) |
 | `test_result_fallback.php` | Test fallback pada `result.php`; verifikasi parameter default (15, 14, 15, 14) terikat dengan benar dalam single-execute query |

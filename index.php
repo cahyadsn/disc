@@ -72,6 +72,23 @@ if ($html_content === false) {
           echo "<tr><td colspan='16' style='text-align:center; color:red;'>Error loading data.</td></tr>";
       }
       $html = [];
+      $render_cell = function($is_first, $cols, $class, $inr, $item) {
+          $th = $is_first ? "<th rowspan='$cols' {$class}>".($inr+1)."</th>" : "";
+          return "{$th}<td {$class}>
+					{$item->term}
+				  </td>
+				  <td {$class}>
+					<input type='radio'
+					       name='m[{$inr}]'
+						   value='{$item->most}'
+						   required /></td>
+				  <td {$class}>
+					<input type='radio'
+					       name='l[{$inr}]'
+					       value='{$item->least}'
+					       required /></td>";
+      };
+
       for($i=0;$i<$rows;++$i){
         // Bolt optimization: Eliminated inner-loop array allocations ($inr_cache, $idx_base) by calculating invariants directly, reducing memory overhead and loop initialization time.
         // Bolt optimization: Unrolled inner loop to eliminate redundant calculations and complex conditionals
@@ -122,107 +139,15 @@ if ($html_content === false) {
                 $class3 = $class3_rest;
             }
 
-            if ($j == 0) {
-                $html[] = "<th rowspan='$cols' {$class0}>".($inr0+1)."</th><td {$class0}>
-					{$i0->term}
-				  </td>
-				  <td {$class0}>
-					<input type='radio'
-					       name='m[{$inr0}]'
-						   value='{$i0->most}'
-						   required /></td>
-				  <td {$class0}>
-					<input type='radio'
-					       name='l[{$inr0}]'
-					       value='{$i0->least}'
-					       required /></td><th rowspan='$cols' {$class1}>".($inr1+1)."</th><td {$class1}>
-					{$i1->term}
-				  </td>
-				  <td {$class1}>
-					<input type='radio'
-					       name='m[{$inr1}]'
-						   value='{$i1->most}'
-						   required /></td>
-				  <td {$class1}>
-					<input type='radio'
-					       name='l[{$inr1}]'
-					       value='{$i1->least}'
-					       required /></td><th rowspan='$cols' {$class2}>".($inr2+1)."</th><td {$class2}>
-					{$i2->term}
-				  </td>
-				  <td {$class2}>
-					<input type='radio'
-					       name='m[{$inr2}]'
-						   value='{$i2->most}'
-						   required /></td>
-				  <td {$class2}>
-					<input type='radio'
-					       name='l[{$inr2}]'
-					       value='{$i2->least}'
-					       required /></td><th rowspan='$cols' {$class3}>".($inr3+1)."</th><td {$class3}>
-					{$i3->term}
-				  </td>
-				  <td {$class3}>
-					<input type='radio'
-					       name='m[{$inr3}]'
-						   value='{$i3->most}'
-						   required /></td>
-				  <td {$class3}>
-					<input type='radio'
-					       name='l[{$inr3}]'
-					       value='{$i3->least}'
-					       required /></td></tr>";
-            } else {
-                $html[] = "{$tr}<td {$class0}>
-					{$i0->term}
-				  </td>
-				  <td {$class0}>
-					<input type='radio'
-					       name='m[{$inr0}]'
-						   value='{$i0->most}'
-						   required /></td>
-				  <td {$class0}>
-					<input type='radio'
-					       name='l[{$inr0}]'
-					       value='{$i0->least}'
-					       required /></td><td {$class1}>
-					{$i1->term}
-				  </td>
-				  <td {$class1}>
-					<input type='radio'
-					       name='m[{$inr1}]'
-						   value='{$i1->most}'
-						   required /></td>
-				  <td {$class1}>
-					<input type='radio'
-					       name='l[{$inr1}]'
-					       value='{$i1->least}'
-					       required /></td><td {$class2}>
-					{$i2->term}
-		          	  </td>
-				  <td {$class2}>
-		        		<input type='radio' 
-					       name='m[{$inr2}]'
-						   value='{$i2->most}'
-						   required /></td>
-				  <td {$class2}>
-		          		<input type='radio' 
-					       name='l[{$inr2}]'
-					       value='{$i2->least}'
-					       required /></td><td {$class3}>
-					{$i3->term}
-				  </td>
-				  <td {$class3}>
-					<input type='radio'
-					       name='m[{$inr3}]'
-						   value='{$i3->most}'
-						   required /></td>
-				  <td {$class3}>
-					<input type='radio'
-					       name='l[{$inr3}]'
-					       value='{$i3->least}'
-					       required /></td></tr>";
-            }
+            $is_first = ($j == 0);
+            $row_start = $is_first ? "" : $tr;
+
+            $html[] = $row_start .
+                $render_cell($is_first, $cols, $class0, $inr0, $i0) .
+                $render_cell($is_first, $cols, $class1, $inr1, $i1) .
+                $render_cell($is_first, $cols, $class2, $inr2, $i2) .
+                $render_cell($is_first, $cols, $class3, $inr3, $i3) .
+                "</tr>";
         }
       }
       echo implode('', $html);

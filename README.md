@@ -104,6 +104,10 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-27)
+- **Code Health & Refactoring**:
+  - Extracted the heavily duplicated inline HTML generation block in `index.php` into a single concise `$render_cell` closure, dramatically reducing the inner loop size and improving code readability and maintainability.
+
 ### Recent Updates (2026-08-24)
 - **Security & Hardening**:
   - Implemented session-based CSRF protection on form submissions (`index.php` and `result.php`).

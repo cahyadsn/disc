@@ -93,7 +93,6 @@ if ($html_content === false) {
         // Bolt optimization: Eliminated inner-loop array allocations ($inr_cache, $idx_base) by calculating invariants directly, reducing memory overhead and loop initialization time.
         // Bolt optimization: Unrolled inner loop to eliminate redundant calculations and complex conditionals
         $tr = $i%2==0 ? "<tr class='dark'>" : "<tr>";
-        $html[] = $tr;
 
         $inr0 = $i;
         $inr1 = $i + $rows;
@@ -140,14 +139,14 @@ if ($html_content === false) {
             }
 
             $is_first = ($j == 0);
-            $row_start = $is_first ? "" : $tr;
 
-            $html[] = $row_start .
-                $render_cell($is_first, $cols, $class0, $inr0, $i0) .
-                $render_cell($is_first, $cols, $class1, $inr1, $i1) .
-                $render_cell($is_first, $cols, $class2, $inr2, $i2) .
-                $render_cell($is_first, $cols, $class3, $inr3, $i3) .
-                "</tr>";
+            // Bolt optimization: Consolidating array appends into a single string interpolation append reduces CPU branching, string concatenation overhead, and array resizing overhead.
+            $cell0 = $render_cell($is_first, $cols, $class0, $inr0, $i0);
+            $cell1 = $render_cell($is_first, $cols, $class1, $inr1, $i1);
+            $cell2 = $render_cell($is_first, $cols, $class2, $inr2, $i2);
+            $cell3 = $render_cell($is_first, $cols, $class3, $inr3, $i3);
+
+            $html[] = "{$tr}{$cell0}{$cell1}{$cell2}{$cell3}</tr>";
         }
       }
       echo implode('', $html);

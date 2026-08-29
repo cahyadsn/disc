@@ -104,6 +104,10 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-29)
+- **Performance & Loop Optimization**:
+  - Consolidated multiple array append operations in the HTML rendering loop of `index.php` into a single string interpolation append. This avoids redundant array resizing overhead and CPU branching.
+
 ### Recent Updates (2026-08-27)
 - **Code Health & Refactoring**:
   - Extracted the heavily duplicated inline HTML generation block in `index.php` into a single concise `$render_cell` closure, dramatically reducing the inner loop size and improving code readability and maintainability.

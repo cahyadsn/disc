@@ -152,7 +152,7 @@ if ($html_content === false) {
       echo implode('', $html);
     $html_content = ob_get_clean();
     if ($result) {
-        if (@file_put_contents($html_cache_file, $html_content, LOCK_EX) === false) {
+        if (file_put_contents($html_cache_file, $html_content, LOCK_EX) === false) {
             error_log("Failed to write to HTML cache file: $html_cache_file");
         }
     }

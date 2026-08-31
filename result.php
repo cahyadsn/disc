@@ -136,8 +136,9 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
                 'Description' => $data->description
             ];
             foreach ($properties as $label => $value) {
+                // Bolt optimization: Removed redundant htmlspecialchars on hardcoded static label keys
                 echo "          <div class='result-card'>\n";
-                echo "            <h3>" . htmlspecialchars($label, ENT_NOQUOTES, 'UTF-8') . "</h3>\n";
+                echo "            <h3>" . $label . "</h3>\n";
                 echo "            <p>" . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . "</p>\n";
                 echo "          </div>\n";
             }

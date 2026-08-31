@@ -66,6 +66,7 @@ This project is built using a lightweight and highly optimized architecture desi
   * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output to an HTML cache file (`html_cache.html`) in the local `cache/` directory (protected via `.htaccess` to prevent direct HTTP access), yielding a ~98% speedup.
   * **Filesystem Call Reductions**: Uses `is_readable()` to perform cache-hit checks in one step, bypassing redundant `file_exists()` checks.
   * **Single-Pass Value Aggregation**: Direct mutation of the result array in `result.php` avoids intermediate array allocations and the difference aggregation loop, yielding a ~45% speedup.
+  * **Static Key Optimization**: Removed redundant `htmlspecialchars` escaping on hardcoded, static array keys in the `result.php` rendering loop to eliminate unnecessary function call overhead.
   * **Loop & Memory Optimizations**: Minimized array allocations and nested calculations inside loops.
 * **Security & Hardening**:
   * **CSRF Protection**: Form submissions on `index.php` are protected against Cross-Site Request Forgery (CSRF) via session-backed, cryptographically secure random tokens validated with `hash_equals()` in `result.php`.
@@ -104,6 +105,13 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-08-31)
+- **Code Health & Error Handling**:
+  - Removed error suppression operator (`@`) from `file_put_contents` in `index.php` and aligned it with proper error logging practices when cache generation fails.
+  - Replaced error suppression (`@`) in `mkdir` for cache directory creation with explicit error checking and logging to prevent silent permission failure bugs.
+- **Performance Optimization**:
+  - Removed redundant `htmlspecialchars` escaping on static label keys in `result.php` loop, reducing unnecessary function call overhead.
+
 ### Recent Updates (2026-08-29)
 - **Performance & Loop Optimization**:
   - Consolidated multiple array append operations in the HTML rendering loop of `index.php` into a single string interpolation append. This avoids redundant array resizing overhead and CPU branching.

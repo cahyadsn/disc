@@ -34,7 +34,9 @@ copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
 require_once __DIR__ . '/conf/headers.php';
 $cache_dir = __DIR__ . '/cache';
 if (!is_dir($cache_dir)) {
-    @mkdir($cache_dir, 0755, true);
+    if (!mkdir($cache_dir, 0755, true)) {
+        error_log("Failed to create cache directory: $cache_dir");
+    }
 }
 $html_cache_file = $cache_dir . '/html_cache.html';
 $html_content = false;

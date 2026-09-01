@@ -1,6 +1,10 @@
 <?php
 $passed = true;
 $header_content = file_get_contents(__DIR__ . '/../conf/headers.php');
+if (strpos($header_content, "header('Strict-Transport-Security: max-age=31536000; includeSubDomains');") === false) {
+    echo "Missing Strict-Transport-Security in conf/headers.php\n";
+    $passed = false;
+}
 if (strpos($header_content, "header('X-Frame-Options: DENY');") === false) {
     echo "Missing X-Frame-Options in conf/headers.php\n";
     $passed = false;

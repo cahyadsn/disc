@@ -9,7 +9,7 @@ if (strpos($header_content, "header('X-Content-Type-Options: nosniff');") === fa
     echo "Missing X-Content-Type-Options in conf/headers.php\n";
     $passed = false;
 }
-if (strpos($header_content, "header(\"Content-Security-Policy: default-src 'self';\");") === false) {
+if (strpos($header_content, "header(\"Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;\");") === false) {
     echo "Missing Content-Security-Policy in conf/headers.php\n";
     $passed = false;
 }

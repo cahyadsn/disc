@@ -9,5 +9,5 @@ if (empty($_SESSION['csrf_token'])) {
 if (!headers_sent()) {
     header('X-Frame-Options: DENY');
     header('X-Content-Type-Options: nosniff');
-    header("Content-Security-Policy: default-src 'self';");
+    header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
 }

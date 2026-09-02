@@ -1,0 +1,4 @@
+<FilesMatch "^\.">
+    Require all denied
+    Deny from all
+</FilesMatch>

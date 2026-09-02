@@ -69,8 +69,10 @@ This project is built using a lightweight and highly optimized architecture desi
   * **Static Key Optimization**: Removed redundant `htmlspecialchars` escaping on hardcoded, static array keys in the `result.php` rendering loop to eliminate unnecessary function call overhead.
   * **Loop & Memory Optimizations**: Minimized array allocations and nested calculations inside loops.
 * **Security & Hardening**:
+  * **Dotfile & Sensitive File Protection**: Root `.htaccess` configuration blocks direct HTTP access to dotfiles and sensitive metadata (such as `.env` and `.git`).
+  * **Session Cookie Security**: Configures `session.cookie_secure` and `session.cookie_httponly` flags before session start to protect session tokens against network interception and client-side script access.
   * **CSRF Protection**: Form submissions on `index.php` are protected against Cross-Site Request Forgery (CSRF) via session-backed, cryptographically secure random tokens validated with `hash_equals()` in `result.php`.
-  * **HTTP Security Headers**: Implements custom protection rules such as `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and a restrictive `Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;` to defend against clickjacking, MIME sniffing, and cross-site scripting (XSS).
+  * **HTTP Security Headers & HSTS**: Implements strict protection headers including `Strict-Transport-Security: max-age=31536000; includeSubDomains`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and a fine-tuned `Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;` to prevent clickjacking, MIME sniffing, protocol downgrades, and cross-site scripting (XSS).
   * **XSS Defenses**: Sanitized and escaped HTML output using `htmlspecialchars` with UTF-8 encoding.
   * **Sensitive Data Redaction**: Safe exception handling prevents database password and credential leaks in debug logs and user interfaces by stripping underlying exception context during connection failures.
 * **Frontend & Presentation**:
@@ -105,6 +107,16 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-09-02)
+- **Security & Hardening**:
+  - Added root `.htaccess` configuration to prevent public web access to dotfiles and sensitive configuration files (`.env`, `.git`).
+  - Added `Strict-Transport-Security` (HSTS) with `max-age=31536000; includeSubDomains` header in `conf/headers.php`.
+  - Configured `session.cookie_secure` and `session.cookie_httponly` flags for enhanced session cookie protection in `conf/headers.php`.
+  - Adjusted `Content-Security-Policy` (CSP) directives to permit external Google Fonts (`https://fonts.googleapis.com` and `https://fonts.gstatic.com`).
+- **Testing & Quality Assurance**:
+  - Added `tests/test_session_cookies.php` to verify secure session cookie flags.
+  - Updated `tests/test_security_headers.php` to validate HSTS and the updated CSP font policy.
+
 ### Recent Updates (2026-08-31)
 - **Code Health & Error Handling**:
   - Removed error suppression operator (`@`) from `file_put_contents` in `index.php` and aligned it with proper error logging practices when cache generation fails.

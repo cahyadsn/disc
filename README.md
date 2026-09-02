@@ -70,7 +70,7 @@ This project is built using a lightweight and highly optimized architecture desi
   * **Loop & Memory Optimizations**: Minimized array allocations and nested calculations inside loops.
 * **Security & Hardening**:
   * **CSRF Protection**: Form submissions on `index.php` are protected against Cross-Site Request Forgery (CSRF) via session-backed, cryptographically secure random tokens validated with `hash_equals()` in `result.php`.
-  * **HTTP Security Headers**: Implements custom protection rules such as `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and a restrictive `Content-Security-Policy: default-src 'self';` to defend against clickjacking, MIME sniffing, and cross-site scripting (XSS).
+  * **HTTP Security Headers**: Implements custom protection rules such as `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and a restrictive `Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;` to defend against clickjacking, MIME sniffing, and cross-site scripting (XSS).
   * **XSS Defenses**: Sanitized and escaped HTML output using `htmlspecialchars` with UTF-8 encoding.
   * **Sensitive Data Redaction**: Safe exception handling prevents database password and credential leaks in debug logs and user interfaces by stripping underlying exception context during connection failures.
 * **Frontend & Presentation**:
@@ -208,7 +208,7 @@ This project is built using a lightweight and highly optimized architecture desi
 ### Recent Updates (2026-07-26)
 - **Security & Caching**:
   - Moved `html_cache.html` out of the web root into the local `cache/` directory (protected via `.htaccess`) to prevent direct public HTTP access.
-  - Implemented `Content-Security-Policy: default-src 'self';` header on both `index.php` and `result.php`.
+  - Implemented `Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;` header on both `index.php` and `result.php`.
   - Redacted the database connection exception context (stripped internal PHP exception chains) to prevent accidental database credential leaks in debug logs.
   - Removed redundant `file_exists()` checks before checking `is_readable()` when resolving HTML cache hits.
 

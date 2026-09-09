@@ -45,11 +45,25 @@ function loadEnv($filePath) {
         return;
     }
 
+    $cacheFile = dirname(__DIR__) . '/cache/env_' . md5($filePath) . '.php';
+    if (is_readable($cacheFile) && filemtime($filePath) <= filemtime($cacheFile)) {
+        $env = require $cacheFile;
+        foreach ($env as $key => $value) {
+            if (getenv($key) === false) {
+                putenv("{$key}={$value}");
+                $_ENV[$key] = $value;
+                $_SERVER[$key] = $value;
+            }
+        }
+        return;
+    }
+
     $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     if ($lines === false) {
         return;
     }
 
+    $env = [];
     foreach ($lines as $line) {
         $line = trim($line);
         
@@ -71,6 +85,8 @@ function loadEnv($filePath) {
         // Bolt optimization: replaced preg_match with trim for removing quotes to avoid regex engine overhead.
         $value = trim($value, "\"'");
 
+        $env[$key] = $value;
+
         // Only set if not already set by system/server environment
         if (getenv($key) === false) {
             putenv("{$key}={$value}");
@@ -78,6 +94,12 @@ function loadEnv($filePath) {
             $_SERVER[$key] = $value;
         }
     }
+
+    $cacheContent = "<?php\nreturn " . var_export($env, true) . ";\n";
+    if (!is_dir(dirname($cacheFile))) {
+        mkdir(dirname($cacheFile), 0777, true);
+    }
+    file_put_contents($cacheFile, $cacheContent);
 }
 
 // Check if we are running unit/standalone tests to avoid side-effects on test isolation

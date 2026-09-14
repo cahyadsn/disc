@@ -29,6 +29,7 @@ The project directory has been reorganized to keep configuration and test layers
   * `autoload_env.php`: A native, zero-dependency environment variables loader that parses and applies configuration variables from `.env`.
   * `headers.php`: Central security headers configuration ensuring custom protection rules are applied uniformly across PHP page endpoints.
 * **`/db`**: Contains database schema and seed data files (`disc.sql`).
+* **`/cache`**: Local cache directory containing pre-compiled HTML templates (`html_cache.html`) and parsed environment variable cache files (`env_*.php`), protected against direct HTTP access via `.htaccess`.
 * **`/tests`**: Contains the PHPUnit and standalone test suites covering security, SQL injection mitigations, cache handlers, and platform-specific tests.
 * **`/assets`**: Frontend styles, fonts, and assets.
 
@@ -64,10 +65,11 @@ This project is built using a lightweight and highly optimized architecture desi
   * **Prepared Statements**: Secure parameter binding utilizing mysqli prepared statements.
 * **Caching & Performance Optimization**:
   * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output to an HTML cache file (`html_cache.html`) in the local `cache/` directory (protected via `.htaccess` to prevent direct HTTP access), yielding a ~98% speedup.
+  * **Environment Variables Caching**: Caches parsed `.env` variables into compiled PHP cache files (`cache/env_*.php`) to eliminate file parsing overhead on repeated requests.
   * **Filesystem Call Reductions**: Uses `is_readable()` to perform cache-hit checks in one step, bypassing redundant `file_exists()` checks.
   * **Single-Pass Value Aggregation**: Direct mutation of the result array in `result.php` avoids intermediate array allocations and the difference aggregation loop, yielding a ~45% speedup.
   * **Static Key Optimization**: Removed redundant `htmlspecialchars` escaping on hardcoded, static array keys in the `result.php` rendering loop to eliminate unnecessary function call overhead.
-  * **Loop & Memory Optimizations**: Minimized array allocations and nested calculations inside loops.
+  * **Loop & Memory Optimizations**: Minimized array allocations, inlined closures, and avoided nested calculations inside loops.
 * **Security & Hardening**:
   * **Dotfile & Sensitive File Protection**: Root `.htaccess` configuration blocks direct HTTP access to dotfiles and sensitive metadata (such as `.env` and `.git`).
   * **Session Cookie Security**: Configures `session.cookie_secure` and `session.cookie_httponly` flags before session start to protect session tokens against network interception and client-side script access.
@@ -82,6 +84,7 @@ This project is built using a lightweight and highly optimized architecture desi
   * **Responsive Dashboard Grid**: Layout cards and lists adapt fluidly to screen dimensions, providing a highly premium experience on both desktop and mobile.
 * **Testing & CI/CD**:
   * **PHPUnit Framework**: Unit test suite covering SQL injection mitigations, XSS checks, caching mechanics, exception context preservation, database connection failures, and invalid POST fallbacks.
+  * **Standalone Test Suites & Error Path Coverage**: Comprehensive standalone regression tests covering edge cases such as missing/empty database results, filesystem permission and `mkdir` failures via custom stream wrappers, CSRF verification, and security headers.
   * **Cross-platform Compatibility**: Test scripts dynamically adapt to and run reliably on both Unix/Linux and Windows environments.
 
 ## Donation
@@ -107,6 +110,16 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-09-14)
+- **Testing & Quality Assurance**:
+  - Added `tests/test_cache_mkdir_failure.php` using a custom PHP stream wrapper (`MkdirFailingWrapper`) to verify error logging and graceful failure paths when `mkdir` fails during cache directory initialization in `index.php`.
+  - Added `tests/test_result_empty_result.php` to verify graceful fallback handling and error messaging when database queries return no rows or missing data in `result.php`.
+
+### Recent Updates (2026-09-08)
+- **Performance & Optimization**:
+  - Implemented compilation caching for parsed environment variables in `conf/autoload_env.php` (`cache/env_*.php`), eliminating redundant file reads and string parsing on subsequent requests.
+  - Inlined the `$render_cell` closure in the inner table generation loop of `index.php`, eliminating function call overhead during HTML rendering.
+
 ### Recent Updates (2026-09-02)
 - **Security & Hardening**:
   - Added root `.htaccess` configuration to prevent public web access to dotfiles and sensitive configuration files (`.env`, `.git`).

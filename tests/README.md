@@ -49,6 +49,8 @@ php tests/test_unreadable_cache.php
 php tests/test_invalid_dimensions.php
 php tests/test_result_xss.php
 php tests/test_autoload_env.php
+php tests/test_result_empty_result.php
+php tests/test_cache_mkdir_failure.php
 ```
 
 ## Daftar Test
@@ -80,6 +82,8 @@ php tests/test_autoload_env.php
 | `test_invalid_dimensions.php` | Test penanganan nilai dimensi kepribadian yang tidak valid (invalid dimensions) pada data POST di `result.php` |
 | `test_result_xss.php` | Test edge case untuk simulasi serangan XSS pada output hasil database |
 | `test_autoload_env.php` | Test unit untuk loadEnv behavior, parsing .env, penanganan file tidak terbaca/hilang, dan proteksi overwrite |
+| `test_result_empty_result.php` | Test fallback pada `result.php` ketika query database menghasilkan data kosong / tidak ditemukan |
+| `test_cache_mkdir_failure.php` | Test penanganan error dan logging saat `mkdir` gagal membuat direktori cache menggunakan custom stream wrapper |
 
 
 ## Environment Variables

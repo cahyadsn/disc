@@ -88,22 +88,46 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
         JOIN patterns c ON c.id=a.pattern
         ORDER BY m.priority ASC
         LIMIT 1";
-	$stmt = isset($db) ? $db->prepare($sql) : false;
 	$data = null;
-	if ($stmt) {
-		$val_d = $result['D'];
-		$val_i = $result['I'];
-		$val_s = $result['S'];
-		$val_c = $result['C'];
-		$def_d = DEFAULT_VAL_D;
-		$def_i = DEFAULT_VAL_I;
-		$def_s = DEFAULT_VAL_S;
-		$def_c = DEFAULT_VAL_C;
-		$stmt->bind_param("iiiiiiii", $val_d, $val_i, $val_s, $val_c, $def_d, $def_i, $def_s, $def_c);
-		$stmt->execute();
-		$db_result=$stmt->get_result();
-		$data = $db_result ? $db_result->fetch_object() : null;
-	}
+    $cache_dir = __DIR__ . '/cache';
+    if (!is_dir($cache_dir)) {
+        if (!mkdir($cache_dir, 0755, true)) {
+            error_log("Failed to create cache directory: $cache_dir");
+        }
+    }
+    // Bolt optimization: Cache DB results for Personality Profiles to avoid executing the complex UNION ALL/subquery SQL statement on every submission
+    $cache_key = md5($result['D'] . '_' . $result['I'] . '_' . $result['S'] . '_' . $result['C']);
+    $cache_file = $cache_dir . '/result_' . $cache_key . '.json';
+
+    if (is_readable($cache_file)) {
+        $json = file_get_contents($cache_file);
+        if ($json !== false) {
+            $data = json_decode($json);
+        }
+    }
+
+    if (!$data) {
+        $stmt = isset($db) ? $db->prepare($sql) : false;
+        if ($stmt) {
+            $val_d = $result['D'];
+            $val_i = $result['I'];
+            $val_s = $result['S'];
+            $val_c = $result['C'];
+            $def_d = DEFAULT_VAL_D;
+            $def_i = DEFAULT_VAL_I;
+            $def_s = DEFAULT_VAL_S;
+            $def_c = DEFAULT_VAL_C;
+            $stmt->bind_param("iiiiiiii", $val_d, $val_i, $val_s, $val_c, $def_d, $def_i, $def_s, $def_c);
+            $stmt->execute();
+            $db_result=$stmt->get_result();
+            $data = $db_result ? $db_result->fetch_object() : null;
+            if ($data) {
+                if (file_put_contents($cache_file, json_encode($data), LOCK_EX) === false) {
+                    error_log("Failed to write to result cache file: $cache_file");
+                }
+            }
+        }
+    }
 
 	if (!$data) {
 		echo "    <div class='app-container'><div class='card-glass error-container'>\n      <div class='error-title'>Error</div>\n      <p>Data not found, check your database.</p>\n    </div></div>\n";

@@ -99,7 +99,9 @@ function loadEnv($filePath) {
     if (!is_dir(dirname($cacheFile))) {
         mkdir(dirname($cacheFile), 0777, true);
     }
-    file_put_contents($cacheFile, $cacheContent);
+    if (file_put_contents($cacheFile, $cacheContent) === false) {
+        error_log("Failed to write env cache file: $cacheFile");
+    }
 }
 
 // Check if we are running unit/standalone tests to avoid side-effects on test isolation

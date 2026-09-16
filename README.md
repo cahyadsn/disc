@@ -66,6 +66,7 @@ This project is built using a lightweight and highly optimized architecture desi
 * **Caching & Performance Optimization**:
   * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output to an HTML cache file (`html_cache.html`) in the local `cache/` directory (protected via `.htaccess` to prevent direct HTTP access), yielding a ~98% speedup.
   * **Environment Variables Caching**: Caches parsed `.env` variables into compiled PHP cache files (`cache/env_*.php`) to eliminate file parsing overhead on repeated requests.
+  * **Result Profile Caching**: Caches resolved DISC profile results (`cache/result_*.php`) to eliminate database queries and pattern resolution overhead for identical personality test submissions.
   * **Filesystem Call Reductions**: Uses `is_readable()` to perform cache-hit checks in one step, bypassing redundant `file_exists()` checks.
   * **Single-Pass Value Aggregation**: Direct mutation of the result array in `result.php` avoids intermediate array allocations and the difference aggregation loop, yielding a ~45% speedup.
   * **Static Key Optimization**: Removed redundant `htmlspecialchars` escaping on hardcoded, static array keys in the `result.php` rendering loop to eliminate unnecessary function call overhead.
@@ -110,6 +111,15 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-09-16)
+- **Performance & Optimization**:
+  - Implemented file-based caching for resolved personality profile results in `result.php` (`cache/result_*.php`), eliminating database queries and fallback lookups on identical test submissions.
+- **Code Health & Error Handling**:
+  - Added explicit error handling and error logging (`error_log`) when cache directory creation (`mkdir`) and file write operations (`file_put_contents`) fail in `conf/autoload_env.php`.
+- **Testing & Quality Assurance**:
+  - Added `tests/test_autoload_env_cache_write_failure.php` to verify error logging when `.env` cache file writing fails.
+  - Added `tests/test_autoload_env_mkdir_failure.php` using a custom PHP stream wrapper (`MkdirFailingWrapper`) to test error logging during directory creation failure in `conf/autoload_env.php`.
+
 ### Recent Updates (2026-09-14)
 - **Testing & Quality Assurance**:
   - Added `tests/test_cache_mkdir_failure.php` using a custom PHP stream wrapper (`MkdirFailingWrapper`) to verify error logging and graceful failure paths when `mkdir` fails during cache directory initialization in `index.php`.

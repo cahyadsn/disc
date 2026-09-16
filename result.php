@@ -64,11 +64,7 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
   foreach ($_POST['m'] as $v) if (is_scalar($v) && isset($result[$v])) $result[$v]++;
   foreach ($_POST['l'] as $v) if (is_scalar($v) && isset($result[$v])) $result[$v]--;
 
-  try {
-      require_once 'conf/config.php';
-  } catch (Exception $e) {
-      error_log($e->getMessage());
-  }
+  require_once __DIR__ . '/conf/db.php';
     $sql="
         SELECT a.*, c.*, m.priority
         FROM (

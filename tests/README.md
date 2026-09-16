@@ -51,6 +51,7 @@ php tests/test_result_xss.php
 php tests/test_autoload_env.php
 php tests/test_result_empty_result.php
 php tests/test_cache_mkdir_failure.php
+php tests/test_autoload_env_mkdir_failure.php
 ```
 
 ## Daftar Test
@@ -84,6 +85,7 @@ php tests/test_cache_mkdir_failure.php
 | `test_autoload_env.php` | Test unit untuk loadEnv behavior, parsing .env, penanganan file tidak terbaca/hilang, dan proteksi overwrite |
 | `test_result_empty_result.php` | Test fallback pada `result.php` ketika query database menghasilkan data kosong / tidak ditemukan |
 | `test_cache_mkdir_failure.php` | Test penanganan error dan logging saat `mkdir` gagal membuat direktori cache menggunakan custom stream wrapper |
+| `test_autoload_env_mkdir_failure.php` | Test penanganan error dan logging saat `mkdir` gagal membuat direktori cache di autoload_env.php menggunakan custom stream wrapper |
 
 
 ## Environment Variables

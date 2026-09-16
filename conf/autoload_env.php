@@ -97,7 +97,9 @@ function loadEnv($filePath) {
 
     $cacheContent = "<?php\nreturn " . var_export($env, true) . ";\n";
     if (!is_dir(dirname($cacheFile))) {
-        mkdir(dirname($cacheFile), 0777, true);
+        if (!mkdir(dirname($cacheFile), 0777, true)) {
+            error_log("Failed to create cache directory: " . dirname($cacheFile));
+        }
     }
     if (file_put_contents($cacheFile, $cacheContent) === false) {
         error_log("Failed to write env cache file: $cacheFile");

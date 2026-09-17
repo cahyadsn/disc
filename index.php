@@ -49,11 +49,7 @@ if (is_readable($html_cache_file)) {
 
 if ($html_content === false) {
     // Lazy load the database connection only on cache miss
-    try {
-        require_once 'conf/config.php';
-    } catch (Exception $e) {
-        error_log($e->getMessage());
-    }
+    require_once __DIR__ . '/conf/db.php';
 
     //-- query data from database
     $sql='SELECT * FROM personalities ORDER BY no ASC';

@@ -26,6 +26,7 @@ The project directory has been reorganized to keep configuration and test layers
 
 * **`/conf`**: Directory holding central configuration and autoload helper:
   * `config.php`: Central database configuration setup with lazy-loading connection pooling.
+  * `db.php`: Centralized helper that encapsulates database configuration loading with safe error handling across page endpoints.
   * `autoload_env.php`: A native, zero-dependency environment variables loader that parses and applies configuration variables from `.env`.
   * `headers.php`: Central security headers configuration ensuring custom protection rules are applied uniformly across PHP page endpoints.
 * **`/db`**: Contains database schema and seed data files (`disc.sql`).
@@ -77,7 +78,7 @@ This project is built using a lightweight and highly optimized architecture desi
   * **CSRF Protection**: Form submissions on `index.php` are protected against Cross-Site Request Forgery (CSRF) via session-backed, cryptographically secure random tokens validated with `hash_equals()` in `result.php`.
   * **HTTP Security Headers & HSTS**: Implements strict protection headers including `Strict-Transport-Security: max-age=31536000; includeSubDomains`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and a fine-tuned `Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;` to prevent clickjacking, MIME sniffing, protocol downgrades, and cross-site scripting (XSS).
   * **XSS Defenses**: Sanitized and escaped HTML output using `htmlspecialchars` with UTF-8 encoding.
-  * **Sensitive Data Redaction**: Safe exception handling prevents database password and credential leaks in debug logs and user interfaces by stripping underlying exception context during connection failures.
+  * **Sensitive Data Redaction & Stack Trace Preservation**: Safe exception handling prevents database password and credential leaks in debug logs and user interfaces while preserving original exception stack traces for effective debugging.
 * **Frontend & Presentation**:
   * **Glassmorphic UI Design**: Refactored to a sleek, modern visual aesthetic featuring background blurs (`backdrop-filter`), translucent panels, glowing border/shadow effects, and gradient backdrops.
   * **Typography**: Clean visual styling built on the `Plus Jakarta Sans` Google Font.
@@ -111,6 +112,13 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-09-17)
+- **Code Health & Refactoring**:
+  - Extracted and centralized duplicated database configuration loading logic from `index.php` and `result.php` into a dedicated helper `conf/db.php`.
+  - Refactored test environment isolation check in `conf/autoload_env.php` using an isolated closure.
+- **Error Handling & Diagnostics**:
+  - Preserved original exception context and stack traces in `conf/config.php` during database connection failures while ensuring sensitive credentials remain redacted.
+
 ### Recent Updates (2026-09-16)
 - **Performance & Optimization**:
   - Implemented file-based caching for resolved personality profile results in `result.php` (`cache/result_*.php`), eliminating database queries and fallback lookups on identical test submissions.

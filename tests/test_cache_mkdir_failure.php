@@ -1,5 +1,5 @@
 <?php
-// Fix working directory
+// Change working directory to the parent directory to ensure tests run correctly relative to the project root.
 chdir(__DIR__ . '/../');
 
 class MkdirFailingWrapper {

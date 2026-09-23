@@ -2,6 +2,14 @@
 
 All notable changes, architectural decisions, and improvements to the DISC Personality Test project are documented in this file.
 
+## Recent Updates (2026-09-23)
+- **Security & Input Validation**:
+  - Mitigated unbounded array iteration vulnerabilities by slicing input arrays (`$_POST['m']` and `$_POST['l']`) to a maximum of 28 elements using `array_slice` in `result.php`, preventing potential DoS attacks.
+- **Testing & Quality Assurance**:
+  - Added `tests/test_result_array_limit.php` to verify input size truncation and boundary enforcement.
+  - Added `tests/test_result_cache_write_failure.php` to verify error logging when writing to result cache files fails.
+  - Refactored working directory comment in `tests/test_cache_mkdir_failure.php` for clarity.
+
 ## Recent Updates (2026-09-17)
 - **Code Health & Refactoring**:
   - Extracted and centralized duplicated database configuration loading logic from `index.php` and `result.php` into a dedicated helper `conf/db.php`.

@@ -78,6 +78,7 @@ This project is built using a lightweight and highly optimized architecture desi
   * **CSRF Protection**: Form submissions on `index.php` are protected against Cross-Site Request Forgery (CSRF) via session-backed, cryptographically secure random tokens validated with `hash_equals()` in `result.php`.
   * **HTTP Security Headers & HSTS**: Implements strict protection headers including `Strict-Transport-Security: max-age=31536000; includeSubDomains`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and a fine-tuned `Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;` to prevent clickjacking, MIME sniffing, protocol downgrades, and cross-site scripting (XSS).
   * **XSS Defenses**: Sanitized and escaped HTML output using `htmlspecialchars` with UTF-8 encoding.
+  * **Input Size & Array Limit Validation**: Form input arrays (`$_POST['m']` and `$_POST['l']`) are strictly sliced to a maximum of 28 elements via `array_slice` in `result.php`, mitigating unbounded array iteration and denial-of-service (DoS) payloads.
   * **Sensitive Data Redaction & Stack Trace Preservation**: Safe exception handling prevents database password and credential leaks in debug logs and user interfaces while preserving original exception stack traces for effective debugging.
 * **Frontend & Presentation**:
   * **Glassmorphic UI Design**: Refactored to a sleek, modern visual aesthetic featuring background blurs (`backdrop-filter`), translucent panels, glowing border/shadow effects, and gradient backdrops.
@@ -112,6 +113,14 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-09-23)
+- **Security & Input Validation**:
+  - Mitigated unbounded array iteration vulnerabilities by slicing input arrays (`$_POST['m']` and `$_POST['l']`) to a maximum of 28 elements using `array_slice` in `result.php`, preventing potential DoS attacks.
+- **Testing & Quality Assurance**:
+  - Added `tests/test_result_array_limit.php` to verify input size truncation and boundary enforcement.
+  - Added `tests/test_result_cache_write_failure.php` to verify error logging when writing to result cache files fails.
+  - Refactored working directory comment in `tests/test_cache_mkdir_failure.php` for clarity.
+
 ### Recent Updates (2026-09-17)
 - **Code Health & Refactoring**:
   - Extracted and centralized duplicated database configuration loading logic from `index.php` and `result.php` into a dedicated helper `conf/db.php`.
@@ -137,16 +146,6 @@ This project is built using a lightweight and highly optimized architecture desi
 - **Performance & Optimization**:
   - Implemented compilation caching for parsed environment variables in `conf/autoload_env.php` (`cache/env_*.php`), eliminating redundant file reads and string parsing on subsequent requests.
   - Inlined the `$render_cell` closure in the inner table generation loop of `index.php`, eliminating function call overhead during HTML rendering.
-
-### Recent Updates (2026-09-02)
-- **Security & Hardening**:
-  - Added root `.htaccess` configuration to prevent public web access to dotfiles and sensitive configuration files (`.env`, `.git`).
-  - Added `Strict-Transport-Security` (HSTS) with `max-age=31536000; includeSubDomains` header in `conf/headers.php`.
-  - Configured `session.cookie_secure` and `session.cookie_httponly` flags for enhanced session cookie protection in `conf/headers.php`.
-  - Adjusted `Content-Security-Policy` (CSP) directives to permit external Google Fonts (`https://fonts.googleapis.com` and `https://fonts.gstatic.com`).
-- **Testing & Quality Assurance**:
-  - Added `tests/test_session_cookies.php` to verify secure session cookie flags.
-  - Updated `tests/test_security_headers.php` to validate HSTS and the updated CSP font policy.
 
 *For earlier updates and the complete changelog history, please refer to [change_log.md](change_log.md).*
 

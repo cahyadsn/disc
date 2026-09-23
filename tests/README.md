@@ -53,6 +53,8 @@ php tests/test_result_empty_result.php
 php tests/test_cache_mkdir_failure.php
 php tests/test_autoload_env_cache_write_failure.php
 php tests/test_autoload_env_mkdir_failure.php
+php tests/test_result_array_limit.php
+php tests/test_result_cache_write_failure.php
 ```
 
 ## Daftar Test
@@ -88,6 +90,8 @@ php tests/test_autoload_env_mkdir_failure.php
 | `test_cache_mkdir_failure.php` | Test penanganan error dan logging saat `mkdir` gagal membuat direktori cache menggunakan custom stream wrapper |
 | `test_autoload_env_cache_write_failure.php` | Test penanganan error dan logging saat `file_put_contents` gagal menulis cache file env di autoload_env.php |
 | `test_autoload_env_mkdir_failure.php` | Test penanganan error dan logging saat `mkdir` gagal membuat direktori cache di autoload_env.php menggunakan custom stream wrapper |
+| `test_result_array_limit.php` | Test validasi pembatasan ukuran array input POST pada result.php (maksimal 28 elemen) untuk mencegah DoS |
+| `test_result_cache_write_failure.php` | Verifikasi bahwa `error_log` dipanggil ketika gagal menulis file cache hasil result.php (di-skip di Windows) |
 
 
 ## Environment Variables

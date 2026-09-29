@@ -4,23 +4,12 @@ use PHPUnit\Framework\TestCase;
 
 class DiscTest extends TestCase
 {
-    /**
-     * Calculate DISC scores from most/least arrays (extracted from result.php logic)
-     */
-    private function calculateScores(array $most, array $least): array
-    {
-        $result = ['D' => 0, 'I' => 0, 'S' => 0, 'C' => 0];
-        foreach ($most as $v) if (is_scalar($v) && isset($result[$v])) $result[$v]++;
-        foreach ($least as $v) if (is_scalar($v) && isset($result[$v])) $result[$v]--;
-        return $result;
-    }
-
     public function testCalculateScoresBasic(): void
     {
         $most = ['D', 'D', 'I', 'S', 'C'];
         $least = ['I', 'S', 'S', 'C', 'C'];
         
-        $result = $this->calculateScores($most, $least);
+        $result = \Disc\ScoreCalculator::calculateScores($most, $least);
         
         $this->assertEquals(2, $result['D']);
         $this->assertEquals(0, $result['I']);
@@ -28,7 +17,7 @@ class DiscTest extends TestCase
 
     public function testCalculateScoresEmpty(): void
     {
-        $result = $this->calculateScores([], []);
+        $result = \Disc\ScoreCalculator::calculateScores([], []);
         
         foreach (['D', 'I', 'S', 'C'] as $dim) {
             $this->assertEquals(0, $result[$dim]);
@@ -41,7 +30,7 @@ class DiscTest extends TestCase
         $least = ['S', new stdClass(), 'C'];
         
         // Should not throw warning, arrays filtered out
-        $result = $this->calculateScores($most, $least);
+        $result = \Disc\ScoreCalculator::calculateScores($most, $least);
         
         $this->assertEquals(1, $result['D']);
         $this->assertEquals(1, $result['I']);
@@ -61,7 +50,7 @@ class DiscTest extends TestCase
         $most = ['D'];
         $least = ['D', 'D', 'D'];
         
-        $result = $this->calculateScores($most, $least);
+        $result = \Disc\ScoreCalculator::calculateScores($most, $least);
         
         $this->assertEquals(-2, $result['D']);
     }

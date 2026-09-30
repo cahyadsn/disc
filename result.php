@@ -60,10 +60,12 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
 }
 
 // Bolt optimization: Single-pass direct mutation of result array avoiding intermediate most/least array allocations and difference extraction loop (~45% speedup).
-  require_once __DIR__ . '/src/ScoreCalculator.php';
+// Bolt optimization: Explicit if/elseif chain using strict identity checks (===) avoids dynamic array key lookups, isset(), and is_scalar() runtime overhead.
+  require_once __DIR__ . '/conf/utils.php';
+
   $m = array_slice($_POST['m'], 0, 28);
   $l = array_slice($_POST['l'], 0, 28);
-  $result = \Disc\ScoreCalculator::calculateScores($m, $l);
+  $result = calculateScores($m, $l);
 
   require_once __DIR__ . '/conf/db.php';
     $sql="

@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 
+require_once __DIR__ . '/../conf/utils.php';
+
 class DiscTest extends TestCase
 {
     public function testCalculateScoresBasic(): void
@@ -9,7 +11,7 @@ class DiscTest extends TestCase
         $most = ['D', 'D', 'I', 'S', 'C'];
         $least = ['I', 'S', 'S', 'C', 'C'];
         
-        $result = \Disc\ScoreCalculator::calculateScores($most, $least);
+        $result = calculateScores($most, $least);
         
         $this->assertEquals(2, $result['D']);
         $this->assertEquals(0, $result['I']);
@@ -17,7 +19,7 @@ class DiscTest extends TestCase
 
     public function testCalculateScoresEmpty(): void
     {
-        $result = \Disc\ScoreCalculator::calculateScores([], []);
+        $result = calculateScores([], []);
         
         foreach (['D', 'I', 'S', 'C'] as $dim) {
             $this->assertEquals(0, $result[$dim]);
@@ -30,7 +32,7 @@ class DiscTest extends TestCase
         $least = ['S', new stdClass(), 'C'];
         
         // Should not throw warning, arrays filtered out
-        $result = \Disc\ScoreCalculator::calculateScores($most, $least);
+        $result = calculateScores($most, $least);
         
         $this->assertEquals(1, $result['D']);
         $this->assertEquals(1, $result['I']);
@@ -50,7 +52,7 @@ class DiscTest extends TestCase
         $most = ['D'];
         $least = ['D', 'D', 'D'];
         
-        $result = \Disc\ScoreCalculator::calculateScores($most, $least);
+        $result = calculateScores($most, $least);
         
         $this->assertEquals(-2, $result['D']);
     }

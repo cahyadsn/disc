@@ -28,6 +28,7 @@ The project directory has been reorganized to keep configuration and test layers
   * `config.php`: Central database configuration setup with lazy-loading connection pooling.
   * `db.php`: Centralized helper that encapsulates database configuration loading with safe error handling across page endpoints.
   * `autoload_env.php`: A native, zero-dependency environment variables loader that parses and applies configuration variables from `.env`.
+  * `utils.php`: Central utility providing reusable DISC score calculation logic across application endpoints and unit tests.
   * `headers.php`: Central security headers configuration ensuring custom protection rules are applied uniformly across PHP page endpoints.
 * **`/db`**: Contains database schema and seed data files (`disc.sql`).
 * **`/cache`**: Local cache directory containing pre-compiled HTML templates (`html_cache.html`) and parsed environment variable cache files (`env_*.php`), protected against direct HTTP access via `.htaccess`.
@@ -113,6 +114,13 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-09-30)
+- **Code Health & Refactoring**:
+  - Extracted core DISC score calculation logic from `result.php` and `tests/DiscTest.php` into a dedicated helper function `calculateScores()` in `conf/utils.php` to eliminate code duplication and avoid logic drift.
+- **Testing & Quality Assurance**:
+  - Added `tests/test_result_cache_decode_failure.php` to verify error logging and fallback handling when cached result JSON decoding fails.
+  - Updated `tests/DiscTest.php` unit test suite to utilize the centralized `calculateScores()` utility.
+
 ### Recent Updates (2026-09-23)
 - **Security & Input Validation**:
   - Mitigated unbounded array iteration vulnerabilities by slicing input arrays (`$_POST['m']` and `$_POST['l']`) to a maximum of 28 elements using `array_slice` in `result.php`, preventing potential DoS attacks.
@@ -141,11 +149,6 @@ This project is built using a lightweight and highly optimized architecture desi
 - **Testing & Quality Assurance**:
   - Added `tests/test_cache_mkdir_failure.php` using a custom PHP stream wrapper (`MkdirFailingWrapper`) to verify error logging and graceful failure paths when `mkdir` fails during cache directory initialization in `index.php`.
   - Added `tests/test_result_empty_result.php` to verify graceful fallback handling and error messaging when database queries return no rows or missing data in `result.php`.
-
-### Recent Updates (2026-09-08)
-- **Performance & Optimization**:
-  - Implemented compilation caching for parsed environment variables in `conf/autoload_env.php` (`cache/env_*.php`), eliminating redundant file reads and string parsing on subsequent requests.
-  - Inlined the `$render_cell` closure in the inner table generation loop of `index.php`, eliminating function call overhead during HTML rendering.
 
 *For earlier updates and the complete changelog history, please refer to [change_log.md](change_log.md).*
 

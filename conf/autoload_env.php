@@ -101,7 +101,7 @@ function loadEnv($filePath) {
             error_log("Failed to create cache directory: " . dirname($cacheFile));
         }
     }
-    if (file_put_contents($cacheFile, $cacheContent) === false) {
+    if (file_put_contents($cacheFile, $cacheContent, LOCK_EX) === false) {
         error_log("Failed to write env cache file: $cacheFile");
     }
 }

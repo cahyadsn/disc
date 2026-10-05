@@ -72,7 +72,7 @@ function loadEnv($filePath) {
         $line = trim($line);
         
         // Skip comments and empty lines
-        if ($line === '' || strpos($line, '#') === 0) {
+        if ($line === '' || $line[0] === '#') {
             continue;
         }
 

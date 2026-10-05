@@ -62,13 +62,13 @@ function loadEnv($filePath) {
         return;
     }
 
-    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if ($lines === false) {
+    $handle = fopen($filePath, 'r');
+    if ($handle === false) {
         return;
     }
 
     $env = [];
-    foreach ($lines as $line) {
+    while (($line = fgets($handle)) !== false) {
         $line = trim($line);
         
         // Skip comments and empty lines
@@ -94,6 +94,8 @@ function loadEnv($filePath) {
         // Only set if not already set by system/server environment
         $inject($key, $value);
     }
+
+    fclose($handle);
 
     $cacheContent = "<?php\nreturn " . var_export($env, true) . ";\n";
     if (!is_dir(dirname($cacheFile))) {

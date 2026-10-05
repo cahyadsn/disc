@@ -95,7 +95,7 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
         }
     }
     // Bolt optimization: Cache DB results for Personality Profiles to avoid executing the complex UNION ALL/subquery SQL statement on every submission
-    $cache_key = md5($result['D'] . '_' . $result['I'] . '_' . $result['S'] . '_' . $result['C']);
+    $cache_key = $result['D'] . '_' . $result['I'] . '_' . $result['S'] . '_' . $result['C'];
     $cache_file = $cache_dir . '/result_' . $cache_key . '.json';
 
     if (is_readable($cache_file)) {

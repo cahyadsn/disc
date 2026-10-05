@@ -53,7 +53,7 @@ if (!is_dir($cache_dir)) {
     mkdir($cache_dir, 0755, true);
 }
 // 0_0_0_0 is the default because POST m and l are empty
-$cache_key = md5('0_0_0_0');
+$cache_key = '0_0_0_0';
 $cache_file = $cache_dir . '/result_' . $cache_key . '.json';
 
 @unlink($cache_file);

@@ -69,7 +69,7 @@ $log_contents = @file_get_contents($log_file);
 @unlink($log_file);
 @unlink($envFile);
 
-if ($log_contents && strpos($log_contents, "Failed to create cache directory:") !== false) {
+if ($log_contents && strpos($log_contents, "Failed to create cache directory: env_cache_dir") !== false) {
     echo "PASS: error_log called for cache directory creation failure in autoload_env.php.\n";
     exit(0);
 } else {

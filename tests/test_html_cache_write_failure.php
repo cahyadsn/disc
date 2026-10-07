@@ -39,7 +39,7 @@ unlink($cache_file);
 $log_contents = @file_get_contents($log_file);
 @unlink($log_file);
 
-if ($log_contents && strpos($log_contents, "Failed to write to HTML cache file") !== false) {
+if ($log_contents && strpos($log_contents, "Failed to write to HTML cache file: index_html_cache") !== false) {
     echo "PASS: error_log called for cache write failure.\n";
     exit(0);
 } else {

@@ -101,7 +101,7 @@ ini_set('error_log', $original_error_log);
 $log_contents = @file_get_contents($log_file);
 @unlink($log_file);
 
-if ($log_contents && strpos($log_contents, "Failed to create cache directory:") !== false) {
+if ($log_contents && strpos($log_contents, "Failed to create cache directory: index_cache_dir") !== false) {
     echo "PASS: error_log called for cache directory creation failure.\n";
     exit(0);
 } else {

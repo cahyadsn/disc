@@ -35,7 +35,7 @@ require_once __DIR__ . '/conf/headers.php';
 $cache_dir = __DIR__ . '/cache';
 if (!is_dir($cache_dir)) {
     if (!mkdir($cache_dir, 0755, true)) {
-        error_log("Failed to create cache directory: $cache_dir");
+        error_log("Failed to create cache directory: index_cache_dir");
     }
 }
 $html_cache_file = $cache_dir . '/html_cache.html';
@@ -190,7 +190,7 @@ if ($html_content === false) {
     $html_content = ob_get_clean();
     if ($result) {
         if (file_put_contents($html_cache_file, $html_content, LOCK_EX) === false) {
-            error_log("Failed to write to HTML cache file: $html_cache_file");
+            error_log("Failed to write to HTML cache file: index_html_cache");
         }
     }
 }

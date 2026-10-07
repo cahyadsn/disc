@@ -37,7 +37,7 @@ ini_set('error_log', $original_error_log);
 $log_contents = @file_get_contents($log_file);
 @unlink($log_file);
 
-if ($log_contents && strpos($log_contents, "Failed to write env cache file:") !== false) {
+if ($log_contents && strpos($log_contents, "Failed to write env cache file: env_cache_file") !== false) {
     echo "PASS: error_log called for env cache write failure.\n";
     exit(0);
 } else {

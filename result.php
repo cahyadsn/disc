@@ -91,7 +91,7 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
     $cache_dir = __DIR__ . '/cache';
     if (!is_dir($cache_dir)) {
         if (!mkdir($cache_dir, 0755, true)) {
-            error_log("Failed to create cache directory: $cache_dir");
+            error_log("Failed to create cache directory: result_cache_dir");
         }
     }
     // Bolt optimization: Cache DB results for Personality Profiles to avoid executing the complex UNION ALL/subquery SQL statement on every submission
@@ -122,7 +122,7 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
             $data = $db_result ? $db_result->fetch_object() : null;
             if ($data) {
                 if (file_put_contents($cache_file, json_encode($data), LOCK_EX) === false) {
-                    error_log("Failed to write to result cache file: $cache_file");
+                    error_log("Failed to write to result cache file: result_cache_file");
                 }
             }
         }

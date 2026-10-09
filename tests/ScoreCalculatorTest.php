@@ -51,4 +51,17 @@ class ScoreCalculatorTest extends TestCase
 
         $this->assertEquals(-2, $result['D']);
     }
+
+    public function testInvalidDimensions(): void
+    {
+        $most = ['X', 'Y', 'Z'];
+        $least = ['X', 'Y', 'Z'];
+
+        $result = ScoreCalculator::calculateScores($most, $least);
+
+        $this->assertEquals(0, $result['D']);
+        $this->assertEquals(0, $result['I']);
+        $this->assertEquals(0, $result['S']);
+        $this->assertEquals(0, $result['C']);
+    }
 }

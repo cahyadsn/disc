@@ -88,11 +88,7 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
         LIMIT 1";
 	$data = null;
     $cache_dir = __DIR__ . '/cache';
-    if (!is_dir($cache_dir)) {
-        if (!mkdir($cache_dir, 0755, true)) {
-            error_log("Failed to create cache directory: result_cache_dir");
-        }
-    }
+    ensureCacheDir($cache_dir, "result_cache_dir");
     // Bolt optimization: Cache DB results for Personality Profiles to avoid executing the complex UNION ALL/subquery SQL statement on every submission
     $cache_key = $result['D'] . '_' . $result['I'] . '_' . $result['S'] . '_' . $result['C'];
     $cache_file = $cache_dir . '/result_' . $cache_key . '.json';

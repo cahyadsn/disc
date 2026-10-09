@@ -67,7 +67,6 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
   $l = array_slice($_POST['l'], 0, 28);
   $result = calculateScores($m, $l);
 
-  require_once __DIR__ . '/conf/db.php';
     $sql="
         SELECT a.*, c.*, m.priority
         FROM (
@@ -106,6 +105,8 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
     }
 
     if (!$data) {
+        // Bolt optimization: Lazy load the database connection only on cache miss
+        require_once __DIR__ . '/conf/db.php';
         $stmt = isset($db) ? $db->prepare($sql) : false;
         if ($stmt) {
             $val_d = $result['D'];

@@ -45,19 +45,15 @@ function loadEnv($filePath) {
         return;
     }
 
-    $inject = function($key, $value) {
-        if (getenv($key) === false) {
-            putenv("{$key}={$value}");
-            $_ENV[$key] = $value;
-            $_SERVER[$key] = $value;
-        }
-    };
-
     $cacheFile = dirname(__DIR__) . '/cache/env_' . md5($filePath) . '.php';
     if (is_readable($cacheFile) && filemtime($filePath) <= filemtime($cacheFile)) {
         $env = require $cacheFile;
         foreach ($env as $key => $value) {
-            $inject($key, $value);
+            if (getenv($key) === false) {
+                putenv("{$key}={$value}");
+                $_ENV[$key] = $value;
+                $_SERVER[$key] = $value;
+            }
         }
         return;
     }
@@ -92,7 +88,11 @@ function loadEnv($filePath) {
         $env[$key] = $value;
 
         // Only set if not already set by system/server environment
-        $inject($key, $value);
+        if (getenv($key) === false) {
+            putenv("{$key}={$value}");
+            $_ENV[$key] = $value;
+            $_SERVER[$key] = $value;
+        }
     }
 
     fclose($handle);

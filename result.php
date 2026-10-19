@@ -122,7 +122,10 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
             $db_result=$stmt->get_result();
             $data = $db_result ? $db_result->fetch_object() : null;
             if ($data) {
-                if (file_put_contents($cache_file, json_encode($data), LOCK_EX) === false) {
+                $json_data = json_encode($data);
+                if ($json_data === false) {
+                    error_log("Failed to encode result data to JSON");
+                } elseif (file_put_contents($cache_file, $json_data, LOCK_EX) === false) {
                     error_log("Failed to write to result cache file: result_cache_file");
                 }
             }

@@ -100,7 +100,10 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
     if (is_readable($cache_file)) {
         $json = file_get_contents($cache_file);
         if ($json !== false) {
-            $data = json_decode($json);
+            $decoded = json_decode($json);
+            if (is_object($decoded)) {
+                $data = $decoded;
+            }
         }
     }
 

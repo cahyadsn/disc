@@ -2,6 +2,29 @@
 
 All notable changes, architectural decisions, and improvements to the DISC Personality Test project are documented in this file.
 
+## Recent Updates (2026-10-20)
+- **Header & Documentation Standardization**:
+  - Updated `UPDATED DATE` file headers in `conf/autoload_env.php`, `conf/config.php`, `index.php`, and `result.php` to `2026-10-20 07:28:59` to maintain strict traceability format.
+  - Updated `README.md` and `tests/README.md` to reflect removal of `conf/utils.php`, addition of `tests/ScoreCalculatorTest.php` and `tests/test_result_cache_validation.php`, and lazy-loaded DB connections.
+- **Code Health & Refactoring**:
+  - Removed deprecated procedural helper `conf/utils.php` and unified all DISC scoring through the namespaced `Disc\ScoreCalculator` class.
+- **Performance & Caching Optimization**:
+  - Streamlined `.env` file loading in `conf/autoload_env.php` using line-by-line `fopen()`/`fgets()` reading to minimize memory usage.
+  - Inlined environment variable injection closure in `conf/autoload_env.php` to reduce function call overhead.
+  - Optimized string prefix checks (`$line[0] === '#'`) in `conf/autoload_env.php` avoiding `strpos()` function call overhead.
+  - Added exclusive file locking (`LOCK_EX`) during env cache generation in `conf/autoload_env.php` to prevent race conditions on concurrent requests.
+  - Eliminated `md5()` hashing on result cache keys in `result.php`, using direct scalar score string formatting (`D_I_S_C`).
+  - Implemented lazy database connection pooling in `result.php`, deferring connection instantiation until a cache miss occurs.
+- **Security & Hardening**:
+  - Validated cached profile data types (`is_object($decoded)`) in `result.php` to prevent non-object and scalar payloads from corrupting result rendering.
+  - Added explicit error logging on `json_encode` failure when serializing result cache records in `result.php`.
+  - Redacted exception chaining in `conf/config.php` during database connection failure to prevent potential credential leakage in exception stack traces.
+  - Mitigated information and path disclosure risks by standardizing error logs to use generic identifiers (`env_cache_dir`, `env_cache_file`, `index_cache_dir`, `index_html_cache`, `result_cache_dir`, `result_cache_file`) instead of exposing absolute server paths.
+- **Testing & Quality Assurance**:
+  - Added `tests/ScoreCalculatorTest.php` covering basic scoring, empty inputs, non-scalar filtering, negative scores, and invalid dimension validation.
+  - Added `tests/test_result_cache_validation.php` to verify database fallback when result cache contains scalar or non-object JSON data.
+  - Updated cache failure test suites to assert against generic error identifiers.
+
 ## Recent Updates (2026-10-02)
 - **Code Health & Architecture**:
   - Introduced `Disc\ScoreCalculator` class in `src/ScoreCalculator.php` providing a modern object-oriented scoring engine with strict identity checks and performance optimizations.

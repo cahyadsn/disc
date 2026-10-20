@@ -28,7 +28,6 @@ The project directory has been reorganized to keep configuration and test layers
   * `config.php`: Central database configuration setup with lazy-loading connection pooling.
   * `db.php`: Centralized helper that encapsulates database configuration loading with safe error handling across page endpoints.
   * `autoload_env.php`: A native, zero-dependency environment variables loader that parses and applies configuration variables from `.env`.
-  * `utils.php`: Central utility providing reusable DISC score calculation logic across application endpoints and unit tests.
   * `headers.php`: Central security headers configuration ensuring custom protection rules are applied uniformly across PHP page endpoints.
 * **`/src`**: Contains object-oriented namespaced source classes:
   * `ScoreCalculator.php`: Object-oriented implementation (`Disc\ScoreCalculator`) for DISC dimension scoring and assessment calculations.
@@ -61,16 +60,16 @@ To verify code changes, security fixes, and database behaviors, run the test sui
 This project is built using a lightweight and highly optimized architecture designed for performance, security, and portability:
 
 * **Core Engine**: PHP (supports version 5.6 and above)
-  * **Native Environment Variables Loader**: Automatically loads credentials from a `.env` file via `conf/autoload_env.php` using pure native PHP.
-  * **Lazy-Loading Database Connection**: Database connections are deferred and only established on cache misses.
+  * **Native Environment Variables Loader**: Automatically loads credentials from a `.env` file via `conf/autoload_env.php` using pure native PHP with streaming line-by-line reading to minimize memory footprint.
+  * **Lazy-Loading Database Connection**: Database connections are deferred and only established on cache misses in both `index.php` and `result.php`.
   * **Persistent Database Pooling**: Configured with persistent connections (`p:`) to minimize TCP handshake and connection authentication overhead.
 * **Database & Query Layer**: MySQL / MariaDB
   * **Single Round-trip Fallbacks**: Optimized data retrieval utilizing SQL `UNION ALL` to resolve pattern records and application fallbacks in a single database query.
   * **Prepared Statements**: Secure parameter binding utilizing mysqli prepared statements.
 * **Caching & Performance Optimization**:
   * **HTML File Caching**: Pre-compiles the heavily nested rendering loop output to an HTML cache file (`html_cache.html`) in the local `cache/` directory (protected via `.htaccess` to prevent direct HTTP access), yielding a ~98% speedup.
-  * **Environment Variables Caching**: Caches parsed `.env` variables into compiled PHP cache files (`cache/env_*.php`) to eliminate file parsing overhead on repeated requests.
-  * **Result Profile Caching**: Caches resolved DISC profile results (`cache/result_*.php`) to eliminate database queries and pattern resolution overhead for identical personality test submissions.
+  * **Environment Variables Caching**: Caches parsed `.env` variables into compiled PHP cache files (`cache/env_*.php`) with exclusive file locking (`LOCK_EX`) to eliminate file parsing overhead and prevent cache write races.
+  * **Result Profile Caching**: Caches resolved DISC profile results (`cache/result_*.json`) using direct score coordinate concatenation keys (without hashing overhead) to eliminate database queries and pattern resolution overhead for identical personality test submissions.
   * **Filesystem Call Reductions**: Uses `is_readable()` to perform cache-hit checks in one step, bypassing redundant `file_exists()` checks.
   * **Single-Pass Value Aggregation**: Direct mutation of the result array in `result.php` avoids intermediate array allocations and the difference aggregation loop, yielding a ~45% speedup.
   * **Static Key Optimization**: Removed redundant `htmlspecialchars` escaping on hardcoded, static array keys in the `result.php` rendering loop to eliminate unnecessary function call overhead.
@@ -82,6 +81,7 @@ This project is built using a lightweight and highly optimized architecture desi
   * **HTTP Security Headers & HSTS**: Implements strict protection headers including `Strict-Transport-Security: max-age=31536000; includeSubDomains`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and a fine-tuned `Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;` to prevent clickjacking, MIME sniffing, protocol downgrades, and cross-site scripting (XSS).
   * **XSS Defenses**: Sanitized and escaped HTML output using `htmlspecialchars` with UTF-8 encoding.
   * **Input Size & Array Limit Validation**: Form input arrays (`$_POST['m']` and `$_POST['l']`) are strictly sliced to a maximum of 28 elements via `array_slice` in `result.php`, mitigating unbounded array iteration and denial-of-service (DoS) payloads.
+  * **Path & Error Log Information Disclosure Protection**: Standardized generic resource identifiers (`env_cache_dir`, `index_cache_dir`, `result_cache_file`, etc.) replace absolute filesystem paths in error logs to prevent directory and path disclosure.
   * **Sensitive Data Redaction & Stack Trace Preservation**: Safe exception handling prevents database password and credential leaks in debug logs and user interfaces while preserving original exception stack traces for effective debugging.
 * **Frontend & Presentation**:
   * **Glassmorphic UI Design**: Refactored to a sleek, modern visual aesthetic featuring background blurs (`backdrop-filter`), translucent panels, glowing border/shadow effects, and gradient backdrops.
@@ -116,6 +116,29 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-10-20)
+- **Header & Documentation Standardization**:
+  - Updated `UPDATED DATE` file headers in `conf/autoload_env.php`, `conf/config.php`, `index.php`, and `result.php` to `2026-10-20 07:28:59` to maintain strict traceability format.
+  - Updated `README.md` and `tests/README.md` to reflect removal of `conf/utils.php`, addition of `tests/ScoreCalculatorTest.php` and `tests/test_result_cache_validation.php`, and lazy-loaded DB connections.
+- **Code Health & Refactoring**:
+  - Removed deprecated procedural helper `conf/utils.php` and unified all DISC scoring through the namespaced `Disc\ScoreCalculator` class.
+- **Performance & Caching Optimization**:
+  - Streamlined `.env` file loading in `conf/autoload_env.php` using line-by-line `fopen()`/`fgets()` reading to minimize memory usage.
+  - Inlined environment variable injection closure in `conf/autoload_env.php` to reduce function call overhead.
+  - Optimized string prefix checks (`$line[0] === '#'`) in `conf/autoload_env.php` avoiding `strpos()` function call overhead.
+  - Added exclusive file locking (`LOCK_EX`) during env cache generation in `conf/autoload_env.php` to prevent race conditions on concurrent requests.
+  - Eliminated `md5()` hashing on result cache keys in `result.php`, using direct scalar score string formatting (`D_I_S_C`).
+  - Implemented lazy database connection pooling in `result.php`, deferring connection instantiation until a cache miss occurs.
+- **Security & Hardening**:
+  - Validated cached profile data types (`is_object($decoded)`) in `result.php` to prevent non-object and scalar payloads from corrupting result rendering.
+  - Added explicit error logging on `json_encode` failure when serializing result cache records in `result.php`.
+  - Redacted exception chaining in `conf/config.php` during database connection failure to prevent potential credential leakage in exception stack traces.
+  - Mitigated information and path disclosure risks by standardizing error logs to use generic identifiers (`env_cache_dir`, `env_cache_file`, `index_cache_dir`, `index_html_cache`, `result_cache_dir`, `result_cache_file`) instead of exposing absolute server paths.
+- **Testing & Quality Assurance**:
+  - Added `tests/ScoreCalculatorTest.php` covering basic scoring, empty inputs, non-scalar filtering, negative scores, and invalid dimension validation.
+  - Added `tests/test_result_cache_validation.php` to verify database fallback when result cache contains scalar or non-object JSON data.
+  - Updated cache failure test suites to assert against generic error identifiers.
+
 ### Recent Updates (2026-10-02)
 - **Code Health & Architecture**:
   - Introduced `Disc\ScoreCalculator` class in `src/ScoreCalculator.php` providing a modern object-oriented scoring engine with strict identity checks and performance optimizations.
@@ -141,15 +164,6 @@ This project is built using a lightweight and highly optimized architecture desi
   - Refactored test environment isolation check in `conf/autoload_env.php` using an isolated closure.
 - **Error Handling & Diagnostics**:
   - Preserved original exception context and stack traces in `conf/config.php` during database connection failures while ensuring sensitive credentials remain redacted.
-
-### Recent Updates (2026-09-16)
-- **Performance & Optimization**:
-  - Implemented file-based caching for resolved personality profile results in `result.php` (`cache/result_*.php`), eliminating database queries and fallback lookups on identical test submissions.
-- **Code Health & Error Handling**:
-  - Added explicit error handling and error logging (`error_log`) when cache directory creation (`mkdir`) and file write operations (`file_put_contents`) fail in `conf/autoload_env.php`.
-- **Testing & Quality Assurance**:
-  - Added `tests/test_autoload_env_cache_write_failure.php` to verify error logging when `.env` cache file writing fails.
-  - Added `tests/test_autoload_env_mkdir_failure.php` using a custom PHP stream wrapper (`MkdirFailingWrapper`) to test error logging during directory creation failure in `conf/autoload_env.php`.
 
 *For earlier updates and the complete changelog history, please refer to [change_log.md](change_log.md).*
 

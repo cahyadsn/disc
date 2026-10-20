@@ -4,7 +4,7 @@ All notable changes, architectural decisions, and improvements to the DISC Perso
 
 ## Recent Updates (2026-10-20)
 - **Header & Documentation Standardization**:
-  - Updated `UPDATED DATE` file headers in `conf/autoload_env.php`, `conf/config.php`, `index.php`, and `result.php` to `2026-10-20 07:28:59` to maintain strict traceability format.
+  - Updated `UPDATED DATE` file headers in `conf/autoload_env.php`, `conf/config.php`, `index.php`, `result.php`, and `src/ScoreCalculator.php` to `2026-10-20 08:02:19` to maintain strict traceability format.
   - Updated `README.md` and `tests/README.md` to reflect removal of `conf/utils.php`, addition of `tests/ScoreCalculatorTest.php` and `tests/test_result_cache_validation.php`, and lazy-loaded DB connections.
 - **Code Health & Refactoring**:
   - Removed deprecated procedural helper `conf/utils.php` and unified all DISC scoring through the namespaced `Disc\ScoreCalculator` class.

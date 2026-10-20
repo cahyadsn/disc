@@ -6,7 +6,7 @@ FILENAME     : autoload_env.php
 DESC		 : grab configuration data form .env file
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2026-07-25
-UPDATED DATE : 2026-10-20 07:28:59
+UPDATED DATE : 2026-10-20 08:02:19
 ================================================================================
 MIT License
 

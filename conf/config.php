@@ -38,7 +38,7 @@ $dbuser = getenv('DB_USER') ?: '';
 $dbpass = getenv('DB_PASS');
 if ($dbpass === false || $dbpass === '') {
     error_log('DB_PASS environment variable is required.');
-    exit('Database configuration error.');
+    throw new Exception('Database configuration error.');
 }
 $dbname = getenv('DB_NAME') ?: 'test';
 

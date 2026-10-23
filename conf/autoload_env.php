@@ -45,7 +45,7 @@ function loadEnv($filePath) {
         return;
     }
 
-    $cacheFile = dirname(__DIR__) . '/cache/env_' . md5($filePath) . '.php';
+    $cacheFile = dirname(__DIR__) . '/cache/env_' . hash('sha256', $filePath) . '.php';
     if (is_readable($cacheFile) && filemtime($filePath) <= filemtime($cacheFile)) {
         $env = require $cacheFile;
         foreach ($env as $key => $value) {

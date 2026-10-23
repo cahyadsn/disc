@@ -15,7 +15,7 @@ $envFile = __DIR__ . '/test_cache_write.env';
 file_put_contents($envFile, "TEST_KEY=test_value\n");
 
 // Determine cache file path based on loadEnv logic:
-$cacheFile = dirname(__DIR__) . '/cache/env_' . md5($envFile) . '.php';
+$cacheFile = dirname(__DIR__) . '/cache/env_' . hash('sha256', $envFile) . '.php';
 
 // Prepare unwriteable cache file
 if (!is_dir(dirname($cacheFile))) {

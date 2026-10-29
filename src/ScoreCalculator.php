@@ -43,19 +43,17 @@ class ScoreCalculator
         // avoids dynamic array key lookups, isset(), and is_scalar() runtime overhead.
         $result = ['D' => 0, 'I' => 0, 'S' => 0, 'C' => 0];
 
-        foreach ($most as $v) {
-            if ($v === 'D') $result['D']++;
-            else if ($v === 'I') $result['I']++;
-            else if ($v === 'S') $result['S']++;
-            else if ($v === 'C') $result['C']++;
-        }
+        $mostCounts = @array_count_values($most);
+        if (isset($mostCounts['D'])) $result['D'] += $mostCounts['D'];
+        if (isset($mostCounts['I'])) $result['I'] += $mostCounts['I'];
+        if (isset($mostCounts['S'])) $result['S'] += $mostCounts['S'];
+        if (isset($mostCounts['C'])) $result['C'] += $mostCounts['C'];
 
-        foreach ($least as $v) {
-            if ($v === 'D') $result['D']--;
-            else if ($v === 'I') $result['I']--;
-            else if ($v === 'S') $result['S']--;
-            else if ($v === 'C') $result['C']--;
-        }
+        $leastCounts = @array_count_values($least);
+        if (isset($leastCounts['D'])) $result['D'] -= $leastCounts['D'];
+        if (isset($leastCounts['I'])) $result['I'] -= $leastCounts['I'];
+        if (isset($leastCounts['S'])) $result['S'] -= $leastCounts['S'];
+        if (isset($leastCounts['C'])) $result['C'] -= $leastCounts['C'];
 
         return $result;
     }

@@ -39,22 +39,14 @@ class ScoreCalculator
      */
     public static function calculateScores(array $most, array $least): array
     {
-        // Bolt optimization: Explicit if/elseif chain using strict identity checks (===)
-        // avoids dynamic array key lookups, isset(), and is_scalar() runtime overhead.
         $result = ['D' => 0, 'I' => 0, 'S' => 0, 'C' => 0];
 
-        foreach ($most as $v) {
-            if ($v === 'D') $result['D']++;
-            else if ($v === 'I') $result['I']++;
-            else if ($v === 'S') $result['S']++;
-            else if ($v === 'C') $result['C']++;
-        }
+        $mostCounts = array_count_values(array_filter($most, 'is_scalar'));
+        $leastCounts = array_count_values(array_filter($least, 'is_scalar'));
 
-        foreach ($least as $v) {
-            if ($v === 'D') $result['D']--;
-            else if ($v === 'I') $result['I']--;
-            else if ($v === 'S') $result['S']--;
-            else if ($v === 'C') $result['C']--;
+        foreach (['D', 'I', 'S', 'C'] as $dim) {
+            $result[$dim] += $mostCounts[$dim] ?? 0;
+            $result[$dim] -= $leastCounts[$dim] ?? 0;
         }
 
         return $result;

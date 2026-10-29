@@ -39,21 +39,15 @@ class ScoreCalculator
      */
     public static function calculateScores(array $most, array $least): array
     {
-        // Bolt optimization: Explicit if/elseif chain using strict identity checks (===)
-        // avoids dynamic array key lookups, isset(), and is_scalar() runtime overhead.
         $result = ['D' => 0, 'I' => 0, 'S' => 0, 'C' => 0];
 
-        $mostCounts = @array_count_values($most);
-        if (isset($mostCounts['D'])) $result['D'] += $mostCounts['D'];
-        if (isset($mostCounts['I'])) $result['I'] += $mostCounts['I'];
-        if (isset($mostCounts['S'])) $result['S'] += $mostCounts['S'];
-        if (isset($mostCounts['C'])) $result['C'] += $mostCounts['C'];
+        $mostCounts = array_count_values(array_filter($most, 'is_scalar'));
+        $leastCounts = array_count_values(array_filter($least, 'is_scalar'));
 
-        $leastCounts = @array_count_values($least);
-        if (isset($leastCounts['D'])) $result['D'] -= $leastCounts['D'];
-        if (isset($leastCounts['I'])) $result['I'] -= $leastCounts['I'];
-        if (isset($leastCounts['S'])) $result['S'] -= $leastCounts['S'];
-        if (isset($leastCounts['C'])) $result['C'] -= $leastCounts['C'];
+        foreach (['D', 'I', 'S', 'C'] as $dim) {
+            $result[$dim] += $mostCounts[$dim] ?? 0;
+            $result[$dim] -= $leastCounts[$dim] ?? 0;
+        }
 
         return $result;
     }

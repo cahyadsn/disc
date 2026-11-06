@@ -7,10 +7,16 @@ Demo link :
 - [https://psycho.cahyadsn.com/disc/index.es.php](https://psycho.cahyadsn.com/disc/index.es.php) [ver 0.7 Spanish version] 
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D%208.3-8892BF.svg)](composer.json)
 [![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=flat)]()
 [![Donate](https://img.shields.io/badge/$-support-ff69b4.svg?style=flat)](https://paypal.me/cahyadwiana)  
 
 )* I can't provide the real data as on demo for this github repo since this data is proprietary (see Reference section) 
+
+## Requirements
+- **PHP**: >= 8.3 (with `mysqli`, `json`, and `session` extensions enabled)
+- **Database**: MySQL 5.7+ or MariaDB 10.2+ (supports prepared statements and `UNION ALL`)
+- **Composer**: 2.x (required for development dependencies and running test suites)
 
 ## Installation
 1. download 'disc_master.zip' file
@@ -25,13 +31,13 @@ Demo link :
 The project directory has been reorganized to keep configuration and test layers clean:
 
 * **`/conf`**: Directory holding central configuration and autoload helper:
-  * `config.php`: Central database configuration setup with lazy-loading connection pooling.
+  * `config.php`: Central database configuration setup with lazy-loading connection pooling and Throwable exception shielding.
   * `db.php`: Centralized helper that encapsulates database configuration loading with safe error handling across page endpoints.
   * `autoload_env.php`: A native, zero-dependency environment variables loader that parses and applies configuration variables from `.env`.
   * `headers.php`: Central security headers configuration ensuring custom protection rules are applied uniformly across PHP page endpoints.
 * **`/src`**: Contains object-oriented namespaced source classes:
   * `CacheHelper.php`: Helper utility (`Disc\CacheHelper`) providing safe, centralized cache directory creation and permission enforcement.
-  * `ScoreCalculator.php`: Object-oriented implementation (`Disc\ScoreCalculator`) for DISC dimension scoring and assessment calculations.
+  * `ScoreCalculator.php`: Object-oriented implementation (`Disc\ScoreCalculator`) for DISC dimension scoring and assessment calculations with typed constants (`DIMENSIONS`).
 * **`/db`**: Contains database schema and seed data files (`disc.sql`).
 * **`/cache`**: Local cache directory containing pre-compiled HTML templates (`html_cache.html`) and parsed environment variable cache files (`env_*.php`), protected against direct HTTP access via `.htaccess`.
 * **`/tests`**: Contains the PHPUnit and standalone test suites covering security, SQL injection mitigations, cache handlers, and platform-specific tests.
@@ -122,6 +128,17 @@ This project is built using a lightweight and highly optimized architecture desi
 + Lucas Giovanny
 
 ## Changelog
+### Recent Updates (2026-11-06)
+- **PHP 8.3 Minimum Requirement Modernization**:
+  - Established PHP 8.3 as the minimum required version in `composer.json` (`"require": { "php": ">=8.3" }`) and configured platform target to `8.3.0`.
+  - Enforced `declare(strict_types=1);` across all project scripts (`conf/autoload_env.php`, `conf/config.php`, `conf/db.php`, `conf/headers.php`, `src/CacheHelper.php`, `src/ScoreCalculator.php`, `index.php`, `result.php`, `tests/DiscTest.php`, `tests/ScoreCalculatorTest.php`).
+  - Added PHP 8.3 typed class constants in `Disc\ScoreCalculator::DIMENSIONS` and `ResultDefaults`.
+  - Implemented PHP 8.3 native `json_validate()` in `result.php` for high-performance cached profile validation before JSON decoding.
+  - Replaced legacy string prefix checks with native `str_starts_with()` and `str_contains()`.
+  - Unified error handling with `Throwable` exception shielding across database connection and error handlers.
+  - Updated standardized `UPDATED DATE` headers to `2026-11-06 08:20:00`.
+  - Fixed test isolation in standalone result test suites by automatically purging residual cache files.
+
 ### Recent Updates (2026-10-23)
 - **Header & Documentation Standardization**:
   - Added standard MIT license and file metadata header block to `src/CacheHelper.php`.

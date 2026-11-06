@@ -3,6 +3,11 @@
 All notable changes, architectural decisions, and improvements to the DISC Personality Test project are documented in this file.
 
 ## Recent Updates (2026-11-06)
+- **REST API Scoring Endpoint**:
+  - Implemented `POST /api/score.php` accepting JSON assessment responses and returning raw scores, graph points, and personality profiles.
+  - Added `Disc\PayloadValidator` and `Disc\ValidationResult` validating 28 question items with valid dimensions and error formatting.
+  - Added `Disc\ProfileResolver` evaluating raw counts, line graph plotting points, and cached pattern profile resolution.
+  - Added full test coverage in `tests/ApiScoreTest.php` and standalone integration suite `tests/test_api_score.php`.
 - **PHP 8.3 Minimum Requirement Modernization**:
   - Established PHP 8.3 as the minimum required version in `composer.json` (`"require": { "php": ">=8.3" }`) and configured platform target to `8.3.0`.
   - Enforced `declare(strict_types=1);` across all project scripts (`conf/autoload_env.php`, `conf/config.php`, `conf/db.php`, `conf/headers.php`, `src/CacheHelper.php`, `src/ScoreCalculator.php`, `index.php`, `result.php`, `tests/DiscTest.php`, `tests/ScoreCalculatorTest.php`).

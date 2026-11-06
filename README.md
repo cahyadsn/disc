@@ -30,6 +30,8 @@ Demo link :
 
 The project directory has been reorganized to keep configuration and test layers clean:
 
+* **`/api`**: Directory containing REST API endpoints:
+  * `score.php`: RESTful JSON scoring endpoint accepting candidate assessment answers and returning structured scores, line graph plotting points, and personality profile descriptions.
 * **`/conf`**: Directory holding central configuration and autoload helper:
   * `config.php`: Central database configuration setup with lazy-loading connection pooling and Throwable exception shielding.
   * `db.php`: Centralized helper that encapsulates database configuration loading with safe error handling across page endpoints.
@@ -38,10 +40,77 @@ The project directory has been reorganized to keep configuration and test layers
 * **`/src`**: Contains object-oriented namespaced source classes:
   * `CacheHelper.php`: Helper utility (`Disc\CacheHelper`) providing safe, centralized cache directory creation and permission enforcement.
   * `ScoreCalculator.php`: Object-oriented implementation (`Disc\ScoreCalculator`) for DISC dimension scoring and assessment calculations with typed constants (`DIMENSIONS`).
+  * `PayloadValidator.php`: Request validator (`Disc\PayloadValidator`) validating 28 question items with valid MOST and LEAST choices.
+  * `ValidationResult.php`: Value object (`Disc\ValidationResult`) encapsulating validation state and error messages.
+  * `ProfileResolver.php`: Service class (`Disc\ProfileResolver`) resolving raw scores, plotting segments, and database personality profiles.
 * **`/db`**: Contains database schema and seed data files (`disc.sql`).
 * **`/cache`**: Local cache directory containing pre-compiled HTML templates (`html_cache.html`) and parsed environment variable cache files (`env_*.php`), protected against direct HTTP access via `.htaccess`.
 * **`/tests`**: Contains the PHPUnit and standalone test suites covering security, SQL injection mitigations, cache handlers, and platform-specific tests.
 * **`/assets`**: Frontend styles, fonts, and assets.
+
+## REST API Documentation
+
+The platform provides a RESTful JSON endpoint (`api/score.php`) for programmatically evaluating DISC assessments from recruitment platforms and external HR applications without web UI rendering.
+
+### Scoring Endpoint: `POST /api/score.php`
+
+- **HTTP Method**: `POST`
+- **Headers**:
+  - `Content-Type: application/json`
+
+#### Request Payload
+The endpoint accepts either an `answers` list of 28 objects (with `most` and `least` dimensions: `D`, `I`, `S`, `C`, or `#`) or direct `m` and `l` string arrays.
+
+```json
+{
+  "answers": [
+    { "most": "D", "least": "C" },
+    { "most": "I", "least": "S" }
+  ]
+}
+```
+
+#### Successful Response (`200 OK`)
+```json
+{
+  "status": "success",
+  "scores": {
+    "most": { "D": 7, "I": 7, "S": 7, "C": 7 },
+    "least": { "D": 7, "I": 7, "S": 7, "C": 7 },
+    "change": { "D": 0, "I": 0, "S": 0, "C": 0 }
+  },
+  "graph": {
+    "line1_most": { "D": 7, "I": 7, "S": 7, "C": 7 },
+    "line2_least": { "D": 7, "I": 7, "S": 7, "C": 7 },
+    "line3_change": { "D": 0, "I": 0, "S": 0, "C": 0 }
+  },
+  "profile": {
+    "id": 1,
+    "name": "Developer Pattern",
+    "emotions": "...",
+    "goal": "...",
+    "judges_others": "...",
+    "influences_others": "...",
+    "organization_value": "...",
+    "overuses": "...",
+    "under_pressure": "...",
+    "fear": "...",
+    "effectiveness": "...",
+    "description": "..."
+  },
+  "segment": {
+    "d": 7,
+    "i": 4,
+    "s": 2,
+    "c": 3
+  }
+}
+```
+
+#### Error Responses
+- **`400 Bad Request`**: Malformed JSON, incorrect question item count (must be exactly 28), invalid dimension choices, or identical selections for most and least.
+- **`405 Method Not Allowed`**: Non-POST HTTP methods (e.g., GET).
+- **`500 Internal Server Error`**: Unexpected evaluation error (database credentials are never leaked).
 
 ## Running Tests
 
@@ -129,6 +198,11 @@ This project is built using a lightweight and highly optimized architecture desi
 
 ## Changelog
 ### Recent Updates (2026-11-06)
+- **REST API Scoring Endpoint**:
+  - Implemented `POST /api/score.php` accepting JSON assessment responses and returning raw scores, graph points, and personality profiles.
+  - Added `Disc\PayloadValidator` and `Disc\ValidationResult` validating 28 question items with valid dimensions and error formatting.
+  - Added `Disc\ProfileResolver` evaluating raw counts, line graph plotting points, and cached pattern profile resolution.
+  - Added full test coverage in `tests/ApiScoreTest.php` and standalone integration suite `tests/test_api_score.php`.
 - **PHP 8.3 Minimum Requirement Modernization**:
   - Established PHP 8.3 as the minimum required version in `composer.json` (`"require": { "php": ">=8.3" }`) and configured platform target to `8.3.0`.
   - Enforced `declare(strict_types=1);` across all project scripts (`conf/autoload_env.php`, `conf/config.php`, `conf/db.php`, `conf/headers.php`, `src/CacheHelper.php`, `src/ScoreCalculator.php`, `index.php`, `result.php`, `tests/DiscTest.php`, `tests/ScoreCalculatorTest.php`).

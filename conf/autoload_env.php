@@ -61,23 +61,23 @@ function loadEnv(string $filePath): void {
         return;
     }
 
-    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if ($lines === false) {
+    $handle = @fopen($filePath, 'r');
+    if ($handle === false) {
         return;
     }
 
     $env = [];
-    foreach ($lines as $line) {
+    while (($line = fgets($handle)) !== false) {
         $line = trim($line);
         
         // Skip comments and empty lines
-        if ($line === '' || str_starts_with($line, '#')) {
+        if ($line === '' || $line[0] === '#') {
             continue;
         }
 
         // Parse key-value pairs
         $parts = explode('=', $line, 2);
-        if (count($parts) !== 2) {
+        if (!isset($parts[1])) {
             continue;
         }
 
@@ -97,6 +97,7 @@ function loadEnv(string $filePath): void {
             $_SERVER[$key] = $value;
         }
     }
+    fclose($handle);
 
     $cacheContent = "<?php\nreturn " . var_export($env, true) . ";\n";
     require_once dirname(__DIR__) . '/src/CacheHelper.php';

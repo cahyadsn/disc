@@ -61,13 +61,13 @@ function loadEnv(string $filePath): void {
         return;
     }
 
-    $handle = fopen($filePath, 'r');
-    if ($handle === false) {
+    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if ($lines === false) {
         return;
     }
 
     $env = [];
-    while (($line = fgets($handle)) !== false) {
+    foreach ($lines as $line) {
         $line = trim($line);
         
         // Skip comments and empty lines
@@ -97,8 +97,6 @@ function loadEnv(string $filePath): void {
             $_SERVER[$key] = $value;
         }
     }
-
-    fclose($handle);
 
     $cacheContent = "<?php\nreturn " . var_export($env, true) . ";\n";
     require_once dirname(__DIR__) . '/src/CacheHelper.php';

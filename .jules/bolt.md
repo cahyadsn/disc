@@ -9,3 +9,7 @@
 ## 2026-10-16 - Inline closures in tight loops
 **Learning:** In PHP, creating and calling closures (anonymous functions) repeatedly in tight loops adds significant execution overhead (about 3x slower in our benchmark) compared to having the logic directly inline.
 **Action:** When a closure's logic is only used in a couple of places within the same function and is inside a loop, inline the logic directly instead of invoking the closure to improve execution speed.
+
+## 2026-10-21 - Avoid @ operator even if slightly faster
+**Learning:** Using the `@` error suppression operator (e.g. `@array_count_values`) in PHP is considered a dangerous anti-pattern because it suppresses all warnings and errors, which makes debugging incredibly difficult if unexpected types are encountered. Even if it measures slightly faster than a manual loop with `isset` and `is_scalar` checks, the loss in safety and maintainability is not worth the micro-optimization.
+**Action:** When counting frequencies in mixed-type arrays, avoid `@array_count_values`. Instead, pre-initialize the result array with expected keys and use a `foreach` loop with strict type checking (`is_scalar`) and existence checking (`isset($map[$v])`) to directly mutate values.

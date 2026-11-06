@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 BISMILLAAHIRRAHMAANIRRAHIIM - In the Name of Allah, Most Gracious, Most Merciful
 ================================================================================
@@ -6,7 +7,7 @@ FILENAME     : config.php
 DESC		 : database configuration for disc apps
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
-UPDATED DATE : 2026-10-20 08:02:19
+UPDATED DATE : 2026-11-06 08:18:00
 ================================================================================
 MIT License
 
@@ -32,6 +33,7 @@ copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
 ================================================================================
 */
 require_once __DIR__ . '/autoload_env.php';
+
 //-- database configuration
 $dbhost = getenv('DB_HOST') ?: 'localhost';
 $dbuser = getenv('DB_USER') ?: '';
@@ -46,10 +48,10 @@ $dbname = getenv('DB_NAME') ?: 'test';
 try {
     // Bolt optimization: Prefix the hostname with 'p:' to enable persistent connection pooling
     // in mysqli, reducing TCP handshake and authentication overhead per request.
-    $db = new mysqli((strpos($dbhost, 'p:') === 0 ? $dbhost : 'p:' . $dbhost), $dbuser, $dbpass, $dbname);
+    $db = new mysqli(str_starts_with($dbhost, 'p:') ? $dbhost : 'p:' . $dbhost, $dbuser, $dbpass, $dbname);
     if ($db->connect_error) {
         throw new Exception('Database connection failed.');
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     throw new Exception('Database connection failed.');
 }

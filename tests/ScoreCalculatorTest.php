@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Disc\Tests;
 
@@ -7,6 +8,11 @@ use Disc\ScoreCalculator;
 
 class ScoreCalculatorTest extends TestCase
 {
+    public function testDimensionsConstant(): void
+    {
+        $this->assertSame(['D', 'I', 'S', 'C'], ScoreCalculator::DIMENSIONS);
+    }
+
     public function testCalculateScoresBasic(): void
     {
         $most = ['D', 'D', 'I', 'S', 'C'];

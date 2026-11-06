@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 BISMILLAAHIRRAHMAANIRRAHIIM - In the Name of Allah, Most Gracious, Most Merciful
 ================================================================================
@@ -6,7 +7,7 @@ FILENAME     : index.php
 DESC		 : main file for disc apps
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
-UPDATED DATE : 2026-10-20 08:02:19
+UPDATED DATE : 2026-11-06 08:20:00
 ================================================================================
 MIT License
 
@@ -49,19 +50,23 @@ if ($html_content === false) {
     require_once __DIR__ . '/conf/db.php';
 
     //-- query data from database
-    $sql='SELECT * FROM personalities ORDER BY no ASC';
-    $result = isset($db) ? $db->query($sql) : false;
-    $data=array();
+    $sql = 'SELECT * FROM personalities ORDER BY no ASC';
+    try {
+        $result = isset($db) ? $db->query($sql) : false;
+    } catch (Throwable) {
+        $result = false;
+    }
+    $data = [];
     if ($result) {
-        while($row=$result->fetch_object()) {
-            $row->term = htmlspecialchars($row->term, ENT_QUOTES, 'UTF-8');
-            $row->most = htmlspecialchars($row->most, ENT_QUOTES, 'UTF-8');
-            $row->least = htmlspecialchars($row->least, ENT_QUOTES, 'UTF-8');
-            $data[]=$row;
+        while ($row = $result->fetch_object()) {
+            $row->term = htmlspecialchars((string)$row->term, ENT_QUOTES, 'UTF-8');
+            $row->most = htmlspecialchars((string)$row->most, ENT_QUOTES, 'UTF-8');
+            $row->least = htmlspecialchars((string)$row->least, ENT_QUOTES, 'UTF-8');
+            $data[] = $row;
         }
     }
 
-    $rows 		= count($data)/(4*$cols);
+    $rows = count($data) > 0 ? (int)(count($data) / (4 * $cols)) : 0;
     ob_start();
       if (!$result) {
           echo "<tr><td colspan='16' style='text-align:center; color:red;'>Error loading data.</td></tr>";
@@ -207,7 +212,7 @@ if ($html_content === false) {
       
       <div class="card-glass">
         <form method='post' action='result.php'>
-          <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars((string)($_SESSION['csrf_token'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
           <table>
             <caption>DISC Personality Test</caption>
             <thead>

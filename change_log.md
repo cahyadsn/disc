@@ -2,6 +2,30 @@
 
 All notable changes, architectural decisions, and improvements to the DISC Personality Test project are documented in this file.
 
+## Recent Updates (2026-11-06)
+- **PHP 8.3 Minimum Requirement Modernization**:
+  - Established PHP 8.3 as the minimum required version in `composer.json` (`"require": { "php": ">=8.3" }`) and configured platform target to `8.3.0`.
+  - Enforced `declare(strict_types=1);` across all project scripts (`conf/autoload_env.php`, `conf/config.php`, `conf/db.php`, `conf/headers.php`, `src/CacheHelper.php`, `src/ScoreCalculator.php`, `index.php`, `result.php`, `tests/DiscTest.php`, `tests/ScoreCalculatorTest.php`).
+  - Added PHP 8.3 typed class constants in `Disc\ScoreCalculator::DIMENSIONS` and `ResultDefaults`.
+  - Implemented PHP 8.3 native `json_validate()` in `result.php` for high-performance cached profile validation before JSON decoding.
+  - Replaced legacy string prefix checks with native `str_starts_with()` and `str_contains()`.
+  - Unified error handling with `Throwable` exception shielding across database connection and error handlers.
+  - Updated `conductor/code_styleguides/php.md` and `conductor/tech-stack.md` to reflect modern PHP 8.3 standards.
+  - Updated standardized `UPDATED DATE` headers to `2026-11-06 08:20:00`.
+
+## Recent Updates (2026-10-23)
+- **Header & Documentation Standardization**:
+  - Added standard MIT license and file metadata header block to `src/CacheHelper.php`.
+  - Updated `UPDATED DATE` file headers in `conf/autoload_env.php`, `conf/config.php`, `index.php`, `result.php`, `src/CacheHelper.php`, and `src/ScoreCalculator.php` to `2026-10-23 11:08:14` to maintain strict traceability format.
+  - Updated `README.md` project structure, architecture, and changelog entries.
+- **Code Health & Architecture**:
+  - Extracted duplicated cache directory creation and permission checks across `conf/autoload_env.php`, `index.php`, and `result.php` into `Disc\CacheHelper::ensureDirectory()` in `src/CacheHelper.php`.
+  - Replaced deprecated `md5()` file path hashing with `hash('sha256', ...)` for compiled `.env` cache file naming in `conf/autoload_env.php`.
+  - Replaced procedural `exit()` with a thrown `Exception` in `conf/config.php` when `DB_PASS` is missing to improve error flow and testability.
+- **Testing & Quality Assurance**:
+  - Updated `tests/test_config_pass.php` to assert against thrown `Exception` and logged error message on missing `DB_PASS`.
+  - Updated `tests/test_autoload_env_cache_write_failure.php` to reflect SHA-256 cache filename hashing.
+
 ## Recent Updates (2026-10-20)
 - **Header & Documentation Standardization**:
   - Updated `UPDATED DATE` file headers in `conf/autoload_env.php`, `conf/config.php`, `index.php`, `result.php`, and `src/ScoreCalculator.php` to `2026-10-20 08:02:19` to maintain strict traceability format.

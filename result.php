@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 BISMILLAAHIRRAHMAANIRRAHIIM - In the Name of Allah, Most Gracious, Most Merciful
 ================================================================================
@@ -6,7 +7,7 @@ FILENAME     : result.php
 DESC		 : result page for disc apps
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2015-01-11
-UPDATED DATE : 2026-10-20 08:02:19
+UPDATED DATE : 2026-11-06 08:20:00
 ================================================================================
 MIT License
 
@@ -32,10 +33,19 @@ copyright (c) 2026 by cahya dsn; cahyadsn@gmail.com
 ================================================================================
 */
 require_once __DIR__ . '/conf/headers.php';
-const DEFAULT_VAL_D = 15;
-const DEFAULT_VAL_I = 14;
-const DEFAULT_VAL_S = 15;
-const DEFAULT_VAL_C = 14;
+
+final class ResultDefaults
+{
+    public const int DEFAULT_VAL_D = 15;
+    public const int DEFAULT_VAL_I = 14;
+    public const int DEFAULT_VAL_S = 15;
+    public const int DEFAULT_VAL_C = 14;
+}
+
+const DEFAULT_VAL_D = ResultDefaults::DEFAULT_VAL_D;
+const DEFAULT_VAL_I = ResultDefaults::DEFAULT_VAL_I;
+const DEFAULT_VAL_S = ResultDefaults::DEFAULT_VAL_S;
+const DEFAULT_VAL_C = ResultDefaults::DEFAULT_VAL_C;
 ?>
 <!doctype html>
 <html>
@@ -45,7 +55,7 @@ const DEFAULT_VAL_C = 14;
   </head>
   <body>
 <?php
-if (!isset($_POST['csrf_token']) || !is_string($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+if (!isset($_POST['csrf_token']) || !is_string($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || !hash_equals((string)$_SESSION['csrf_token'], $_POST['csrf_token'])) {
     http_response_code(403);
     echo "Invalid CSRF token.";
     return;
@@ -96,7 +106,7 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
 
     if (is_readable($cache_file)) {
         $json = file_get_contents($cache_file);
-        if ($json !== false) {
+        if ($json !== false && json_validate($json)) {
             $decoded = json_decode($json);
             if (is_object($decoded)) {
                 $data = $decoded;
@@ -107,7 +117,11 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
     if (!$data) {
         // Bolt optimization: Lazy load the database connection only on cache miss
         require_once __DIR__ . '/conf/db.php';
-        $stmt = isset($db) ? $db->prepare($sql) : false;
+        try {
+            $stmt = isset($db) ? $db->prepare($sql) : false;
+        } catch (Throwable) {
+            $stmt = false;
+        }
         if ($stmt) {
             $val_d = $result['D'];
             $val_i = $result['I'];
@@ -119,7 +133,7 @@ if (!(isset($_POST['m']) && isset($_POST['l']) && is_array($_POST['m']) && is_ar
             $def_c = DEFAULT_VAL_C;
             $stmt->bind_param("iiiiiiii", $val_d, $val_i, $val_s, $val_c, $def_d, $def_i, $def_s, $def_c);
             $stmt->execute();
-            $db_result=$stmt->get_result();
+            $db_result = $stmt->get_result();
             $data = $db_result ? $db_result->fetch_object() : null;
             if ($data) {
                 $json_data = json_encode($data);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 BISMILLAAHIRRAHMAANIRRAHIIM - In the Name of Allah, Most Gracious, Most Merciful
 ================================================================================
@@ -6,7 +7,7 @@ FILENAME     : autoload_env.php
 DESC		 : grab configuration data form .env file
 AUTHOR       : CAHYA DSN
 CREATED DATE : 2026-07-25
-UPDATED DATE : 2026-10-20 08:02:19
+UPDATED DATE : 2026-11-06 08:18:00
 ================================================================================
 MIT License
 
@@ -38,7 +39,7 @@ if (!ini_get('date.timezone')) {
 /**
  * Load environment variables from .env file
  */
-function loadEnv($filePath) {
+function loadEnv(string $filePath): void {
     // Bolt optimization: is_readable() implicitly checks if the file exists.
     // Removing file_exists() bypasses a redundant OS stat system call.
     if (!is_readable($filePath)) {
@@ -48,11 +49,13 @@ function loadEnv($filePath) {
     $cacheFile = dirname(__DIR__) . '/cache/env_' . hash('sha256', $filePath) . '.php';
     if (is_readable($cacheFile) && filemtime($filePath) <= filemtime($cacheFile)) {
         $env = require $cacheFile;
-        foreach ($env as $key => $value) {
-            if (getenv($key) === false) {
-                putenv("{$key}={$value}");
-                $_ENV[$key] = $value;
-                $_SERVER[$key] = $value;
+        if (is_array($env)) {
+            foreach ($env as $key => $value) {
+                if (getenv((string)$key) === false) {
+                    putenv("{$key}={$value}");
+                    $_ENV[$key] = $value;
+                    $_SERVER[$key] = $value;
+                }
             }
         }
         return;
@@ -68,7 +71,7 @@ function loadEnv($filePath) {
         $line = trim($line);
         
         // Skip comments and empty lines
-        if ($line === '' || $line[0] === '#') {
+        if ($line === '' || str_starts_with($line, '#')) {
             continue;
         }
 
@@ -107,7 +110,12 @@ function loadEnv($filePath) {
 
 // Check if we are running unit/standalone tests to avoid side-effects on test isolation
 // Bolt optimization: debug_backtrace is very expensive. We use defined/$_SERVER instead to detect testing environment (PHPUnit or ad-hoc test execution) yielding ~45% speedup.
-$isTestEnv = defined('PHPUNIT_COMPOSER_INSTALL') || (isset($_SERVER['SCRIPT_FILENAME']) && (strpos($_SERVER['SCRIPT_FILENAME'], '/tests/') !== false || strpos($_SERVER['SCRIPT_FILENAME'], '\\tests\\') !== false));
+$script = (string)($_SERVER['SCRIPT_FILENAME'] ?? '');
+$isTestEnv = defined('PHPUNIT_COMPOSER_INSTALL')
+    || str_contains($script, '/tests/')
+    || str_contains($script, '\\tests\\')
+    || str_starts_with($script, 'tests/')
+    || str_starts_with($script, 'tests\\');
 
 if (!$isTestEnv) {
     loadEnv(dirname(__DIR__) . '/.env');

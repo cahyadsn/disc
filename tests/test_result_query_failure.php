@@ -1,5 +1,7 @@
 <?php
 
+register_shutdown_function(fn() => @unlink(__DIR__ . '/../cache/result_1_-1_0_0.json'));
+
 try {
     putenv('DB_PASS=dummy'); // Ensure no Exception from config.php missing pass
     require_once __DIR__ . '/../conf/config.php';
@@ -68,6 +70,7 @@ class MockDb {
 global $db;
 $db = new MockDb();
 
+@unlink(__DIR__ . '/../cache/result_1_-1_0_0.json');
 session_start(); $_SESSION['csrf_token'] = 'mock_token'; $_POST['csrf_token'] = 'mock_token'; $_POST['m'] = ['D'];
 $_POST['l'] = ['I'];
 
@@ -118,9 +121,9 @@ if (strpos($output, 'Data not found, check your database.') !== false) {
     $failed = true;
 }
 
+@unlink(__DIR__ . '/../cache/result_1_-1_0_0.json');
+
 if ($failed) {
     exit(1);
 }
 exit(0);
-
-

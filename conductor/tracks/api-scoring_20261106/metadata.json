@@ -1,0 +1,16 @@
+{
+  "id": "api-scoring_20261106",
+  "title": "REST API Scoring Endpoint",
+  "type": "feature",
+  "status": "pending",
+  "created": "2026-11-06T07:47:45+07:00",
+  "updated": "2026-11-06T07:47:45+07:00",
+  "phases": {
+    "total": 4,
+    "completed": 0
+  },
+  "tasks": {
+    "total": 8,
+    "completed": 0
+  }
+}

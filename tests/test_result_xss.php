@@ -58,12 +58,14 @@ global $db;
 $db = new MockMySQLi();
 
 // Mock POST data for result.php
+@unlink(__DIR__ . '/../cache/result_1_-1_0_0.json');
 session_start(); $_SESSION['csrf_token'] = 'mock_token'; $_POST['csrf_token'] = 'mock_token'; $_POST['m'] = ['D'];
 $_POST['l'] = ['I'];
 
 ob_start();
 include __DIR__ . '/../result.php';
 $output = ob_get_clean();
+@unlink(__DIR__ . '/../cache/result_1_-1_0_0.json');
 
 $fields = [
     'd', 'i', 's', 'c', 'name', 'emotions', 'goal', 'judges', 'influences', 'org', 'overuses', 'pressure', 'fear', 'effectiveness', 'description'
@@ -85,6 +87,8 @@ foreach ($fields as $field) {
         $success = false;
     }
 }
+
+@unlink(__DIR__ . '/../cache/result_1_-1_0_0.json');
 
 if (!$success) {
     exit(1);

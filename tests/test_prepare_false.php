@@ -6,6 +6,7 @@ try {
     // Suppress connection errors
 }
 
+@unlink(__DIR__ . '/../cache/result_1_-1_0_0.json');
 session_start(); $_SESSION['csrf_token'] = 'mock_token'; $_POST['csrf_token'] = 'mock_token'; $_POST['m'] = ['D'];
 $_POST['l'] = ['I'];
 
@@ -32,5 +33,3 @@ if (strpos($output, 'Data not found, check your database.') !== false) {
     echo "FAIL: Unexpected output:\n$output\n";
     exit(1);
 }
-
-
